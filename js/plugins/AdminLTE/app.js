@@ -19,10 +19,14 @@ function hash_change() {
 }
 
 function load_ajax(name) {
-    $("#content-ajax").load("pages/" + name + ".html", function () {
-        var titleElem = $("#content-ajax>title");
-        document.title = titleElem.text() + " | Socializ3d";
-        titleElem.remove();
+    $("#content-ajax").load("pages/" + name + ".html", function(response, status, XMLHttpRequest) {
+        if (name !== "404" && status !== "success") {
+            load_ajax("404");
+        } else {
+            var titleElem = $("#content-ajax>title");
+            document.title = titleElem.text() + " | Socializ3d";
+            titleElem.remove();
+        }
     });
 }
 
