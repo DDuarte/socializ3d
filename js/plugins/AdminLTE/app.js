@@ -11,7 +11,7 @@ function hash_change() {
     var hash_parts = document.location.hash.slice(1).split("&"); // first character is #
 
     hash_parts.forEach(function (hash) {
-        var pattern = /([A-Za-z]+)_([A-Za-z]+)/; // name_value
+        var pattern = /([A-Za-z0-9]+)_([A-Za-z0-9]+)/; // name_value
         var result = pattern.exec(hash);
         if (result[1] === "page")
             load_ajax(result[2]);
