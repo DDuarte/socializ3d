@@ -176,7 +176,8 @@ img {
 .bg-fuchsia,
 .bg-purple,
 .bg-maroon,
-.bg-black {
+.bg-black,
+.bg-white {
   color: #f9f9f9 !important;
 }
 .bg-gray {
@@ -227,6 +228,9 @@ img {
 .bg-maroon {
   background-color: #85144b !important;
 }
+.bg-white {
+  background-color: #FFF !important;
+}
 /* Text colors */
 .text-red {
   color: #f56954 !important;
@@ -269,6 +273,9 @@ img {
 }
 .text-maroon {
   color: #85144b !important;
+}
+.text-black {
+  color: #000 !important;
 }
 /*Hide elements by display none only*/
 .hide {
