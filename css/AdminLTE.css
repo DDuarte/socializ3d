@@ -477,6 +477,11 @@ body > .header .logo .icon {
     float: right;
   }
 }
+
+.my_navbar {
+    border-radius: 0px
+}
+
 @media screen and (max-width: 560px) {
   body > .header {
     position: relative;
@@ -2456,7 +2461,7 @@ Component: timeline
 }
 /* skin-blue logo */
 .skin-blue .logo {
-  background-color: #367fa9;
+  background-color: #3c8dbc;
   color: #f9f9f9;
 }
 .skin-blue .logo > a {
