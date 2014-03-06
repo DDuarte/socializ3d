@@ -45,7 +45,7 @@ $(function() {
             $('.row-offcanvas').toggleClass('active');
             $('.left-side').removeClass("collapse-left");
             $(".right-side").removeClass("strech");
-            $('.row-offcanvas').toggleClass("relative");
+            // $('.row-offcanvas').toggleClass("relative");
         } else {
             //Else, enable content streching
             $('.left-side').toggleClass("collapse-left");

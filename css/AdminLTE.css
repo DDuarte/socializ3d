@@ -601,6 +601,7 @@ body > .header .logo .icon {
   }
   .row-offcanvas-left .sidebar-offcanvas {
     left: -220px;
+    z-index: 1;
   }
   .row-offcanvas-right.active {
     right: 220px;
