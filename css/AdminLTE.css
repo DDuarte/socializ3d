@@ -2632,3 +2632,15 @@ Component: timeline
     background-size: 200px 20px;
   }
 }
+
+/* custom */
+
+#username_drop {
+    display: inline;
+}
+
+@media (max-width: 400px) {
+  #username_drop {
+    display: none!important;
+  }
+}
