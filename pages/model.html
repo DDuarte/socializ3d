@@ -1,51 +1,62 @@
+<title>Model</title>
+
 <!-- Content Header (Page header) -->
 <!-- Main content -->
 <section class="content">
     <div class="row">
-        <canvas id="model-display" class="col-sm-12 col-md-12">
-        </canvas>
+        <div id="model-display" class="col-md-8 col-md-offset-2">
+            <img class="center-block box" src="http://placehold.it/800x600" alt="...">
+        </div>
+    </div>
+    <div class="row">
         <div class="box col-sm-12 col-md-12">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs pull-right">
-                    <li class="active"><a href="#tab_1-1" data-toggle="tab">Information</a></li>
-                    <li><a href="#tab_2-2" data-toggle="tab">Comments <span class="badge">2</span></a></li>
-                    <!--<li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        Dropdown <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
-                            <li role="presentation" class="divider"></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
-                        </ul>
-                        </li>-->
+                    <li class="active"><a href="#tab_info" data-toggle="tab">Information</a></li>
+                    <li><a href="#tab_comments" data-toggle="tab">Comments <span class="badge">2</span></a></li>
                     <li class="pull-left header"><i class="fa fa-info-circle"></i> Generic Model</li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane active" id="tab_1-1">
-                        <div class="user-panel">
-                            <div class="pull-left image">
-                                <img src="img/avatar3.png" class="img-square" alt="User Image" />
+                    <div class="tab-pane active" id="tab_info">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="user-panel">
+                                    <div class="pull-left image">
+                                        <img src="img/avatar3.png" class="img-square" alt="User Image" />
+                                    </div>
+                                    <div class="pull-left info">
+                                        <p>Author: <a href="#page_profile">Jane Doe</a></p>
+                                        <p><time class="timeago" datetime="2013-02-28T09:24:17Z">February 28, 2013</time></p>
+                                    </div>
+                                </div>
+                                <h4>Description:</h4>
+                                <p>This is the most bland model known to man. Shame on you for hosting this content.</p>
                             </div>
-                            <div class="pull-left info">
-                                <p>Author: Jane Doe</p>
-                                <p>28th February 2014</p>
-                            </div>
+                            <div class="col-md-4">
+                                <!-- Primary tile -->
+                                <div class="box box-solid bg-light-blue">
+                                    <div class="box-header">
+                                        <h3 class="box-title">Tags</h3>
+                                    </div>
+                                    <div class="box-body">
+                                        <span class="btn bg-white btn-flat margin text-black">3D</span>
+                                        <span class="btn bg-white btn-flat margin text-black">Model</span>
+                                        <span class="btn bg-white btn-flat margin text-black">Bland</span>
+                                        <span class="btn bg-white btn-flat margin text-black">CG</span>
+                                    </div><!-- /.box-body -->
+                                </div><!-- /.box -->
+                            </div><!-- /.col -->
                         </div>
-                        <h4>Description:</h4>
-                        <p>This is the most bland model known to man. Shame on you for hosting this content.</p>
                     </div>
                     <!-- /.tab-pane -->
-                    <div class="tab-pane" id="tab_2-2">
+                    <div class="tab-pane" id="tab_comments">
                         <div class="box-body chat" id="chat-box">
                             <!-- chat item -->
                             <div class="item">
                                 <img src="img/avatar2.png" alt="user image" class="offline"/>
                                 <p class="message">
-                                    <a href="#" class="name">
-                                    <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 5:15</small>
+                                    <a href="#page_profile" class="name">
+                                    <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> <time class="timeago" datetime="2014-03-06T17:15:00Z">6 March, 2014</time></small>
                                     Jane Doe
                                     </a>
                                     This is something... I guess.
@@ -56,8 +67,8 @@
                             <div class="item">
                                 <img src="img/avatar3.png" alt="user image" class="offline"/>
                                 <p class="message">
-                                    <a href="#" class="name">
-                                    <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 5:30</small>
+                                    <a href="#page_profile" class="name">
+                                    <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> <time class="timeago" datetime="2014-03-06T17:30:00Z">6 March, 2014</time></small>
                                     Susan Doe
                                     </a>
                                     I'm not fond of this one.
