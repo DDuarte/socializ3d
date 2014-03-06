@@ -8,17 +8,31 @@
 function hash_change() {
     if (document.location.hash.length === 0)
         document.location.hash = "page_catalog"; // default page
-    var hash_parts = document.location.hash.slice(1).split("&"); // first character is #
+    var hash_parts = document.location.hash.slice(1).split("-"); // first character is #
+
+    var map = {};
 
     hash_parts.forEach(function (hash) {
         var pattern = /([A-Za-z0-9]+)_([A-Za-z0-9]+)/; // name_value
         var result = pattern.exec(hash);
-        if (result[1] === "page")
-            load_ajax(result[2]);
+        map[result[1]] = result[2];
     });
+
+    var pageName = map["page"];
+    if (pageName) {
+        var tabName = map["tab"];
+        if (tabName)
+            load_ajax(pageName, function() {
+                $("a[href=\"#tab_" + tabName + "\"]").trigger("click");
+                var pos = $("a[href=\"#tab_" + tabName + "\"]").offset();
+                $('body').animate({ scrollTop: pos.top });
+            });
+        else
+            load_ajax(pageName);
+    }
 }
 
-function load_ajax(name) {
+function load_ajax(name, func) {
     $("#content-ajax").load("pages/" + name + ".html", function(response, status, XMLHttpRequest) {
         if (name !== "404" && status !== "success") {
             load_ajax("404");
@@ -27,6 +41,8 @@ function load_ajax(name) {
             document.title = titleElem.text() + " | Socializ3d";
             titleElem.remove();
             $("time.timeago").timeago();
+            if (func !== undefined)
+                func();
         }
     });
 }
