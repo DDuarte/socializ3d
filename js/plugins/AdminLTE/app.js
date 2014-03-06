@@ -26,6 +26,7 @@ function load_ajax(name) {
             var titleElem = $("#content-ajax>title");
             document.title = titleElem.text() + " | Socializ3d";
             titleElem.remove();
+            $("time.timeago").timeago();
         }
     });
 }
