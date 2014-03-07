@@ -13,7 +13,7 @@ function hash_change() {
     var map = {};
 
     hash_parts.forEach(function (hash) {
-        var pattern = /([A-Za-z0-9]+)_([A-Za-z0-9]+)/; // name_value
+        var pattern = /([A-Za-z0-9]+)_([A-Za-z0-9]*)/; // name_value
         var result = pattern.exec(hash);
         map[result[1]] = result[2];
     });
