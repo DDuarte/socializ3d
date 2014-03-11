@@ -34,6 +34,7 @@ function hash_change() {
 
 function load_ajax(name, func) {
     $("#content-ajax").load("pages/" + name + ".html", function(response, status, XMLHttpRequest) {
+        $('.active').removeClass('active');
         if (name !== "404" && status !== "success") {
             load_ajax("404");
         } else {
@@ -43,6 +44,7 @@ function load_ajax(name, func) {
             $("time.timeago").timeago();
             if (func !== undefined)
                 func();
+            $('li>a[href="#page_' + name + '"]').parent().addClass('active');
         }
     });
 }
