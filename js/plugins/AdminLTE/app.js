@@ -34,7 +34,7 @@ function hash_change() {
 
 function load_ajax(name, func) {
     $("#content-ajax").load("pages/" + name + ".html", function(response, status, XMLHttpRequest) {
-        $('.active').removeClass('active');
+        $('.sidebar-menu .active').removeClass('active');
         if (name !== "404" && status !== "success") {
             load_ajax("404");
         } else {
