@@ -5,7 +5,24 @@
  *      This file should be included in all pages
  !**/
 
-function hash_change() {
+Socializ3d = {}
+
+Socializ3d.update_hash = function () {
+    var str = "#";
+    Object.keys(Socializ3d.hash).forEach(function (key) {
+        str += key + '_' + Socializ3d.hash[key] + '-';
+    });
+
+    Socializ3d._ignoreHashChange = true;
+    document.location.hash = str.slice(0, -1);
+};
+
+function hash_change() {    
+    if (Socializ3d._ignoreHashChange === true) {
+        delete Socializ3d._ignoreHashChange;
+        return;
+    }
+    
     if (document.location.hash.length === 0)
         document.location.hash = "page_catalog"; // default page
     var hash_parts = document.location.hash.slice(1).split("-"); // first character is #
@@ -18,6 +35,8 @@ function hash_change() {
         map[result[1]] = result[2];
     });
 
+    Socializ3d.hash = map;
+    
     var pageName = map["page"];
     if (pageName) {
         var tabName = map["tab"];
@@ -51,7 +70,8 @@ function load_ajax(name, func) {
 
 $(function() {
     "use strict";
-
+    
+    // window.addEventListener('hashchange', hash_change, false);
     window.onhashchange = hash_change;
 
     //Enable sidebar toggle
