@@ -12,9 +12,16 @@
         <div class="box col-sm-12 col-md-12">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs pull-right">
-                    <li class="active"><a href="#tab_info" data-toggle="tab">Information</a></li>
-                    <li><a href="#tab_comments" data-toggle="tab">Comments <span class="badge">2</span></a></li>
-                    <li class="pull-left header"><i class="fa fa-info-circle"></i> Generic Model</li>
+                    <li class="active">
+                        <a href="#tab_info" data-toggle="tab">Information</a>
+                    </li>
+                    <li>
+                        <a href="#tab_comments" data-toggle="tab">Comments
+                            <span class="badge">2</span>
+                        </a>
+                    </li>
+                    <li class="pull-left header">
+                        <i class="fa fa-info-circle"></i>Generic Model</li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_info">
@@ -25,15 +32,24 @@
                                         <img src="img/avatar3.png" class="img-square" alt="User Image" />
                                     </div>
                                     <div class="pull-left info">
-                                        <p>Author: <a href="#page_profile">Jane Doe</a></p>
-                                        <p><time class="timeago" datetime="2013-02-28T09:24:17Z">February 28, 2013</time></p>
+                                        <p>Author:
+                                            <a href="#page_profile">Jane Doe</a>
+                                        </p>
+                                        <p>
+                                            <time class="timeago" datetime="2013-02-28T09:24:17Z">February 28, 2013</time>
+                                        </p>
                                     </div>
                                 </div>
                                 <h4>Description:</h4>
                                 <p>This is the most bland model known to man. Shame on you for hosting this content.</p>
                                 <p>
-                                    <button class="btn bg-blue btn-social">
-                                        <i class="fa fa-download"></i><span>Download</span>
+                                    <button id="download-btn" class="btn bg-blue btn-social">
+                                        <i class="fa fa-download"></i>
+                                        <span>Download</span>
+                                    </button>
+                                    <button id="delete-btn" class="btn bg-red btn-social">
+                                        <i class="fa fa-trash-o"></i>
+                                        <span>Delete</span>
                                     </button>
                                 </p>
                             </div>
@@ -48,9 +64,12 @@
                                         <span class="btn bg-white btn-flat margin text-black">Model</span>
                                         <span class="btn bg-white btn-flat margin text-black">Bland</span>
                                         <span class="btn bg-white btn-flat margin text-black">CG</span>
-                                    </div><!-- /.box-body -->
-                                </div><!-- /.box -->
-                            </div><!-- /.col -->
+                                    </div>
+                                    <!-- /.box-body -->
+                                </div>
+                                <!-- /.box -->
+                            </div>
+                            <!-- /.col -->
                         </div>
                     </div>
                     <!-- /.tab-pane -->
@@ -60,11 +79,14 @@
                                 <div class="box-body chat" id="chat-box">
                                     <!-- chat item -->
                                     <div class="item">
-                                        <img src="img/avatar2.png" alt="user image" class="offline"/>
+                                        <img src="img/avatar2.png" alt="user image" class="offline" />
                                         <p class="message">
                                             <a href="#page_profile" class="name">
-                                            <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> <time class="timeago" datetime="2014-03-06T17:15:00Z">6 March, 2014</time></small>
-                                            Jane Doe
+                                                <small class="text-muted pull-right">
+                                                    <i class="fa fa-clock-o"></i>
+                                                    <time class="timeago" datetime="2014-03-06T17:15:00Z">6 March, 2014</time>
+                                                </small>
+                                                Jane Doe
                                             </a>
                                             This is something... I guess.
                                         </p>
@@ -72,11 +94,14 @@
                                     <!-- /.item -->
                                     <!-- chat item -->
                                     <div class="item">
-                                        <img src="img/avatar3.png" alt="user image" class="offline"/>
+                                        <img src="img/avatar3.png" alt="user image" class="offline" />
                                         <p class="message">
                                             <a href="#page_profile" class="name">
-                                            <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> <time class="timeago" datetime="2014-03-06T17:30:00Z">6 March, 2014</time></small>
-                                            Susan Doe
+                                                <small class="text-muted pull-right">
+                                                    <i class="fa fa-clock-o"></i>
+                                                    <time class="timeago" datetime="2014-03-06T17:30:00Z">6 March, 2014</time>
+                                                </small>
+                                                Susan Doe
                                             </a>
                                             I'm not fond of this one.
                                         </p>
@@ -86,36 +111,44 @@
                                 <!-- /.chat -->
                                 <div class="box-footer">
                                     <div class="input-group">
-                                        <input class="form-control" placeholder="Comment this model..."/>
+                                        <input class="form-control" placeholder="Comment this model..." />
                                         <div class="input-group-btn">
-                                            <button class="btn btn-success"><i class="fa fa-plus"></i></button>
+                                            <button class="btn btn-success">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                    <div class="box">
-                                        <div class="box-header">
-                                            <h3 class="box-title">Votes</h3>
-                                        </div>
-                                        <div class="box-body chart-responsive center-block">
-                                            <div class="chart" id="votes-chart" style="height: 150px; position: relative;"></div>
-                                            <div class="text-center">
-                                                <button style="opacity:1.0" id="up_vote_button" class="btn bg-green btn-social"><i class="fa fa-thumbs-up"></i> <span>Up vote</span></button>
-                                                <button style="opacity:1.0" id="down_vote_button" class="btn bg-red btn-social"><i class="fa fa-thumbs-down"></i> <span>Down vote</span></button>
-                                            </div>
+                                <div class="box">
+                                    <div class="box-header">
+                                        <h3 class="box-title">Votes</h3>
+                                    </div>
+                                    <div class="box-body chart-responsive center-block">
+                                        <div class="chart" id="votes-chart" style="height: 150px; position: relative;"></div>
+                                        <div class="text-center">
+                                            <button style="opacity:1.0" id="up_vote_button" class="btn bg-green btn-social">
+                                                <i class="fa fa-thumbs-up"></i>
+                                                <span>Up vote</span>
+                                            </button>
+                                            <button style="opacity:1.0" id="down_vote_button" class="btn bg-red btn-social">
+                                                <i class="fa fa-thumbs-down"></i>
+                                                <span>Down vote</span>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>  
+                        </div>
                     </div>
-                    <!-- /.tab-pane -->
                 </div>
-                <!-- /.tab-content -->
+                <!-- /.tab-pane -->
             </div>
-            <!-- nav-tabs-custom -->
+            <!-- /.tab-content -->
         </div>
+        <!-- nav-tabs-custom -->
+    </div>
     </div>
 </section>
 <!-- /.content -->
