@@ -60,6 +60,7 @@
         this.t = 0; // touches index
         this.isInit = false;
         this.fgColor = null; // main color
+        this.fgColor2 = null; // secondary color
         this.pColor = null; // previous color
         this.dH = null; // draw hook
         this.cH = null; // change hook
@@ -109,6 +110,7 @@
                     displayInput : this.$.data('displayinput') == null || this.$.data('displayinput'),
                     displayPrevious : this.$.data('displayprevious'),
                     fgColor : this.$.data('fgcolor') || '#87CEEB',
+                    fgColor2 : this.$.data('fgcolor2') || '#87CEEB',
                     inputColor: this.$.data('inputcolor'),
                     font: this.$.data('font') || 'Arial',
                     fontWeight: this.$.data('font-weight') || 'bold',

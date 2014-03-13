@@ -5,7 +5,24 @@
  *      This file should be included in all pages
  !**/
 
-function hash_change() {
+Socializ3d = {}
+
+Socializ3d.update_hash = function () {
+    var str = "#";
+    Object.keys(Socializ3d.hash).forEach(function (key) {
+        str += key + '_' + Socializ3d.hash[key] + '-';
+    });
+
+    Socializ3d._ignoreHashChange = true;
+    document.location.hash = str.slice(0, -1);
+};
+
+function hash_change() {    
+    if (Socializ3d._ignoreHashChange === true) {
+        delete Socializ3d._ignoreHashChange;
+        return;
+    }
+    
     if (document.location.hash.length === 0)
         document.location.hash = "page_catalog"; // default page
     var hash_parts = document.location.hash.slice(1).split("-"); // first character is #
@@ -13,11 +30,13 @@ function hash_change() {
     var map = {};
 
     hash_parts.forEach(function (hash) {
-        var pattern = /([A-Za-z0-9]+)_([A-Za-z0-9]+)/; // name_value
+        var pattern = /([A-Za-z0-9]+)_([A-Za-z0-9]*)/; // name_value
         var result = pattern.exec(hash);
         map[result[1]] = result[2];
     });
 
+    Socializ3d.hash = map;
+    
     var pageName = map["page"];
     if (pageName) {
         var tabName = map["tab"];
@@ -34,6 +53,7 @@ function hash_change() {
 
 function load_ajax(name, func) {
     $("#content-ajax").load("pages/" + name + ".html", function(response, status, XMLHttpRequest) {
+        $('.sidebar-menu .active').removeClass('active');
         if (name !== "404" && status !== "success") {
             load_ajax("404");
         } else {
@@ -43,13 +63,15 @@ function load_ajax(name, func) {
             $("time.timeago").timeago();
             if (func !== undefined)
                 func();
+            $('li>a[href="#page_' + name + '"]').parent().addClass('active');
         }
     });
 }
 
 $(function() {
     "use strict";
-
+    
+    // window.addEventListener('hashchange', hash_change, false);
     window.onhashchange = hash_change;
 
     //Enable sidebar toggle

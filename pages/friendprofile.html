@@ -13,11 +13,6 @@
                     <li>
                         <a href="#tab_info" data-toggle="tab">Info</a>
                     </li>
-                    <li class="pull-right">
-                        <a href="#tab_settings" data-toggle="tab">
-                            <i class="fa fa-gear"></i>
-                        </a>
-                    </li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_about">
@@ -30,7 +25,7 @@
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="tab_info">
                         <h4>Full Name:</h4>
-                        <p>Jane Christansen Gordon Doe</p>
+                        <p>John Christansen Gordon Doe</p>
                         <h4>Date of Birth:</h4>
                         19/12/1978
                         <h4>Interests:</h4>
@@ -67,7 +62,17 @@
                         <a href="#tab_groups" data-toggle="tab">Groups</a>
                     </li>
                     <li class="pull-left header">
-                        Jane Doe's Profile
+                        John Doe's Profile
+                    </li>
+                    <li class="pull-left">
+                        <button id="add-to-group-btn" class="btn bg-blue btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">
+                            <i class="fa fa-plus-square-o"></i>
+                            <span>Invite to group</span>
+                        </button>
+                        <button id="unfriend-btn" class="btn bg-blue btn-primary">
+                            <i class="fa fa-times"></i>
+                            <span>Unfriend</span>
+                        </button>
                     </li>
                 </ul>
                 <div class="tab-content">
@@ -283,7 +288,7 @@
                                         <span>Group</span>
                                     </li>
                                     <li>
-                                        <a href="#" class="btn btn-primary" role="button">Leave Group</a>
+                                        <a href="#" class="btn btn-primary" role="button">Join Group</a>
                                     </li>
                                 </ul>
                             </div>
@@ -312,7 +317,7 @@
                                         <span>Group</span>
                                     </li>
                                     <li>
-                                        <a href="#" class="btn btn-primary" role="button">Leave Group</a>
+                                        <a href="#" class="btn btn-primary" role="button">Join Group</a>
                                     </li>
                                 </ul>
                             </div>
@@ -341,7 +346,7 @@
                                         <span>Group</span>
                                     </li>
                                     <li>
-                                        <a href="#" class="btn btn-primary" role="button">Leave Group</a>
+                                        <a href="#" class="btn btn-primary" role="button">Join Group</a>
                                     </li>
                                 </ul>
                             </div>
@@ -372,13 +377,13 @@
                                         <span>User</span>
                                     </li>
                                     <li>
-                                        <a href="#" class="btn btn-primary" role="button">Unfriend</a>
+                                        <a href="#" class="btn btn-primary" role="button">Add Friend</a>
                                     </li>
                                 </ul>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
                                 <h3>
-                                    <a href="#page_friendprofile" title="">Jane Doe</a>
+                                    <a href="#" title="">Jane Doe</a>
                                 </h3>
                                 <p class="about">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, exercitationem, suscipit, distinctio, qui sapiente aspernatur molestiae non corporis magni sit sequi iusto debitis delectus doloremque.</p>
                             </div>
@@ -401,13 +406,13 @@
                                         <span>User</span>
                                     </li>
                                     <li>
-                                        <a href="#" class="btn btn-primary" role="button">Unfriend</a>
+                                        <a href="#" class="btn btn-primary" role="button">Add Friend</a>
                                     </li>
                                 </ul>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
                                 <h3>
-                                    <a href="#page_friendprofile" title="">Chris Doe</a>
+                                    <a href="#" title="">Chris Doe</a>
                                 </h3>
                                 <p class="about">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, exercitationem, suscipit, distinctio, qui sapiente aspernatur molestiae non corporis magni sit sequi iusto debitis delectus doloremque.</p>
                             </div>
@@ -430,13 +435,13 @@
                                         <span>User</span>
                                     </li>
                                     <li>
-                                        <a href="#" class="btn btn-primary" role="button">Unfriend</a>
+                                        <a href="#" class="btn btn-primary" role="button">Add Friend</a>
                                     </li>
                                 </ul>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
                                 <h3>
-                                    <a href="#page_friendprofile" title="">John Doe</a>
+                                    <a href="#" title="">John Doe</a>
                                 </h3>
                                 <p class="about">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, exercitationem, suscipit, distinctio, qui sapiente aspernatur molestiae non corporis magni sit sequi iusto debitis delectus doloremque.</p>
                             </div>
@@ -455,7 +460,7 @@
 <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
-            <div class="content-header">
+            <div class="content-header" style="text-align: center">
                 <h2>Choose the group(s)</h2>
             </div>
             <div class="box box-primary">
