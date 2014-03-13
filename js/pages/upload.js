@@ -1,4 +1,4 @@
-$("div#drop-files").dropzone({ 
+/* $("div#drop-files").dropzone({ 
     autoProcessQueue: false,
     uploadMultiple: false,
     parallelUploads: 1,
@@ -38,4 +38,4 @@ $("div#drop-files").dropzone({
     clickable: $("div#drop-files #upload-button").get(0),
     previewsContainer: $('#upload-preview').get(0),
     
-});
+}); */
