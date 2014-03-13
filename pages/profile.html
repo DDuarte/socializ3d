@@ -69,6 +69,14 @@
                     <li class="pull-left header">
                         John Doe's Profile
                     </li>
+                    <li class="pull-left">
+                        <button class="btn btn-primary">
+                            <i class="fa fa-user"></i>Add friend</button>
+                        <button id="add-to-group-btn" class="btn bg-blue btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">
+                            <i class="fa fa-plus-square-o"></i>
+                            <span>Invite to group</span>
+                        </button>
+                    </li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_gallery">
@@ -451,5 +459,39 @@
     </div>
 </section>
 <!-- /.content -->
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="content-header">
+                <h2> Choose the group(s)</h2>
+            </div>
+            <div class="box box-primary">
+                <div class="box-body notifications-box">
+                    <ul class="todo-list notifications-list">
+                        <li class="notification-item notification-group-item">
+                            <input type="checkbox">
+                            <span class="text">
+                                <span class="notification-group-name">Top Model Crew</span></span>  
+                        </li>
+                        <li class="notifiation-item notification-friendship-item">
+                            <input type="checkbox">
+                            <span class="text">
+                                <span class="notification-friendship-name">Oporto Anime Fans</span></span>
+                        </li>
+                        <li class="notification-item notification-group-activity-item">
+                            <input type="checkbox">
+                            <span class="text">
+                                <span class="notification-group-activity-name">Top Notch Design</span></span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="box-footer">
+                    <button class="btn btn-primary">Invite</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="js/bootstrap-tagsinput.min.js" type="text/javascript"></script>
