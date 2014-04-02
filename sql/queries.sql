@@ -60,5 +60,13 @@ CREATE FUNCTION get_notifications(oldest_date_limit timestamp, max_notifications
 	SELECT idFriendshipInvite, idGroupApplication, idGroupInvite, idModel FROM Notification WHERE createDate > $1 LIMIT $2
 $$ LANGUAGE SQL;
 
-
 -- 
+-----------------------
+-- Update statements --
+-----------------------
+
+-- Update model description --
+UPDATE TABLE Model SET description = :description WHERE id = :id;
+
+-- Update member's about field --
+UPDATE TABLE Member SET about = :about WHERE id = :id;
