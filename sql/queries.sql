@@ -54,4 +54,11 @@ SELECT DISTINCT Model.name as model, Member.name as author, count(CASE WHEN upVo
 	JOIN Member ON Member.id = Model.idAuthor 
 	JOIN TComment ON TComment.idModel = Model.id
 	GROUP BY Model.name, Member.name, TComment.id;
+
+-- List the newest notifications within a given range --	
+CREATE FUNCTION get_notifications(oldest_date_limit timestamp, max_notifications_limit integer) RETURNS TABLE(idFriendshipInvite bigint, idGroupApplication bigint, idGroupInvite bigint, idModel bigint) AS $$
+	SELECT idFriendshipInvite, idGroupApplication, idGroupInvite, idModel FROM Notification WHERE createDate > $1 LIMIT $2
+$$ LANGUAGE SQL;
+
+
 -- 
