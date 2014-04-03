@@ -3,11 +3,11 @@
 -------------------------
 
 -- Groups --
-SELECT name, about, avatarImg, createDate FROM TGroup WHERE visibility = 'public' AND TGroup.name = :modelName;
+SELECT name, about, avatarImg, createDate FROM TGroup WHERE visibility = 'public' AND TGroup.name = :groupName;
 -- Users --
 SELECT name, about, avatarImg, registerDate FROM Member WHERE Member.name = :memberName;
 -- Models --
-SELECT name, description, FROM Model WHERE Model.name = :name AND visibility = 'public';
+SELECT name, description, createDate FROM Model WHERE Model.name = :modelName AND visibility = 'public';
 
 ---
 
@@ -22,7 +22,8 @@ SELECT DISTINCT Model.name as model, Member.name as author, count(CASE WHEN upVo
     LEFT JOIN Vote ON Model.id = Vote.idModel 
 	LEFT JOIN TComment ON TComment.idModel = Model.id
 	WHERE Model.id = 1
-	GROUP BY Model.id, Member.id;	
+	GROUP BY Model.id, Member.id;
+	
 -- List all the members of a group --
 SELECT Member.id, Member.name FROM GroupUser 
 	JOIN TGroup ON GroupUser.idGroup = :groupId
@@ -66,6 +67,5 @@ $$ LANGUAGE SQL;
 
 -- Update model description --
 UPDATE TABLE Model SET description = :description WHERE id = :id;
-
 -- Update member's about field --
 UPDATE TABLE Member SET about = :about WHERE id = :id;
