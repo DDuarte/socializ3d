@@ -11,6 +11,11 @@ DROP TRIGGER IF EXISTS check_not_existent_friendship_trigger ON FriendshipInvite
 DROP TRIGGER IF EXISTS add_to_group_on_invite_acceptance_trigger ON GroupInvite;
 DROP TRIGGER IF EXISTS add_to_group_on_application_acceptance_trigger ON GroupApplication;
 DROP TRIGGER IF EXISTS create_friendship_on_invite_acceptance_trigger ON FriendshipInvite;
+DROP TRIGGER IF EXISTS insert_mode_insert_model_vote_trigger ON Model;
+DROP TRIGGER IF EXISTS friendship_symmetry_trigger ON Friendship;
+DROP TRIGGER IF EXISTS insert_vote_update_model_vote_trigger ON Vote;
+DROP TRIGGER IF EXISTS update_vote_update_model_vote_trigger ON Vote;
+DROP TRIGGER IF EXISTS delete_vote_update_model_vote_trigger ON Vote;
 
 ------------------------------
 -- PUBLICATION NOTIFICATION --
@@ -305,3 +310,59 @@ $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER friendship_symmetry_trigger BEFORE INSERT ON Friendship
 FOR EACH ROW WHEN (NEW.idMember1 > NEW.idMember2) EXECUTE PROCEDURE friendship_symmetry();
+
+-- Model Vote --
+
+CREATE OR REPLACE FUNCTION insert_mode_insert_model_vote() RETURNS TRIGGER AS $$
+    BEGIN
+        INSERT INTO ModelVote (idModel) VALUES (NEW.id);
+        RETURN NEW;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER insert_mode_insert_model_vote_trigger AFTER INSERT ON Model
+FOR EACH ROW EXECUTE PROCEDURE insert_mode_insert_model_vote();
+
+-- Model Vote Update --
+
+CREATE OR REPLACE FUNCTION insert_vote_update_model_vote() RETURNS TRIGGER AS $$
+    BEGIN
+        IF NEW.upvote = TRUE THEN
+            UPDATE ModelVote SET numVotes = numVotes + 1 WHERE idModel = NEW.idModel;
+        ELSE
+            UPDATE ModelVote SET numVotes = numVotes - 1 WHERE idModel = NEW.idModel;
+        END IF;
+        RETURN NEW;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER insert_vote_update_model_vote_trigger AFTER INSERT ON Vote
+FOR EACH ROW EXECUTE PROCEDURE insert_vote_update_model_vote();
+
+CREATE OR REPLACE FUNCTION update_vote_update_model_vote() RETURNS TRIGGER AS $$
+    BEGIN
+        IF NEW.upVote = TRUE THEN
+            UPDATE ModelVote SET numVotes = numVotes + 2 WHERE idModel = NEW.idModel;
+        ELSE
+            UPDATE ModelVote SET numVotes = numVotes - 2 WHERE idModel = NEW.idModel;
+        END IF;
+        RETURN NEW;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_vote_update_model_vote_trigger AFTER UPDATE ON Vote
+FOR EACH ROW WHEN (OLD.upVote <> NEW.upVote) EXECUTE PROCEDURE update_vote_update_model_vote();
+
+CREATE OR REPLACE FUNCTION delete_vote_update_model_vote() RETURNS TRIGGER AS $$
+    BEGIN
+        IF OLD.upVote = TRUE THEN
+            UPDATE ModelVote SET numVotes = numVotes - 1 WHERE idModel = NEW.idModel;
+        ELSE
+            UPDATE ModelVote SET numVotes = numVotes + 1 WHERE idModel = NEW.idModel;
+        END IF;
+        RETURN NEW;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER delete_vote_update_model_vote_trigger AFTER DELETE ON Vote
+FOR EACH ROW EXECUTE PROCEDURE delete_vote_update_model_vote();

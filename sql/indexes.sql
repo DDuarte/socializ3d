@@ -27,6 +27,7 @@ DROP INDEX IF EXISTS userInterest_idMember_idx;
 DROP INDEX IF EXISTS modelTag_idModel_idx;
 DROP INDEX IF EXISTS groupUser_idMember_idx;
 DROP INDEX IF EXISTS groupModel_idModel_idx;
+DROP INDEX IF EXISTS modelVote_numVotes_idx;
 
 -- Notification --
 CREATE INDEX notification_idx ON Notification(createDate);
@@ -86,4 +87,7 @@ CREATE INDEX groupUser_idMember_idx ON GroupUser(idMember);
 
 -- GroupModel -- 
 CREATE INDEX groupModel_idModel_idx ON GroupModel(idModel);
+
+-- ModelVote --
+CREATE INDEX modelVote_numVotes_idx ON ModelVote(numVotes DESC);
 
