@@ -26,6 +26,7 @@ DROP INDEX IF EXISTS tag_name_idx;
 DROP INDEX IF EXISTS userInterest_idMember_idx;
 DROP INDEX IF EXISTS modelTag_idModel_idx;
 DROP INDEX IF EXISTS groupUser_idMember_idx;
+DROP INDEX IF EXISTS groupModel_idModel_idx;
 
 -- Notification --
 CREATE INDEX notification_idx ON Notification(createDate);
