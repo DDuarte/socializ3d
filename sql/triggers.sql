@@ -26,8 +26,10 @@ CREATE OR REPLACE FUNCTION generate_publication_notification() RETURNS TRIGGER A
         notificationId bigint;
         friendId bigint;
     BEGIN
-        IF (NOT EXISTS(SELECT notification.id INTO notificationId FROM notification WHERE idmodel = NEW.id LIMIT 1)) THEN
+        IF (NOT EXISTS(SELECT notification.id FROM notification WHERE idmodel = NEW.id LIMIT 1)) THEN
             INSERT INTO notification (idmodel, notificationtype) VALUES (NEW.id, 'Publication'::notification_type) RETURNING id INTO notificationId;
+        ELSE
+            SELECT notification.id INTO notificationId FROM notification WHERE idmodel = NEW.id LIMIT 1;
         END IF;
 
         IF NEW.visibility IN ('public', 'friends') THEN 
@@ -55,7 +57,7 @@ FOR EACH ROW EXECUTE PROCEDURE generate_publication_notification();
 CREATE TRIGGER generate_publication_notification_trigger_on_change 
 AFTER UPDATE ON model
 FOR EACH ROW 
-WHEN (old.visibility <> NEW.visibility AND NEW.visibility IN ('public', 'friends'))  
+WHEN (old.visibility = 'private' AND NEW.visibility IN ('public', 'friends'))  
 EXECUTE PROCEDURE generate_publication_notification();
 
 -- Event: model is shared with group
