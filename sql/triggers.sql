@@ -82,6 +82,11 @@ FOR EACH ROW EXECUTE PROCEDURE generate_group_publication_notification();
 -- GROUP INVITE --
 ------------------
 
+-- Event: a member is invited to join a group
+-- Database Event: after insert on groupinvite
+-- Condition: N/A
+-- Action: Create notification for the invited member
+
 CREATE OR REPLACE FUNCTION generate_groupinvite_notification() RETURNS TRIGGER AS $example_table$
     DECLARE 
         notificationId bigint;
@@ -99,6 +104,11 @@ FOR EACH ROW EXECUTE PROCEDURE generate_groupinvite_notification();
 -----------------------
 -- GROUP APPLICATION --
 -----------------------
+
+-- Event: a member wants to join a public group
+-- Database Event: after insert on groupapplication
+-- Condition: N/A
+-- Action: Create notification for all the group admins of a group
 
 CREATE OR REPLACE FUNCTION generate_groupapplication_notification() RETURNS TRIGGER AS $example_table$
     DECLARE 
@@ -120,6 +130,11 @@ FOR EACH ROW EXECUTE PROCEDURE generate_groupapplication_notification();
 -- FRIENDSHIP INVITE --
 -----------------------
 
+-- Event: a member sends a friendship invite to another member
+-- Database Event: after insert on friendshipinvite
+-- Condition: N/A
+-- Action: Create notification for the invited member
+
 CREATE OR REPLACE FUNCTION generate_friendshipinvite_notification() RETURNS TRIGGER AS $example_table$
     DECLARE 
         notificationId bigint;
@@ -137,6 +152,11 @@ FOR EACH ROW EXECUTE PROCEDURE generate_friendshipinvite_notification();
 ---------------------------
 -- GROUP INVITE ACCEPTED --
 ---------------------------
+
+-- Event: an invited member accepts the invite to join a group
+-- Database Event: after update on groupinvite
+-- Condition: when accepted is changed to true
+-- Action: create a notification for the group admin that invited the member and for the group
 
 CREATE OR REPLACE FUNCTION generate_groupinviteaccepted_notification() RETURNS TRIGGER AS $example_table$
     DECLARE 
@@ -159,6 +179,11 @@ EXECUTE PROCEDURE generate_groupinviteaccepted_notification();
 -- GROUP APPLICATION ACCEPTED --
 --------------------------------
 
+-- Event: a group admin accepts the application of a member
+-- Database Event: after update on groupapplication
+-- Condition: when accepted is changed to true
+-- Action: create notification for the accepted user and for the group
+
 CREATE OR REPLACE FUNCTION generate_groupapplicationaccepted_notification() RETURNS TRIGGER AS $example_table$
     DECLARE 
         notificationId bigint;
@@ -179,6 +204,11 @@ EXECUTE PROCEDURE generate_groupapplicationaccepted_notification();
 --------------------------------
 -- FRIENDSHIP INVITE ACCEPTED --
 --------------------------------
+
+-- Event: a members accepts the friendship of another member
+-- Database Event: after update on friendshipinvite
+-- Condition: when accepted is changed to true
+-- Action: create notification and usernotification
 
 CREATE OR REPLACE FUNCTION generate_friendshipinviteaccepted_notification() RETURNS TRIGGER AS $example_table$
     DECLARE 
@@ -207,9 +237,9 @@ CREATE OR REPLACE FUNCTION check_not_existent_friendship() RETURNS TRIGGER AS $e
         minId := LEAST(NEW.idreceiver, NEW.idsender);
         maxId := GREATEST(NEW.idreceiver, NEW.idsender);
         
-        IF EXISTS(SELECT * FROM friendship WHERE idmember1 = minId AND idmember2 = maxId) THEN
+        IF EXISTS(SELECT 1 FROM friendship WHERE idmember1 = minId AND idmember2 = maxId) THEN
             RAISE EXCEPTION 'Cannot re-invite friends (friendship). (%, %)', NEW.idreceiver, NEW.idsender;
-        ELSIF EXISTS(SELECT * FROM friendshipInvite WHERE idreceiver = NEW.idsender AND idsender = NEW.idreceiver) THEN
+        ELSIF EXISTS(SELECT 1 FROM friendshipInvite WHERE idreceiver = NEW.idsender AND idsender = NEW.idreceiver) THEN
             RAISE EXCEPTION 'Cannot re-invite friends (friendshipInvite). (%, %)', NEW.idreceiver, NEW.idsender;
         END IF;
         RETURN NEW;
