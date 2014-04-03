@@ -56,10 +56,90 @@ SELECT DISTINCT Model.name as model, Member.name as author, count(CASE WHEN upVo
 	GROUP BY Model.name, Member.name, TComment.id;
 
 -- List the newest notifications within a given range --	
-CREATE FUNCTION get_notifications(oldest_date_limit timestamp, max_notifications_limit integer) RETURNS TABLE(idFriendshipInvite bigint, idGroupApplication bigint, idGroupInvite bigint, idModel bigint) AS $$
+CREATE OR REPLACE FUNCTION get_notifications(oldest_date_limit timestamp, max_notifications_limit integer) RETURNS TABLE(idFriendshipInvite bigint, idGroupApplication bigint, idGroupInvite bigint, idModel bigint) AS $$
 	SELECT idFriendshipInvite, idGroupApplication, idGroupInvite, idModel FROM Notification WHERE createDate > $1 LIMIT $2
 $$ LANGUAGE SQL;
 
+-----------
+-- Views --
+-----------
+
+CREATE VIEW IF NOT EXISTS user_tags AS
+	SELECT UserInterest.idMember AS idMember, Tag.name AS name
+	FROM UserInterest INNER JOIN Tag ON Tag.id = UserInterest.idTag;
+
+CREATE OR REPLACE FUNCTION insert_on_user_tags_view() RETURNS TRIGGER AS $$
+	DECLARE
+		tagid bigint;
+	BEGIN
+		IF NOT EXISTS(SELECT 1 FROM Tag WHERE Tag.name = NEW.name LIMIT 1) THEN
+			INSERT INTO Tag (name) VALUES (NEW.name) RETURNING Tag.id INTO tagid;
+		ELSE
+			SELECT Tag.id INTO tagid FROM Tag WHERE Tag.name = NEW.name LIMIT 1;
+		END IF;
+		
+		INSERT INTO UserInterest (idMember, idTag) SELECT NEW.idMember, tagid 
+			WHERE NOT EXISTS (SELECT 1 FROM UserInterest WHERE UserInterest.idMember= NEW.idMember AND UserInterest.idTag = tagid);
+			
+		RETURN NEW;
+	END; 
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER insert_on_user_tags_view_trigger INSTEAD OF INSERT ON user_tags FOR EACH ROW
+	EXECUTE PROCEDURE insert_on_user_tags_view();
+	
+	
+CREATE OR REPLACE FUNCTION delete_from_user_tags_view() RETURNS TRIGGER AS $$
+	DECLARE
+		tagid bigint;
+	BEGIN
+		SELECT Tag.id INTO tagid FROM TAG WHERE Tag.name = OLD.name LIMIT 1;
+		DELETE FROM UserInterest WHERE UserInterest.idMember = OLD.idMember AND UserInterest.idTag = tagid;
+		RETURN NEW;
+	END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER delete_from_user_tags_view_trigger INSTEAD OF DELETE ON user_tags FOR EACH ROW	
+	EXECUTE PROCEDURE delete_from_user_tags_view();
+	
+CREATE VIEW IF NOT EXISTS model_tags AS
+	SELECT ModelTag.idModel AS idModel, Tag.name AS name
+	FROM ModelTag INNER JOIN Tag ON Tag.id = ModelTag.idTag;
+	
+CREATE OR REPLACE FUNCTION insert_on_model_tags_view() RETURNS TRIGGER AS $$
+	DECLARE
+		tagid bigint;
+	BEGIN
+		IF NOT EXISTS(SELECT 1 FROM Tag WHERE Tag.name = NEW.name LIMIT 1) THEN
+			INSERT INTO Tag (name) VALUES (NEW.name) RETURNING Tag.id INTO tagid;
+		ELSE
+			SELECT Tag.id INTO tagid FROM Tag WHERE Tag.name = NEW.name LIMIT 1;
+		END IF;
+		
+		INSERT INTO ModelTag (idModel, idTag) SELECT NEW.idModel, tagid 
+			WHERE NOT EXISTS (SELECT 1 FROM ModelTag WHERE ModelTag.idModel= NEW.idModel AND ModelTag.idTag = tagid);
+			
+		RETURN NEW;
+	END; 
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER insert_on_model_tags_view_trigger INSTEAD OF INSERT ON model_tags FOR EACH ROW
+	EXECUTE PROCEDURE insert_on_model_tags_view();
+	
+	
+CREATE OR REPLACE FUNCTION delete_from_model_tags_view() RETURNS TRIGGER AS $$
+	DECLARE
+		tagid bigint;
+	BEGIN
+		SELECT Tag.id INTO tagid FROM TAG WHERE Tag.name = OLD.name LIMIT 1;
+		DELETE FROM ModelTag WHERE ModelTag.idModel = OLD.idModel AND ModelTag.idTag = tagid;
+		RETURN NEW;
+	END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER delete_from_model_tags_view_trigger INSTEAD OF DELETE ON model_tags FOR EACH ROW	
+	EXECUTE PROCEDURE delete_from_model_tags_view();
+	
 -- 
 -----------------------
 -- Update statements --
