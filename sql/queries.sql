@@ -21,7 +21,7 @@ SELECT DISTINCT Model.name as model, Member.name as author, count(CASE WHEN upVo
 	JOIN Member ON Member.id = Model.idAuthor 
     LEFT JOIN Vote ON Model.id = Vote.idModel 
 	LEFT JOIN TComment ON TComment.idModel = Model.id
-	WHERE Model.id = 1
+	WHERE Model.id = :id
 	GROUP BY Model.id, Member.id;
 	
 -- List all the members of a group --
@@ -58,15 +58,36 @@ SELECT DISTINCT Model.name as model, Member.name as author, count(CASE WHEN upVo
 	GROUP BY Model.name, Member.name, TComment.id;
 
 -- List the newest notifications within a given range --	
-CREATE OR REPLACE FUNCTION get_notifications(oldest_date_limit timestamp, max_notifications_limit integer) RETURNS TABLE(idFriendshipInvite bigint, idGroupApplication bigint, idGroupInvite bigint, idModel bigint) AS $$
-	SELECT idFriendshipInvite, idGroupApplication, idGroupInvite, idModel FROM Notification WHERE createDate > $1 LIMIT $2
+CREATE OR REPLACE FUNCTION get_notifications(oldest_date_limit timestamp, max_notifications_limit integer) RETURNS TABLE(idNotification bigint, notType notification_type, idFriendshipInvite bigint, idGroupApplication bigint, idGroupInvite bigint, idModel bigint) AS $$
+	SELECT id, notificationType, idFriendshipInvite, idGroupApplication, idGroupInvite, idModel FROM Notification WHERE createDate < $1 LIMIT $2
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION get_member_notifications(memberId bigint, oldest_date_limit timestamp, max_notifications_limit integer) RETURNS TABLE(idNotification bigint, notType notification_type, idFriendshipInvite bigint, idGroupApplication bigint, idGroupInvite bigint, idModel bigint) AS $$
+	SELECT Notification.id, Notification.notificationType, Notification.idFriendshipInvite, Notification.idGroupApplication, Notification.idGroupInvite, Notification.idModel FROM Notification JOIN UserNotification ON UserNotification.idMember = $1 AND UserNotification.idNotification = Notification.id  WHERE createDate < $2 LIMIT $3
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION get_group_notifications(groupId bigint, oldest_date_limit timestamp, max_notifications_limit integer) RETURNS TABLE(idNotification bigint, notType notification_type, idFriendshipInvite bigint, idGroupApplication bigint, idGroupInvite bigint, idModel bigint) AS $$
+	SELECT Notification.id, Notification.notificationType, Notification.idFriendshipInvite, Notification.idGroupApplication, Notification.idGroupInvite, Notification.idModel FROM Notification JOIN GroupNotification ON GroupNotification.idGroup = $1 AND GroupNotification.idNotification = Notification.id  WHERE createDate < $2 LIMIT $3
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION get_model(memberId bigint, oldest_date_limit timestamp, max_notifications_limit integer) RETURNS TABLE(idModel bigint) AS $$
+	SELECT Model.id
+    FROM Model 
+    WHERE Model.createDate < $2
+        AND (   visibility = 'public'
+            OR (visibility = 'friends' AND $1 IN (SELECT FriendShip.idMember1 AS idFriend FROM Friendship WHERE Friendship.idMember2 = Model.idAuthor 
+                                                        UNION ALL
+                                                        SELECT FriendShip.idMember2 AS idFriend FROM Friendship WHERE Friendship.idMember1 = Model.idAuthor)
+                )
+            )
+    LIMIT $3
 $$ LANGUAGE SQL;
 
 -----------
 -- Views --
 -----------
 
-CREATE VIEW IF NOT EXISTS user_tags AS
+CREATE VIEW user_tags AS
 	SELECT UserInterest.idMember AS idMember, Tag.name AS name
 	FROM UserInterest INNER JOIN Tag ON Tag.id = UserInterest.idTag;
 
@@ -104,7 +125,7 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER delete_from_user_tags_view_trigger INSTEAD OF DELETE ON user_tags FOR EACH ROW	
 	EXECUTE PROCEDURE delete_from_user_tags_view();
 	
-CREATE VIEW IF NOT EXISTS model_tags AS
+CREATE VIEW model_tags AS
 	SELECT ModelTag.idModel AS idModel, Tag.name AS name
 	FROM ModelTag INNER JOIN Tag ON Tag.id = ModelTag.idTag;
 	

@@ -3,14 +3,14 @@ DROP TRIGGER IF EXISTS generate_publication_notification_trigger_on_change ON Mo
 DROP TRIGGER IF EXISTS generate_group_publication_notification_trigger ON GroupModel;
 DROP TRIGGER IF EXISTS generate_group_invite_notification_trigger ON GroupInvite;
 DROP TRIGGER IF EXISTS generate_group_application_notification_trigger ON GroupApplication;
-DROP TRIGGER IF EXISTS generate_frienship_invite_notification_trigger ON FrienshipInvite;
+DROP TRIGGER IF EXISTS generate_frienship_invite_notification_trigger ON FriendshipInvite;
 DROP TRIGGER IF EXISTS generate_group_invite_accepted_notification_trigger ON GroupInvite;
 DROP TRIGGER IF EXISTS generate_group_application_notification_accepted_trigger ON GroupApplication;
-DROP TRIGGER IF EXISTS generate_frienship_invite_notification_accepted_trigger ON FrienshipInvite;
-DROP TRIGGER IF EXISTS check_not_existent_friendship_trigger ON FrienshipInvite;
+DROP TRIGGER IF EXISTS generate_frienship_invite_notification_accepted_trigger ON FriendshipInvite;
+DROP TRIGGER IF EXISTS check_not_existent_friendship_trigger ON FriendshipInvite;
 DROP TRIGGER IF EXISTS add_to_group_on_invite_acceptance_trigger ON GroupInvite;
 DROP TRIGGER IF EXISTS add_to_group_on_application_acceptance_trigger ON GroupApplication;
-DROP TRIGGER IF EXISTS create_friendship_on_invite_acceptance_trigger ON FrienshipInvite;
+DROP TRIGGER IF EXISTS create_friendship_on_invite_acceptance_trigger ON FriendshipInvite;
 
 ------------------------------
 -- PUBLICATION NOTIFICATION --
@@ -131,7 +131,7 @@ FOR EACH ROW EXECUTE PROCEDURE generate_group_application_notification();
 -----------------------
 
 -- Event: a member sends a friendship invite to another member
--- Database Event: after insert on FrienshipInvite
+-- Database Event: after insert on FriendshipInvite
 -- Condition: N/A
 -- Action: Create Notification for the invited member
 
@@ -139,13 +139,13 @@ CREATE OR REPLACE FUNCTION generate_frienship_invite_notification() RETURNS TRIG
     DECLARE 
         notificationId bigint;
     BEGIN
-        INSERT INTO Notification (idFrienshipInvite, notificationType) VALUES (NEW.id, 'FriendshipInvite') RETURNING id INTO notificationId;
+        INSERT INTO Notification (idFriendshipInvite, notificationType) VALUES (NEW.id, 'FriendshipInvite') RETURNING id INTO notificationId;
         INSERT INTO UserNotification (idMember, idNotification) VALUES (NEW.idReceiver, notificationId);
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER generate_frienship_invite_notification_trigger AFTER INSERT ON FrienshipInvite
+CREATE TRIGGER generate_frienship_invite_notification_trigger AFTER INSERT ON FriendshipInvite
 FOR EACH ROW EXECUTE PROCEDURE generate_frienship_invite_notification();
 
 
@@ -206,7 +206,7 @@ EXECUTE PROCEDURE generate_group_application_accepted_notification();
 --------------------------------
 
 -- Event: a members accepts the friendship of another member
--- Database Event: after update on FrienshipInvite
+-- Database Event: after update on FriendshipInvite
 -- Condition: when accepted is changed to true
 -- Action: create Notification and userNotification
 
@@ -214,13 +214,13 @@ CREATE OR REPLACE FUNCTION generate_frienship_invite_accepted_notification() RET
     DECLARE 
         notificationId bigint;
     BEGIN
-        INSERT INTO Notification (idFrienshipInvite, notificationType) VALUES (NEW.id, 'FriendshipInviteAccepted') RETURNING id INTO notificationId;
+        INSERT INTO Notification (idFriendshipInvite, notificationType) VALUES (NEW.id, 'FriendshipInviteAccepted') RETURNING id INTO notificationId;
         INSERT INTO UserNotification (idMember, idNotification) VALUES (NEW.idSender, notificationId);
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER generate_frienship_invite_notification_accepted_trigger AFTER UPDATE ON FrienshipInvite
+CREATE TRIGGER generate_frienship_invite_notification_accepted_trigger AFTER UPDATE ON FriendshipInvite
 FOR EACH ROW WHEN (OLD.accepted IS NULL AND NEW.accepted = true)
 EXECUTE PROCEDURE generate_frienship_invite_accepted_notification();
 
@@ -239,14 +239,14 @@ CREATE OR REPLACE FUNCTION check_not_existent_friendship() RETURNS TRIGGER AS $$
         
         IF EXISTS(SELECT 1 FROM Friendship WHERE idMember1 = minId AND idMember2 = maxId) THEN
             RAISE EXCEPTION 'Cannot re-invite friends (friendship). (%, %)', NEW.idReceiver, NEW.idSender;
-        ELSIF EXISTS(SELECT 1 FROM FrienshipInvite WHERE idReceiver = NEW.idSender AND idSender = NEW.idReceiver) THEN
-            RAISE EXCEPTION 'Cannot re-invite friends (FrienshipInvite). (%, %)', NEW.idReceiver, NEW.idSender;
+        ELSIF EXISTS(SELECT 1 FROM FriendshipInvite WHERE idReceiver = NEW.idSender AND idSender = NEW.idReceiver) THEN
+            RAISE EXCEPTION 'Cannot re-invite friends (FriendshipInvite). (%, %)', NEW.idReceiver, NEW.idSender;
         END IF;
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER check_not_existent_friendship_trigger BEFORE INSERT ON FrienshipInvite
+CREATE TRIGGER check_not_existent_friendship_trigger BEFORE INSERT ON FriendshipInvite
 FOR EACH ROW EXECUTE PROCEDURE check_not_existent_friendship();
 
 -----------------------------------
@@ -292,13 +292,16 @@ CREATE OR REPLACE FUNCTION create_friendship_on_invite_acceptance() RETURNS TRIG
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER create_friendship_on_invite_acceptance_trigger AFTER UPDATE ON FrienshipInvite
+CREATE TRIGGER create_friendship_on_invite_acceptance_trigger AFTER UPDATE ON FriendshipInvite
 FOR EACH ROW WHEN (OLD.accepted IS NULL AND NEW.accepted = True) EXECUTE PROCEDURE create_friendship_on_invite_acceptance();
 
 -- FRIENSHIP SYMMETRY RULE --
 
-CREATE OR REPLACE RULE friendship_symmetry_rule AS
-    ON INSERT TO Friendship
-    WHERE NEW.idMember1 > NEW.idMember2
-    DO INSTEAD 
+CREATE OR REPLACE FUNCTION friendship_symmetry() RETURNS TRIGGER AS $$
+    BEGIN
         INSERT INTO Friendship (idMember1, idMember2, createDate) VALUES (NEW.idMember2, NEW.idMember1, NEW.createDate);
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER friendship_symmetry_trigger BEFORE INSERT ON Friendship
+FOR EACH ROW WHEN (NEW.idMember1 > NEW.idMember2) EXECUTE PROCEDURE friendship_symmetry();
