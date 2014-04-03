@@ -37,10 +37,12 @@ SELECT Member.id, Member.name FROM GroupUser
 	ORDER BY Member.name ASC;
 	
 -- List all the friends of a user --
-SELECT Member.id, Member.name FROM (SELECT FriendShip.idMember1 AS idFriend FROM Friendship WHERE Friendship.idMember2 = :id 
-	UNION
-	SELECT FriendShip.idMember2 AS idFriend FROM Friendship WHERE Friendship.idMember1 = :id) 
-	JOIN Member ON Member.id = idFriend;
+SELECT Member.id, Member.name 
+FROM (
+    SELECT FriendShip.idMember1 AS idFriend FROM Friendship WHERE Friendship.idMember2 = :id 
+	UNION ALL
+	SELECT FriendShip.idMember2 AS idFriend FROM Friendship WHERE Friendship.idMember1 = :id
+) JOIN Member ON Member.id = idFriend;
 	
 -- List all the groups of a user --
 SELECT TGroup.id, TGroup.name FROM TGroup JOIN GroupUser ON GroupUser.idGroup = TGroup.id AND GroupUser.idMember = :id;
