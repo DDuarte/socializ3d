@@ -1,44 +1,44 @@
-DROP TRIGGER IF EXISTS generate_publication_notification_trigger ON model;
-DROP TRIGGER IF EXISTS generate_publication_notification_trigger_on_change ON model;
-DROP TRIGGER IF EXISTS generate_group_publication_notification_trigger ON groupmodel;
-DROP TRIGGER IF EXISTS generate_groupinvite_notification_trigger ON groupinvite;
-DROP TRIGGER IF EXISTS generate_groupapplication_notification_trigger ON groupapplication;
-DROP TRIGGER IF EXISTS generate_friendshipinvite_notification_trigger ON friendshipinvite;
-DROP TRIGGER IF EXISTS generate_groupinviteaccepted_notification_trigger ON groupinvite;
-DROP TRIGGER IF EXISTS generate_groupapplication_notificationaccepted_trigger ON groupapplication;
-DROP TRIGGER IF EXISTS generate_friendshipinvite_notificationaccepted_trigger ON friendshipinvite;
-DROP TRIGGER IF EXISTS check_not_existent_friendship_trigger ON friendshipInvite;
-DROP TRIGGER IF EXISTS check_not_existent_friendship_invite_trigger ON friendshipInvite;
-
--- evento, condição e código
+DROP TRIGGER IF EXISTS generate_publication_notification_trigger ON Model;
+DROP TRIGGER IF EXISTS generate_publication_notification_trigger_on_change ON Model;
+DROP TRIGGER IF EXISTS generate_group_publication_notification_trigger ON GroupModel;
+DROP TRIGGER IF EXISTS generate_group_invite_notification_trigger ON GroupInvite;
+DROP TRIGGER IF EXISTS generate_group_application_notification_trigger ON GroupApplication;
+DROP TRIGGER IF EXISTS generate_frienship_invite_notification_trigger ON FrienshipInvite;
+DROP TRIGGER IF EXISTS generate_group_invite_accepted_notification_trigger ON GroupInvite;
+DROP TRIGGER IF EXISTS generate_group_application_notification_accepted_trigger ON GroupApplication;
+DROP TRIGGER IF EXISTS generate_frienship_invite_notification_accepted_trigger ON FrienshipInvite;
+DROP TRIGGER IF EXISTS check_not_existent_friendship_trigger ON FrienshipInvite;
+DROP TRIGGER IF EXISTS add_to_group_on_invite_acceptance_trigger ON GroupInvite;
+DROP TRIGGER IF EXISTS add_to_group_on_application_acceptance_trigger ON GroupApplication;
+DROP TRIGGER IF EXISTS create_friendship_on_invite_acceptance_trigger ON FrienshipInvite;
 
 ------------------------------
 -- PUBLICATION NOTIFICATION --
 ------------------------------
 
--- Event: model is published
--- Database Event: after insert on model table
+-- Event: Model is published
+-- Database Event: after insert on Model table
 -- Condition: none
--- Action: create publication notification and associate it with author's friends if model's visibility is public or friends 
+-- Action: create publication notification and associate it with author's friends if Model's visibility is public or friends 
 
-CREATE OR REPLACE FUNCTION generate_publication_notification() RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION generate_publication_Notification() RETURNS TRIGGER AS $$
     DECLARE
         notificationId bigint;
         friendId bigint;
     BEGIN
-        IF (NOT EXISTS(SELECT notification.id FROM notification WHERE idmodel = NEW.id LIMIT 1)) THEN
-            INSERT INTO notification (idmodel, notificationtype) VALUES (NEW.id, 'Publication'::notification_type) RETURNING id INTO notificationId;
+        IF (NOT EXISTS(SELECT Notification.id FROM Notification WHERE idModel = NEW.id LIMIT 1)) THEN
+            INSERT INTO Notification (idModel, Notificationtype) VALUES (NEW.id, 'Publication'::Notification_type) RETURNING id INTO NotificationId;
         ELSE
-            SELECT notification.id INTO notificationId FROM notification WHERE idmodel = NEW.id LIMIT 1;
+            SELECT Notification.id INTO notificationId FROM Notification WHERE idModel = NEW.id LIMIT 1;
         END IF;
 
         IF NEW.visibility IN ('public', 'friends') THEN 
-            FOR friendId IN SELECT idmember1 FROM friendship WHERE idmember2 = NEW.idAuthor UNION SELECT idmember2 FROM friendship WHERE idmember1 = NEW.idAuthor
+            FOR friendId IN SELECT idMember1 FROM Friendship WHERE idMember2 = NEW.idAuthor UNION ALL SELECT idMember2 FROM Friendship WHERE idMember1 = NEW.idAuthor
             LOOP
-                INSERT INTO usernotification (idnotification, idmember) SELECT notificationId, friendId WHERE NOT EXISTS ( 
-                    SELECT * FROM usernotification 
-                    WHERE idnotification = notificationId AND 
-                          idmember = friendId 
+                INSERT INTO UserNotification (idNotification, idMember) SELECT notificationId, friendId WHERE NOT EXISTS ( 
+                    SELECT 1 FROM UserNotification 
+                    WHERE idNotification = notificationId AND 
+                          idMember = friendId 
                 );
             END LOOP;
         END IF;
@@ -46,36 +46,36 @@ CREATE OR REPLACE FUNCTION generate_publication_notification() RETURNS TRIGGER A
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER generate_publication_notification_trigger AFTER INSERT ON model
+CREATE TRIGGER generate_publication_notification_trigger AFTER INSERT ON Model
 FOR EACH ROW EXECUTE PROCEDURE generate_publication_notification();
 
--- Event: model visibility is changed
--- Database Event: after update on model table
--- Condition: visibility changes and new visibility is public or friends
--- Action: associate publication notification with author's friends
+-- Event: Model visibility is changed
+-- Database Event: after update on Model table
+-- Condition: visibility changes and NEW visibility is public or friends
+-- Action: associate publication Notification with author's friends
 
 CREATE TRIGGER generate_publication_notification_trigger_on_change 
-AFTER UPDATE ON model
+AFTER UPDATE ON Model
 FOR EACH ROW 
-WHEN (old.visibility = 'private' AND NEW.visibility IN ('public', 'friends'))  
+WHEN (OLD.visibility = 'private' AND NEW.visibility IN ('public', 'friends'))  
 EXECUTE PROCEDURE generate_publication_notification();
 
--- Event: model is shared with group
--- Database Event: after insert on groupmodel table
+-- Event: Model is shared with group
+-- Database Event: after insert on GroupModel table
 -- Condition: none
--- Action: associate publication notification with group
+-- Action: associate publication Notification with group
 
 CREATE OR REPLACE FUNCTION generate_group_publication_notification() RETURNS TRIGGER AS $$
     BEGIN    
-        INSERT INTO groupnotification(idgroup, idnotification) 
-            SELECT NEW.idgroup, notification.id 
-            FROM notification 
-            WHERE notification.idmodel = NEW.idmodel;
+        INSERT INTO GroupNotification (idGroup, idNotification) 
+            SELECT NEW.idGroup, Notification.id 
+            FROM Notification 
+            WHERE Notification.idModel = NEW.idModel;
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER generate_group_publication_notification_trigger AFTER INSERT ON groupmodel
+CREATE TRIGGER generate_group_publication_notification_trigger AFTER INSERT ON GroupModel
 FOR EACH ROW EXECUTE PROCEDURE generate_group_publication_notification();
 
 ------------------
@@ -83,70 +83,70 @@ FOR EACH ROW EXECUTE PROCEDURE generate_group_publication_notification();
 ------------------
 
 -- Event: a member is invited to join a group
--- Database Event: after insert on groupinvite
+-- Database Event: after insert on GroupInvite
 -- Condition: N/A
--- Action: Create notification for the invited member
+-- Action: Create Notification for the invited member
 
-CREATE OR REPLACE FUNCTION generate_groupinvite_notification() RETURNS TRIGGER AS $example_table$
+CREATE OR REPLACE FUNCTION generate_group_invite_notification() RETURNS TRIGGER AS $$
     DECLARE 
         notificationId bigint;
     BEGIN
-        INSERT INTO notification (idgroupinvite, notificationtype) VALUES (NEW.id, 'GroupInvite'::notification_type) RETURNING id INTO notificationId;
-        INSERT INTO usernotification (idmember, idnotification) VALUES (NEW.idreceiver, notificationId);
+        INSERT INTO Notification (idGroupInvite, notificationtype) VALUES (NEW.id, 'GroupInvite') RETURNING id INTO notificationId;
+        INSERT INTO UserNotification (idMember, idNotification) VALUES (NEW.idReceiver, notificationId);
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE TRIGGER generate_groupinvite_notification_trigger AFTER INSERT ON groupinvite
-FOR EACH ROW EXECUTE PROCEDURE generate_groupinvite_notification();
+CREATE TRIGGER generate_group_invite_notification_trigger AFTER INSERT ON GroupInvite
+FOR EACH ROW EXECUTE PROCEDURE generate_group_invite_notification();
 
 -----------------------
 -- GROUP APPLICATION --
 -----------------------
 
 -- Event: a member wants to join a public group
--- Database Event: after insert on groupapplication
+-- Database Event: after insert on GroupApplication
 -- Condition: N/A
--- Action: Create notification for all the group admins of a group
+-- Action: Create Notification for all the group admins of a group
 
-CREATE OR REPLACE FUNCTION generate_groupapplication_notification() RETURNS TRIGGER AS $example_table$
+CREATE OR REPLACE FUNCTION generate_group_application_notification() RETURNS TRIGGER AS $$
     DECLARE 
         notificationId bigint;
         adminId bigint;
     BEGIN
-        INSERT INTO notification (idgroupapplication, notificationtype) VALUES (NEW.id, 'GroupApplication'::notification_type) RETURNING id INTO notificationId;
-        FOR adminId IN SELECT idmember FROM GroupUser WHERE idgroup = NEW.idgroup AND isAdmin = TRUE LOOP
-            INSERT INTO usernotification (idmember, idnotification) VALUES (adminId, notificationId);
+        INSERT INTO Notification (idGroupApplication, notificationType) VALUES (NEW.id, 'GroupApplication') RETURNING id INTO notificationId;
+        FOR adminId IN SELECT idMember FROM GroupUser WHERE idGroup = NEW.idGroup AND isAdmin = TRUE LOOP
+            INSERT INTO UserNotification (idMember, idNotification) VALUES (adminId, notificationId);
         END LOOP;
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER generate_groupapplication_notification_trigger AFTER INSERT ON groupapplication
-FOR EACH ROW EXECUTE PROCEDURE generate_groupapplication_notification();
+CREATE TRIGGER generate_group_application_notification_trigger AFTER INSERT ON GroupApplication
+FOR EACH ROW EXECUTE PROCEDURE generate_group_application_notification();
 
 -----------------------
 -- FRIENDSHIP INVITE --
 -----------------------
 
 -- Event: a member sends a friendship invite to another member
--- Database Event: after insert on friendshipinvite
+-- Database Event: after insert on FrienshipInvite
 -- Condition: N/A
--- Action: Create notification for the invited member
+-- Action: Create Notification for the invited member
 
-CREATE OR REPLACE FUNCTION generate_friendshipinvite_notification() RETURNS TRIGGER AS $example_table$
+CREATE OR REPLACE FUNCTION generate_frienship_invite_notification() RETURNS TRIGGER AS $$
     DECLARE 
         notificationId bigint;
     BEGIN
-        INSERT INTO notification (idfriendshipinvite, notificationtype) VALUES (NEW.id, 'FriendshipInvite'::notification_type) RETURNING id INTO notificationId;
-        INSERT INTO usernotification (idmember, idnotification) VALUES (NEW.idreceiver, notificationId);
+        INSERT INTO Notification (idFrienshipInvite, notificationType) VALUES (NEW.id, 'FriendshipInvite') RETURNING id INTO notificationId;
+        INSERT INTO UserNotification (idMember, idNotification) VALUES (NEW.idReceiver, notificationId);
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER generate_friendshipinvite_notification_trigger AFTER INSERT ON friendshipinvite
-FOR EACH ROW EXECUTE PROCEDURE generate_friendshipinvite_notification();
+CREATE TRIGGER generate_frienship_invite_notification_trigger AFTER INSERT ON FrienshipInvite
+FOR EACH ROW EXECUTE PROCEDURE generate_frienship_invite_notification();
 
 
 ---------------------------
@@ -154,75 +154,75 @@ FOR EACH ROW EXECUTE PROCEDURE generate_friendshipinvite_notification();
 ---------------------------
 
 -- Event: an invited member accepts the invite to join a group
--- Database Event: after update on groupinvite
+-- Database Event: after update on GroupInvite
 -- Condition: when accepted is changed to true
--- Action: create a notification for the group admin that invited the member and for the group
+-- Action: create a Notification for the group admin that invited the member and for the group
 
-CREATE OR REPLACE FUNCTION generate_groupinviteaccepted_notification() RETURNS TRIGGER AS $example_table$
+CREATE OR REPLACE FUNCTION generate_group_invite_accepted_notification() RETURNS TRIGGER AS $$
     DECLARE 
         notificationId bigint;
     BEGIN
-        INSERT INTO notification (idgroupinvite, notificationtype) VALUES (NEW.id, 'GroupInviteAccepted'::notification_type) RETURNING id INTO notificationId;
-        INSERT INTO usernotification (idmember, idnotification) VALUES (NEW.idsender, notificationId);
-        INSERT INTO groupnotification (idgroup, idnotification) VALUES (NEW.idgroup, notificationId);
+        INSERT INTO Notification (idGroupInvite, notificationtype) VALUES (NEW.id, 'GroupInviteAccepted') RETURNING id INTO notificationId;
+        INSERT INTO UserNotification (idMember, idNotification) VALUES (NEW.idSender, notificationId);
+        INSERT INTO GroupNotification (idGroup, idNotification) VALUES (NEW.idGroup, notificationId);
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE TRIGGER generate_groupinviteaccepted_notification_trigger AFTER UPDATE ON groupinvite
+CREATE TRIGGER generate_group_invite_accepted_notification_trigger AFTER UPDATE ON GroupInvite
 FOR EACH ROW 
-WHEN (old.accepted IS NULL AND NEW.accepted = true)
-EXECUTE PROCEDURE generate_groupinviteaccepted_notification();
+WHEN (OLD.accepted IS NULL AND NEW.accepted = true)
+EXECUTE PROCEDURE generate_group_invite_accepted_notification();
 
 --------------------------------
 -- GROUP APPLICATION ACCEPTED --
 --------------------------------
 
 -- Event: a group admin accepts the application of a member
--- Database Event: after update on groupapplication
+-- Database Event: after update on GroupApplication
 -- Condition: when accepted is changed to true
--- Action: create notification for the accepted user and for the group
+-- Action: create Notification for the accepted user and for the group
 
-CREATE OR REPLACE FUNCTION generate_groupapplicationaccepted_notification() RETURNS TRIGGER AS $example_table$
+CREATE OR REPLACE FUNCTION generate_group_application_accepted_notification() RETURNS TRIGGER AS $$
     DECLARE 
         notificationId bigint;
         adminId bigint;
     BEGIN
-        INSERT INTO notification (idgroupapplication, notificationtype) VALUES (NEW.id, 'GroupApplicationAccepted'::notification_type) RETURNING id INTO notificationId;
-        INSERT INTO usernotification (idmember, idnotification) VALUES (NEW.idmember, notificationId);
-        INSERT INTO groupnotification (idgroup, idnotification) VALUES (NEW.idgroup, notificationId);
+        INSERT INTO Notification (idGroupApplication, notificationType) VALUES (NEW.id, 'GroupApplicationAccepted') RETURNING id INTO notificationId;
+        INSERT INTO UserNotification (idMember, idNotification) VALUES (NEW.idMember, notificationId);
+        INSERT INTO GroupNotification (idGroup, idNotification) VALUES (NEW.idGroup, notificationId);
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER generate_groupapplication_notificationaccepted_trigger AFTER UPDATE ON groupapplication
+CREATE TRIGGER generate_group_application_notification_accepted_trigger AFTER UPDATE ON GroupApplication
 FOR EACH ROW 
-WHEN (old.accepted IS NULL AND NEW.accepted = true)
-EXECUTE PROCEDURE generate_groupapplicationaccepted_notification();
+WHEN (OLD.accepted IS NULL AND NEW.accepted = true)
+EXECUTE PROCEDURE generate_group_application_accepted_notification();
 
 --------------------------------
 -- FRIENDSHIP INVITE ACCEPTED --
 --------------------------------
 
 -- Event: a members accepts the friendship of another member
--- Database Event: after update on friendshipinvite
+-- Database Event: after update on FrienshipInvite
 -- Condition: when accepted is changed to true
--- Action: create notification and usernotification
+-- Action: create Notification and userNotification
 
-CREATE OR REPLACE FUNCTION generate_friendshipinviteaccepted_notification() RETURNS TRIGGER AS $example_table$
+CREATE OR REPLACE FUNCTION generate_frienship_invite_accepted_notification() RETURNS TRIGGER AS $$
     DECLARE 
         notificationId bigint;
     BEGIN
-        INSERT INTO notification (idfriendshipinvite, notificationtype) VALUES (NEW.id, 'FriendshipInviteAccepted'::notification_type) RETURNING id INTO notificationId;
-        INSERT INTO usernotification (idmember, idnotification) VALUES (NEW.idsender, notificationId);
+        INSERT INTO Notification (idFrienshipInvite, notificationType) VALUES (NEW.id, 'FriendshipInviteAccepted') RETURNING id INTO notificationId;
+        INSERT INTO UserNotification (idMember, idNotification) VALUES (NEW.idSender, notificationId);
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER generate_friendshipinvite_notificationaccepted_trigger AFTER UPDATE ON friendshipinvite
-FOR EACH ROW WHEN (old.accepted IS NULL AND NEW.accepted = true)
-EXECUTE PROCEDURE generate_friendshipinviteaccepted_notification();
+CREATE TRIGGER generate_frienship_invite_notification_accepted_trigger AFTER UPDATE ON FrienshipInvite
+FOR EACH ROW WHEN (OLD.accepted IS NULL AND NEW.accepted = true)
+EXECUTE PROCEDURE generate_frienship_invite_accepted_notification();
 
 -- Event: a member sends a friendship invitation to other
 -- Database Event: before insert on friendishInvite table
@@ -234,20 +234,52 @@ CREATE OR REPLACE FUNCTION check_not_existent_friendship() RETURNS TRIGGER AS $$
         minId bigint;
         maxId bigint;
     BEGIN
-        minId := LEAST(NEW.idreceiver, NEW.idsender);
-        maxId := GREATEST(NEW.idreceiver, NEW.idsender);
+        minId := LEAST(NEW.idReceiver, NEW.idSender);
+        maxId := GREATEST(NEW.idReceiver, NEW.idSender);
         
-        IF EXISTS(SELECT 1 FROM friendship WHERE idmember1 = minId AND idmember2 = maxId) THEN
-            RAISE EXCEPTION 'Cannot re-invite friends (friendship). (%, %)', NEW.idreceiver, NEW.idsender;
-        ELSIF EXISTS(SELECT 1 FROM friendshipInvite WHERE idreceiver = NEW.idsender AND idsender = NEW.idreceiver) THEN
-            RAISE EXCEPTION 'Cannot re-invite friends (friendshipInvite). (%, %)', NEW.idreceiver, NEW.idsender;
+        IF EXISTS(SELECT 1 FROM Friendship WHERE idMember1 = minId AND idMember2 = maxId) THEN
+            RAISE EXCEPTION 'Cannot re-invite friends (friendship). (%, %)', NEW.idReceiver, NEW.idSender;
+        ELSIF EXISTS(SELECT 1 FROM FrienshipInvite WHERE idReceiver = NEW.idSender AND idSender = NEW.idReceiver) THEN
+            RAISE EXCEPTION 'Cannot re-invite friends (FrienshipInvite). (%, %)', NEW.idReceiver, NEW.idSender;
         END IF;
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER check_not_existent_friendship_trigger BEFORE INSERT ON friendshipInvite
+CREATE TRIGGER check_not_existent_friendship_trigger BEFORE INSERT ON FrienshipInvite
 FOR EACH ROW EXECUTE PROCEDURE check_not_existent_friendship();
+
+-----------------------------------
+-- ADD TO GROUP ON INVITE ACCEPT --
+-----------------------------------
+
+CREATE OR REPLACE FUNCTION add_to_group_on_invite_acceptance() RETURNS TRIGGER AS $$
+    BEGIN
+        INSERT INTO GroupUser (idGroup, idMember) VALUES (NEW.idGroup, NEW.idReceiver);
+        RETURN NEW;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER add_to_group_on_invite_acceptance_trigger AFTER UPDATE ON GroupInvite
+FOR EACH ROW 
+WHEN (OLD.accepted IS NULL AND NEW.accepted = true)
+EXECUTE PROCEDURE add_to_group_on_invite_acceptance();
+
+---------------------------------------
+-- ADD TO GROUP ON APLICATION ACCEPT --
+---------------------------------------
+
+CREATE OR REPLACE FUNCTION add_to_group_on_application_acceptance() RETURNS TRIGGER AS $$
+    BEGIN
+        INSERT INTO GroupUser (idGroup, idMember) VALUES (NEW.idGroup, NEW.idMember);
+        RETURN NEW;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER add_to_group_on_application_acceptance_trigger AFTER UPDATE ON GroupApplication
+FOR EACH ROW 
+WHEN (OLD.accepted IS NULL AND NEW.accepted = true)
+EXECUTE PROCEDURE add_to_group_on_application_acceptance();
 
 ------------------------------
 -- FRIENDSHIP INVITE ACCEPT --
@@ -260,12 +292,12 @@ CREATE OR REPLACE FUNCTION create_friendship_on_invite_acceptance() RETURNS TRIG
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER create_friendship_on_invite_acceptance_trigger AFTER UPDATE ON friendshipInvite
+CREATE TRIGGER create_friendship_on_invite_acceptance_trigger AFTER UPDATE ON FrienshipInvite
 FOR EACH ROW WHEN (OLD.accepted IS NULL AND NEW.accepted = True) EXECUTE PROCEDURE create_friendship_on_invite_acceptance();
 
 -- FRIENSHIP SYMMETRY RULE --
 
-CREATE RULE friendship_symmetry_rule AS
+CREATE OR REPLACE RULE friendship_symmetry_rule AS
     ON INSERT TO Friendship
     WHERE NEW.idMember1 > NEW.idMember2
     DO INSTEAD 
