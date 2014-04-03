@@ -16,14 +16,13 @@ SELECT name, description, FROM Model WHERE Model.name = :name AND visibility = '
 ------------------
 	
 -- Thumbnail information for each model --
-SELECT DISTINCT Model.name as model, Member.name as author, count(CASE WHEN upVote = 'true' THEN 1 ELSE null END) as upVotes, count(CASE WHEN upVote = 'false' THEN 0 ELSE null END) as downVotes, 
-	count(TComment.id) as comments 
-	FROM Model JOIN Vote ON Model.id = Vote.idModel 
+SELECT DISTINCT Model.name as model, Member.name as author, count(CASE WHEN upVote = 'true' THEN 1 ELSE 0 END) as upVotes, count(CASE WHEN upVote = 'false' THEN 1 ELSE 0 END) as downVotes, count(TComment.id) as comments 
+	FROM Model 
 	JOIN Member ON Member.id = Model.idAuthor 
-	JOIN TComment ON TComment.idModel = Model.id
-	WHERE Model.id = :id
-	GROUP BY Model.name, Member.name, TComment.id;
-	
+    LEFT JOIN Vote ON Model.id = Vote.idModel 
+	LEFT JOIN TComment ON TComment.idModel = Model.id
+	WHERE Model.id = 1
+	GROUP BY Model.id, Member.id;	
 -- List all the members of a group --
 SELECT Member.id, Member.name FROM GroupUser 
 	JOIN TGroup ON GroupUser.idGroup = :groupId
