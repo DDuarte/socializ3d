@@ -89,5 +89,5 @@ CREATE INDEX groupUser_idMember_idx ON GroupUser(idMember);
 CREATE INDEX groupModel_idModel_idx ON GroupModel(idModel);
 
 -- ModelVote --
-CREATE INDEX modelVote_numVotes_idx ON ModelVote(numVotes DESC);
+CREATE INDEX modelVote_numVotes_idx ON ModelVote((numUpVotes - numDownVotes) DESC);
 

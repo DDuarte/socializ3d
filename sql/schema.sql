@@ -95,7 +95,8 @@ ALTER TABLE Model ADD CONSTRAINT Model_idAuthor_fk FOREIGN KEY (idAuthor) REFERE
 
 CREATE TABLE IF NOT EXISTS ModelVote (
     idModel bigint NOT NULL,
-    numVotes bigint NOT NULL DEFAULT 0
+    numUpVotes bigint NOT NULL DEFAULT 0,
+    numDownVotes bigint NOT NULL DEFAULT 0
 );
 
 ALTER TABLE ModelVote ADD CONSTRAINT ModelVote_pk PRIMARY KEY (idModel);
