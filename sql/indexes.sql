@@ -31,30 +31,35 @@ DROP INDEX IF EXISTS modelVote_numVotes_idx;
 
 -- Notification --
 CREATE INDEX notification_idx ON Notification(createDate);
+CLUSTER Notification USING notification_idx;
 
 -- GroupInvite -- 
 CREATE INDEX group_invite_idGroup_idx ON GroupInvite(idGroup);
 CREATE INDEX group_invite_idReceiver_idx ON GroupInvite(idReceiver);
 CREATE INDEX group_invite_createDate_idx ON GroupInvite(createDate DESC);
 CREATE INDEX group_invite_accepted_idx ON GroupInvite(accepted);
+CLUSTER GroupInvite USING group_invite_createDate_idx;
 
 -- GroupApplication --
 CREATE INDEX group_application_idGroup_idx ON GroupApplication(idGroup);
 CREATE INDEX group_application_idMember_idx ON GroupApplication(idMember);
 CREATE INDEX group_application_createDate_idx ON GroupApplication(createDate DESC);
 CREATE INDEX group_application_accepted_idx ON GroupApplication(accepted);
+CLUSTER GroupApplication USING group_application_createDate_idx;
 
 -- FriendshipInvite --
 CREATE INDEX friendship_invite_idReceiver_idx ON FriendshipInvite(idReceiver);
 CREATE INDEX friendship_invite_idSender_idx ON FriendshipInvite(idSender);
 CREATE INDEX friendship_invite_createDate_idx ON FriendshipInvite(createDate DESC);
 CREATE INDEX friendship_invite_accepted_idx ON FriendshipInvite(accepted);
+CLUSTER FriendshipInvite USING friendship_invite_createDate_idx;
 
 -- Model --
 CREATE INDEX model_name_idx ON Model(name);
 CREATE INDEX model_idAuthor_idx ON Model(idAuthor);
 CREATE INDEX model_createDate_idx ON Model(createDate DESC);
 CREATE INDEX model_visibility_idx ON Model(visibility);
+CLUSTER Model USING model_createDate_idx;
 
 -- TGroup --
 CREATE INDEX group_name_idx ON TGroup(name);
@@ -69,6 +74,7 @@ CREATE INDEX friendship_member2_idx ON Friendship(idMember2);
 -- TComment --
 CREATE INDEX comment_idModel_idx ON TComment(idModel);
 CREATE INDEX comment_createDate_idx ON TComment(createDate DESC);
+CLUSTER TComment USING comment_createDate_idx;
 
 -- Vote --
 CREATE INDEX vote_idModel_idx ON Vote(idModel);
@@ -90,4 +96,3 @@ CREATE INDEX groupModel_idModel_idx ON GroupModel(idModel);
 
 -- ModelVote --
 CREATE INDEX modelVote_numVotes_idx ON ModelVote((numUpVotes - numDownVotes) DESC);
-
