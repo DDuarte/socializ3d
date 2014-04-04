@@ -91,6 +91,13 @@ RETURNS TABLE(modelName varchar, authorName varchar, upVotes bigint, downVotes b
 		GROUP BY Model.id, Member.id
 $$ LANGUAGE SQL;
 
+-- List the top rated models --
+CREATE OR REPLACE FUNCTION get_top_rated_models(max_model_number_limit integer)
+RETURNS TABLE (idModel BIGINT, numUpVotes BIGINT, numDownVotes BIGINT) AS $$
+	SELECT idmodel, numupvotes, numdownvotes
+	FROM modelvote ORDER BY (numupvotes - numdownvotes) DESC LIMIT $1
+$$ LANGUAGE SQL;
+
 -------------------
 -- Notifications --
 -------------------
