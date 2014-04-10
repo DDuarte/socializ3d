@@ -343,3 +343,45 @@ CREATE OR REPLACE FUNCTION set_member_about(memberId bigint, memberAbout varchar
 RETURNS VOID AS $$
     UPDATE Member SET about = $2 WHERE id = $1;
 $$ LANGUAGE SQL;
+
+-- Update model's visibility --
+CREATE OR REPLACE FUNCTION set_model_visibility(modelId bigint, modelVisibility model_visibility)
+RETURNS VOID AS $$
+	UPDATE Model SET visibility = $2 WHERE id = $1;
+$$ LANGUAGE SQL;
+
+-- Update vote --
+CREATE OR REPLACE FUNCTION update_vote(modelId bigint, authorId bigint, upVote boolean)
+RETURNS VOID AS $$
+	UPDATE Vote SET upVote = $3 WHERE Vote.idModel = $1 AND Vote.idMember = $2;
+$$ LANGUAGE SQL;
+
+-- Accept friendship invite --
+CREATE OR REPLACE FUNCTION accept_friendship_invite(inviteId bigint)
+RETURNS VOID AS $$
+	UPDATE FriendshipInvite SET accepted = true WHERE FriendshipInvite.id = $1;
+$$ LANGUAGE SQL;
+
+-- Accept group application --
+CREATE OR REPLACE FUNCTION accept_group_application(groupApplicationid bigint)
+RETURNS VOID AS $$
+	UPDATE GroupApplication SET accepted = true WHERE GroupApplication.id = $1;
+$$ LANGUAGE SQL;
+
+-- Accept group invite --
+CREATE OR REPLACE FUNCTION accept_group_invite(groupInviteId bigint)
+RETURNS VOID AS $$
+	UPDATE GroupInvite SET accepted = true WHERE GroupInvite.id = $1;
+$$ LANGUAGE SQL;
+
+-- Remove Tag from Model --
+CREATE OR REPLACE FUNCTION remove_tag_from_model(modelId bigint, tagId bigint)
+RETURNS VOID AS $$
+	DELETE FROM ModelTag WHERE ModelTag.idModel = $1 AND ModelTag.idTag = $2;
+$$ LANGUAGE SQL;
+
+-- Remove Tag (interest) from Member --
+CREATE OR REPLACE FUNCTION remove_tag_from_member(memberId bigint, tagId bigint)
+RETURNS VOID AS $$
+	DELETE FROM UserInterest WHERE UserInterest.idMember = $1 AND UserInterest.idTag = $2;
+$$ LANGUAGE SQL;
