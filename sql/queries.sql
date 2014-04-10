@@ -5,23 +5,23 @@ DROP TRIGGER IF EXISTS delete_from_model_tags_view_trigger ON model_tags;
 
 DROP FUNCTION IF EXISTS get_group_visibile_models(BIGINT);
 DROP FUNCTION IF EXISTS get_all_visibile_models(BIGINT);
-DROP FUNCTION IF EXISTS get_thumbnail_information(bigint);
-DROP FUNCTION IF EXISTS get_members_of_group(bigint);
-DROP FUNCTION IF EXISTS get_administrators_of_group(bigint)
-DROP FUNCTION IF EXISTS get_friends_of_member(bigint);
+DROP FUNCTION IF EXISTS get_thumbnail_information(BIGINT);
+DROP FUNCTION IF EXISTS get_members_of_group(BIGINT);
+DROP FUNCTION IF EXISTS get_administrators_of_group(BIGINT)
+DROP FUNCTION IF EXISTS get_friends_of_member(BIGINT);
 DROP FUNCTION IF EXISTS get_groups_of_member(BIGINT);
-DROP FUNCTION IF EXISTS get_top_rated_models(integer, integer, BIGINT);
-DROP FUNCTION IF EXISTS get_whats_hot_models(integer, integer, BIGINT);
+DROP FUNCTION IF EXISTS get_top_rated_models(INTEGER, INTEGER, BIGINT);
+DROP FUNCTION IF EXISTS get_whats_hot_models(INTEGER, INTEGER, BIGINT);
 DROP FUNCTION IF EXISTS get_new_models(INTEGER, INTEGER, BIGINT);
 DROP FUNCTION IF EXISTS get_random_models(INTEGER, INTEGER, BIGINT);
 DROP FUNCTION IF EXISTS get_model_counts_per_month_year(DATE, DATE)
 DROP FUNCTION IF EXISTS get_member_counts_per_month_year(DATE, DATE);
 DROP FUNCTION IF EXISTS get_group_counts_per_month_year(DATE, DATE);
 DROP FUNCTION IF EXISTS get_counts_per_month_year(DATE, DATE);
-DROP FUNCTION IF EXISTS get_notifications(timestamp, integer);
-DROP FUNCTION IF EXISTS get_member_notifications(bigint, timestamp, integer);
-DROP FUNCTION IF EXISTS get_group_notifications(bigint, timestamp, integer);
-DROP FUNCTION IF EXISTS get_model(bigint, timestamp, integer);
+DROP FUNCTION IF EXISTS get_notifications(TIMESTAMP, INTEGER);
+DROP FUNCTION IF EXISTS get_member_notifications(BIGINT, TIMESTAMP, INTEGER);
+DROP FUNCTION IF EXISTS get_group_notifications(BIGINT, TIMESTAMP, INTEGER);
+DROP FUNCTION IF EXISTS get_model(BIGINT, TIMESTAMP, INTEGER);
 DROP FUNCTION IF EXISTS insert_on_user_tags_view();
 DROP FUNCTION IF EXISTS delete_from_user_tags_view();
 DROP FUNCTION IF EXISTS insert_on_model_tags_view();
@@ -72,8 +72,8 @@ SELECT name, description, createDate FROM get_all_visibile_models(:userId) JOIN 
 ---
 
 -- Get thumbnail information for a model --
-CREATE OR REPLACE FUNCTION get_thumbnail_information(modelId bigint)
-RETURNS TABLE(modelName varchar, authorName varchar, createDate timestamp, fileName varchar, numUpVotes bigint, numDownVotes bigint, numComments bigint) AS $$
+CREATE OR REPLACE FUNCTION get_thumbnail_information(modelId BIGINT)
+RETURNS TABLE(modelName varchar, authorName varchar, createDate TIMESTAMP, fileName varchar, numUpVotes BIGINT, numDownVotes BIGINT, numComments BIGINT) AS $$
     SELECT model_info.name, Member.name, model_info.createDate, fileName, numUpVotes, numDownVotes, count(TComment.id)
         FROM model_info
         JOIN Member ON Member.id = model_info.idAuthor
@@ -83,8 +83,8 @@ RETURNS TABLE(modelName varchar, authorName varchar, createDate timestamp, fileN
 $$ LANGUAGE SQL;
 
 -- List all the members of a group --
-CREATE OR REPLACE FUNCTION get_members_of_group(groupId bigint)
-RETURNS TABLE(memberId bigint, memberName varchar) AS $$
+CREATE OR REPLACE FUNCTION get_members_of_group(groupId BIGINT)
+RETURNS TABLE(memberId BIGINT, memberName varchar) AS $$
     SELECT Member.id, Member.name FROM GroupUser
         JOIN TGroup ON GroupUser.idGroup = $1
         JOIN Member ON Member.id = GroupUser.idMember
@@ -92,8 +92,8 @@ RETURNS TABLE(memberId bigint, memberName varchar) AS $$
 $$ LANGUAGE SQL;
 
 -- List all the administrators of a group --
-CREATE OR REPLACE FUNCTION get_administrators_of_group(groupId bigint)
-RETURNS TABLE(memberId bigint, memberName varchar) AS $$
+CREATE OR REPLACE FUNCTION get_administrators_of_group(groupId BIGINT)
+RETURNS TABLE(memberId BIGINT, memberName varchar) AS $$
     SELECT Member.id, Member.name FROM GroupUser
         JOIN TGroup ON GroupUser.idGroup = $1
         JOIN Member ON (Member.id = GroupUser.idMember AND GroupUser.isAdmin = 'true')
@@ -101,8 +101,8 @@ RETURNS TABLE(memberId bigint, memberName varchar) AS $$
 $$ LANGUAGE SQL;
 
 -- List all the friends of a user --
-CREATE OR REPLACE FUNCTION get_friends_of_member(memberId bigint)
-RETURNS TABLE(memberId bigint) AS $$
+CREATE OR REPLACE FUNCTION get_friends_of_member(memberId BIGINT)
+RETURNS TABLE(memberId BIGINT) AS $$
     SELECT 
         CASE $1 WHEN Friendship.idMember1 THEN Friendship.idMember2
                WHEN Friendship.idMember2 THEN Friendship.idMember1
@@ -119,7 +119,7 @@ RETURNS TABLE(groupId BIGINT) AS $$
 $$ LANGUAGE SQL;
 
 -- List the top rated models --
-CREATE OR REPLACE FUNCTION get_top_rated_models(max_model_number_limit integer, skip integer, userId BIGINT)
+CREATE OR REPLACE FUNCTION get_top_rated_models(max_model_number_limit INTEGER, skip INTEGER, userId BIGINT)
 RETURNS TABLE (modelId BIGINT) AS $$
 BEGIN
     RETURN QUERY SELECT id
@@ -129,7 +129,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- List the what's hot models --
-CREATE OR REPLACE FUNCTION get_whats_hot_models(max_model_number_limit integer, skip integer, userId BIGINT)
+CREATE OR REPLACE FUNCTION get_whats_hot_models(max_model_number_limit INTEGER, skip INTEGER, userId BIGINT)
 -- ranking based on Reddit's algorithm
 -- ts = createDate - 2014-01-01 00:00:00 // s
 -- x = upvotes - downvotes
@@ -142,11 +142,11 @@ BEGIN
     FROM get_all_visibile_models(userId) JOIN model_info ON get_all_visibile_models.id = model_info.id
     ORDER BY (log(CASE WHEN (numupvotes - numdownvotes) != 0 THEN
             @(numupvotes - numdownvotes) ELSE
-            1::integer END) +
+            1::INTEGER END) +
         CASE WHEN (numupvotes - numdownvotes) > 0 THEN
-            1::integer WHEN (numupvotes - numdownvotes) = 0 THEN
-            0::integer ELSE -1::integer END *
-        EXTRACT(epoch FROM (createDate - '2014-01-01 00:00:00'::timestamp)) / 45000) DESC LIMIT max_model_number_limit OFFSET skip;
+            1::INTEGER WHEN (numupvotes - numdownvotes) = 0 THEN
+            0::INTEGER ELSE -1::INTEGER END *
+        EXTRACT(epoch FROM (createDate - '2014-01-01 00:00:00'::TIMESTAMP)) / 45000) DESC LIMIT max_model_number_limit OFFSET skip;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -217,7 +217,7 @@ BEGIN RETURN QUERY
         WHERE createDate > startDate AND createDate < endDate
         GROUP BY 1, 2
     ) AS cnt
-    RIGHT OUTER JOIN (SELECT * FROM generate_series(startDate::timestamp, endDate - INTERVAL '1 second', '1 month') AS ts) AS dtetable ON EXTRACT(month FROM ts) = cnt.Month AND EXTRACT(year FROM ts) = cnt.Year
+    RIGHT OUTER JOIN (SELECT * FROM generate_series(startDate::TIMESTAMP, endDate - INTERVAL '1 second', '1 month') AS ts) AS dtetable ON EXTRACT(month FROM ts) = cnt.Month AND EXTRACT(year FROM ts) = cnt.Year
     ORDER BY Year, Month ASC;
 END;
 $$ LANGUAGE plpgsql;
@@ -236,7 +236,7 @@ BEGIN RETURN QUERY
         WHERE registerDate > startDate AND registerDate < endDate
         GROUP BY 1, 2
     ) AS cnt
-    RIGHT OUTER JOIN (SELECT * FROM generate_series(startDate::timestamp, endDate - INTERVAL '1 second', '1 month') AS ts) AS dtetable ON EXTRACT(month FROM ts) = cnt.Month AND EXTRACT(year FROM ts) = cnt.Year
+    RIGHT OUTER JOIN (SELECT * FROM generate_series(startDate::TIMESTAMP, endDate - INTERVAL '1 second', '1 month') AS ts) AS dtetable ON EXTRACT(month FROM ts) = cnt.Month AND EXTRACT(year FROM ts) = cnt.Year
     ORDER BY Year, Month ASC;
 END;
 $$ LANGUAGE plpgsql;
@@ -255,7 +255,7 @@ BEGIN RETURN QUERY
         WHERE createDate > startDate AND createDate < endDate
         GROUP BY 1, 2
     ) AS cnt
-    RIGHT OUTER JOIN (SELECT * FROM generate_series(startDate::timestamp, endDate - INTERVAL '1 second', '1 month') AS ts) AS dtetable ON EXTRACT(month FROM ts) = cnt.Month AND EXTRACT(year FROM ts) = cnt.Year
+    RIGHT OUTER JOIN (SELECT * FROM generate_series(startDate::TIMESTAMP, endDate - INTERVAL '1 second', '1 month') AS ts) AS dtetable ON EXTRACT(month FROM ts) = cnt.Month AND EXTRACT(year FROM ts) = cnt.Year
     ORDER BY Year, Month ASC;
 END;
 $$ LANGUAGE plpgsql;
@@ -277,22 +277,22 @@ $$ LANGUAGE plpgsql;
 -------------------
 
 -- List the newest notifications within a given range --
-CREATE OR REPLACE FUNCTION get_notifications(oldest_date_limit timestamp, max_notifications_limit integer) RETURNS TABLE(idNotification bigint, notType notification_type, idFriendshipInvite bigint, idGroupApplication bigint, idGroupInvite bigint, idModel bigint) AS $$
+CREATE OR REPLACE FUNCTION get_notifications(oldest_date_limit TIMESTAMP, max_notifications_limit INTEGER) RETURNS TABLE(idNotification BIGINT, notType notification_type, idFriendshipInvite BIGINT, idGroupApplication BIGINT, idGroupInvite BIGINT, idModel BIGINT) AS $$
     SELECT id, notificationType, idFriendshipInvite, idGroupApplication, idGroupInvite, idModel FROM Notification WHERE createDate < $1 LIMIT $2
 $$ LANGUAGE SQL;
 
 -- List the newest member notifications within a given range --
-CREATE OR REPLACE FUNCTION get_member_notifications(memberId bigint, oldest_date_limit timestamp, max_notifications_limit integer) RETURNS TABLE(idNotification bigint, notType notification_type, idFriendshipInvite bigint, idGroupApplication bigint, idGroupInvite bigint, idModel bigint) AS $$
+CREATE OR REPLACE FUNCTION get_member_notifications(memberId BIGINT, oldest_date_limit TIMESTAMP, max_notifications_limit INTEGER) RETURNS TABLE(idNotification BIGINT, notType notification_type, idFriendshipInvite BIGINT, idGroupApplication BIGINT, idGroupInvite BIGINT, idModel BIGINT) AS $$
     SELECT Notification.id, Notification.notificationType, Notification.idFriendshipInvite, Notification.idGroupApplication, Notification.idGroupInvite, Notification.idModel FROM Notification JOIN UserNotification ON UserNotification.idMember = $1 AND UserNotification.idNotification = Notification.id  WHERE createDate < $2 LIMIT $3
 $$ LANGUAGE SQL;
 
 -- List the newest group notifications within a given range --
-CREATE OR REPLACE FUNCTION get_group_notifications(groupId bigint, oldest_date_limit timestamp, max_notifications_limit integer) RETURNS TABLE(idNotification bigint, notType notification_type, idFriendshipInvite bigint, idGroupApplication bigint, idGroupInvite bigint, idModel bigint) AS $$
+CREATE OR REPLACE FUNCTION get_group_notifications(groupId BIGINT, oldest_date_limit TIMESTAMP, max_notifications_limit INTEGER) RETURNS TABLE(idNotification BIGINT, notType notification_type, idFriendshipInvite BIGINT, idGroupApplication BIGINT, idGroupInvite BIGINT, idModel BIGINT) AS $$
     SELECT Notification.id, Notification.notificationType, Notification.idFriendshipInvite, Notification.idGroupApplication, Notification.idGroupInvite, Notification.idModel FROM Notification JOIN GroupNotification ON GroupNotification.idGroup = $1 AND GroupNotification.idNotification = Notification.id  WHERE createDate < $2 LIMIT $3
 $$ LANGUAGE SQL;
 
 -- List the newest publications for a particular member --
-CREATE OR REPLACE FUNCTION get_model(memberId bigint, oldest_date_limit timestamp, max_notifications_limit integer) RETURNS TABLE(idModel bigint) AS $$
+CREATE OR REPLACE FUNCTION get_model(memberId BIGINT, oldest_date_limit TIMESTAMP, max_notifications_limit INTEGER) RETURNS TABLE(idModel BIGINT) AS $$
     SELECT Model.id
     FROM Model
     WHERE Model.createDate < $2
@@ -303,7 +303,7 @@ CREATE OR REPLACE FUNCTION get_model(memberId bigint, oldest_date_limit timestam
 $$ LANGUAGE SQL;
 
 -- Get Model Information --
-CREATE OR REPLACE FUNCTION get_model_info(modelId bigint) RETURNS TABLE(idAuthor bigint, nameAuthor varchar(70), name varchar(70), description varchar(255), fileName varchar(255), createDate timestamp, numUpVotes bigint, numDownVotes bigint) AS $$
+CREATE OR REPLACE FUNCTION get_model_info(modelId BIGINT) RETURNS TABLE(idAuthor BIGINT, nameAuthor varchar(70), name varchar(70), description varchar(255), fileName varchar(255), createDate TIMESTAMP, numUpVotes BIGINT, numDownVotes BIGINT) AS $$
     SELECT Model.idAuthor, 
            Member.name AS nameAuthor,
            Model.name, 
@@ -316,7 +316,7 @@ CREATE OR REPLACE FUNCTION get_model_info(modelId bigint) RETURNS TABLE(idAuthor
     WHERE Model.id = $1
 $$ LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION get_model_info(userId bigint, modelId bigint) RETURNS TABLE(idAuthor bigint, nameAuthor varchar(70), name varchar(70), description varchar(255), fileName varchar(255), createDate timestamp, numUpVotes bigint, numDownVotes bigint) AS $$
+CREATE OR REPLACE FUNCTION get_model_info(userId BIGINT, modelId BIGINT) RETURNS TABLE(idAuthor BIGINT, nameAuthor varchar(70), name varchar(70), description varchar(255), fileName varchar(255), createDate TIMESTAMP, numUpVotes BIGINT, numDownVotes BIGINT) AS $$
 BEGIN
     IF ($2 IN (SELECT * FROM get_all_visibile_models($1))) THEN
         RETURN QUERY SELECT * FROM get_model_info($2);
@@ -370,7 +370,7 @@ CREATE OR REPLACE VIEW user_tags AS
 
 CREATE OR REPLACE FUNCTION insert_on_user_tags_view() RETURNS TRIGGER AS $$
     DECLARE
-        tagid bigint;
+        tagid BIGINT;
     BEGIN
         IF NOT EXISTS(SELECT 1 FROM Tag WHERE Tag.name = NEW.name LIMIT 1) THEN
             INSERT INTO Tag (name) VALUES (NEW.name) RETURNING Tag.id INTO tagid;
@@ -391,7 +391,7 @@ CREATE TRIGGER insert_on_user_tags_view_trigger INSTEAD OF INSERT ON user_tags F
 
 CREATE OR REPLACE FUNCTION delete_from_user_tags_view() RETURNS TRIGGER AS $$
     DECLARE
-        tagid bigint;
+        tagid BIGINT;
     BEGIN
         SELECT Tag.id INTO tagid FROM Tag WHERE Tag.name = OLD.name LIMIT 1;
         DELETE FROM UserInterest WHERE UserInterest.idMember = OLD.idMember AND UserInterest.idTag = tagid;
@@ -409,7 +409,7 @@ CREATE OR REPLACE VIEW model_tags AS
 
 CREATE OR REPLACE FUNCTION insert_on_model_tags_view() RETURNS TRIGGER AS $$
     DECLARE
-        tagid bigint;
+        tagid BIGINT;
     BEGIN
         IF NOT EXISTS(SELECT 1 FROM Tag WHERE Tag.name = NEW.name LIMIT 1) THEN
             INSERT INTO Tag (name) VALUES (NEW.name) RETURNING Tag.id INTO tagid;
@@ -430,7 +430,7 @@ CREATE TRIGGER insert_on_model_tags_view_trigger INSTEAD OF INSERT ON model_tags
 
 CREATE OR REPLACE FUNCTION delete_from_model_tags_view() RETURNS TRIGGER AS $$
     DECLARE
-        tagid bigint;
+        tagid BIGINT;
     BEGIN
         SELECT Tag.id INTO tagid FROM TAG WHERE Tag.name = OLD.name LIMIT 1;
         DELETE FROM ModelTag WHERE ModelTag.idModel = OLD.idModel AND ModelTag.idTag = tagid;
