@@ -408,55 +408,28 @@ INSERT INTO GroupInvite(idGroup, idReceiver, idSender) VALUES (:idGroup, :idRece
 -----------------------
 
 -- Update model description --
-CREATE OR REPLACE FUNCTION set_model_description(modelId bigint, modelDescription varchar)
-RETURNS VOID AS $$
-    UPDATE Model SET description = $2 WHERE id = $1;
-$$ LANGUAGE SQL;
+UPDATE Model SET description = :description WHERE id = :id;
 
 -- Update member's about field --
-CREATE OR REPLACE FUNCTION set_member_about(memberId bigint, memberAbout varchar)
-RETURNS VOID AS $$
-    UPDATE Member SET about = $2 WHERE id = $1;
-$$ LANGUAGE SQL;
+UPDATE Member SET about = :about WHERE id = :id;
 
 -- Update model's visibility --
-CREATE OR REPLACE FUNCTION set_model_visibility(modelId bigint, modelVisibility model_visibility)
-RETURNS VOID AS $$
-	UPDATE Model SET visibility = $2 WHERE id = $1;
-$$ LANGUAGE SQL;
+UPDATE Model SET visibility = :visibility WHERE id = :id;
 
 -- Update vote --
-CREATE OR REPLACE FUNCTION update_vote(modelId bigint, authorId bigint, upVote boolean)
-RETURNS VOID AS $$
-	UPDATE Vote SET upVote = $3 WHERE Vote.idModel = $1 AND Vote.idMember = $2;
-$$ LANGUAGE SQL;
+UPDATE Vote SET upVote = $3 WHERE Vote.idModel = :idModel AND Vote.idMember = :idMember;
 
 -- Accept friendship invite --
-CREATE OR REPLACE FUNCTION accept_friendship_invite(inviteId bigint)
-RETURNS VOID AS $$
-	UPDATE FriendshipInvite SET accepted = true WHERE FriendshipInvite.id = $1;
-$$ LANGUAGE SQL;
+UPDATE FriendshipInvite SET accepted = true WHERE FriendshipInvite.id = :id;
 
 -- Accept group application --
-CREATE OR REPLACE FUNCTION accept_group_application(groupApplicationid bigint)
-RETURNS VOID AS $$
-	UPDATE GroupApplication SET accepted = true WHERE GroupApplication.id = $1;
-$$ LANGUAGE SQL;
+UPDATE GroupApplication SET accepted = true WHERE GroupApplication.id = :id;
 
 -- Accept group invite --
-CREATE OR REPLACE FUNCTION accept_group_invite(groupInviteId bigint)
-RETURNS VOID AS $$
-	UPDATE GroupInvite SET accepted = true WHERE GroupInvite.id = $1;
-$$ LANGUAGE SQL;
+UPDATE GroupInvite SET accepted = true WHERE GroupInvite.id = :id;
 
 -- Remove Tag from Model --
-CREATE OR REPLACE FUNCTION remove_tag_from_model(modelId bigint, tagId bigint)
-RETURNS VOID AS $$
-	DELETE FROM ModelTag WHERE ModelTag.idModel = $1 AND ModelTag.idTag = $2;
-$$ LANGUAGE SQL;
+DELETE FROM ModelTag WHERE ModelTag.idModel = :idModel AND ModelTag.idTag = :idTag;
 
 -- Remove Tag (interest) from Member --
-CREATE OR REPLACE FUNCTION remove_tag_from_member(memberId bigint, tagId bigint)
-RETURNS VOID AS $$
-	DELETE FROM UserInterest WHERE UserInterest.idMember = $1 AND UserInterest.idTag = $2;
-$$ LANGUAGE SQL;
+DELETE FROM UserInterest WHERE UserInterest.idMember = :idMember AND UserInterest.idTag = :idTag;
