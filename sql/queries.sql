@@ -334,10 +334,10 @@ END;
 $$ LANGUAGE PLPGSQL;
 
 -- Get Model Comments --
-CREATE OR REPLACE FUNCTION get_model_comments(modelId bigint) RETURNS TABLE(idMember bigint, name varchar(70), email varchar(254), content varchar(255), createDate timestamp) as $$
+CREATE OR REPLACE FUNCTION get_model_comments(modelId bigint) RETURNS TABLE(idMember bigint, name varchar(70), hash TEXT, content varchar(255), createDate timestamp) as $$
     SELECT TComment.idMember, 
            Member.name,
-           RegisteredUser.email,
+           get_user_hash(Member.id) AS hash,
            TComment.content,
            TComment.createDate
     FROM TComment JOIN Model ON Model.id = $1
@@ -366,6 +366,22 @@ CREATE OR REPLACE FUNCTION get_model_shared_groups(modelId bigint) RETURNS TABLE
     SELECT GroupModel.idGroup 
     FROM GroupModel JOIN TGroup ON TGroup.id = GroupModel.idGroup
     WHERE GroupModel.idModel = $1 AND TGroup.visibility = 'public'
+$$ LANGUAGE SQL;
+
+-- Member profile --
+CREATE OR REPLACE FUNCTION get_member_profile(userId bigint) RETURNS TABLE(name varchar(70), about varchar(255), birthDate date, hash TEXT) AS $$
+    SELECT Member.name,
+           Member.about,
+           Member.birthDate,
+           get_user_hash($1) AS hash
+    FROM Member
+    WHERE Member.id = $1
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION get_member_tags(userId bigint) RETURNS TABLE(name varchar(20)) AS $$
+    SELECT name 
+    FROM user_tags
+    WHERE user_tags.idMember = $1
 $$ LANGUAGE SQL;
 -----------
 -- Views --
