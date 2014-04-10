@@ -51,7 +51,7 @@ BEGIN
     FROM Model
     WHERE idAuthor = userId OR -- my models
           visibility = 'public' OR -- public model
-         (visibility = 'friends' AND idAuthor IN (SELECT memberId FROM get_friends_of_member(userId))) OR -- my friends
+         (visibility = 'friends' AND idAuthor IN (SELECT memberId FROM get_friends_of_member(userId))) -- my friends
     UNION SELECT get_group_visibile_models(userId);
 END;
 $$ LANGUAGE plpgsql;
@@ -312,16 +312,16 @@ $$ LANGUAGE SQL;
 
 -- Get Model Information --
 CREATE OR REPLACE FUNCTION get_model_info(modelId BIGINT) RETURNS TABLE(idAuthor BIGINT, nameAuthor VARCHAR(70), name VARCHAR(70), description VARCHAR(255), fileName VARCHAR(255), createDate TIMESTAMP, numUpVotes BIGINT, numDownVotes BIGINT) AS $$
-    SELECT Model.idAuthor, 
+    SELECT model_info.idAuthor, 
            Member.name AS nameAuthor,
-           Model.name, 
-           Model.description, 
-           Model.fileName, 
-           Model.createDate,
-           ModelVote.numUpVotes,
-           ModelVote.numDownVotes
-    FROM model_info JOIN Member ON Model.idAuthor = Member.id
-    WHERE Model.id = $1
+           model_info.name, 
+           model_info.description, 
+           model_info.fileName, 
+           model_info.createDate,
+           model_info.numUpVotes,
+           model_info.numDownVotes
+    FROM model_info JOIN Member ON model_info.idAuthor = Member.id
+    WHERE model_info.id = $1
 $$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION get_model_info(userId BIGINT, modelId BIGINT) RETURNS TABLE(idAuthor BIGINT, nameAuthor VARCHAR(70), name VARCHAR(70), description VARCHAR(255), fileName VARCHAR(255), createDate TIMESTAMP, numUpVotes BIGINT, numDownVotes BIGINT) AS $$
@@ -426,7 +426,7 @@ CREATE OR REPLACE FUNCTION insert_on_user_tags_view() RETURNS TRIGGER AS $$
 
         INSERT INTO UserInterest (idMember, idTag) SELECT NEW.idMember, tagid
             WHERE NOT EXISTS (SELECT 1 FROM UserInterest WHERE UserInterest.idMember= NEW.idMember AND UserInterest.idTag = tagid);
-        COMMIT;
+        
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
@@ -441,7 +441,7 @@ CREATE OR REPLACE FUNCTION delete_from_user_tags_view() RETURNS TRIGGER AS $$
     BEGIN
         SELECT Tag.id INTO tagid FROM Tag WHERE Tag.name = OLD.name LIMIT 1;
         DELETE FROM UserInterest WHERE UserInterest.idMember = OLD.idMember AND UserInterest.idTag = tagid;
-        COMMIT;
+        
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
@@ -465,7 +465,7 @@ CREATE OR REPLACE FUNCTION insert_on_model_tags_view() RETURNS TRIGGER AS $$
 
         INSERT INTO ModelTag (idModel, idTag) SELECT NEW.idModel, tagid
             WHERE NOT EXISTS (SELECT 1 FROM ModelTag WHERE ModelTag.idModel= NEW.idModel AND ModelTag.idTag = tagid);
-        COMMIT;
+        
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
@@ -480,7 +480,7 @@ CREATE OR REPLACE FUNCTION delete_from_model_tags_view() RETURNS TRIGGER AS $$
     BEGIN
         SELECT Tag.id INTO tagid FROM TAG WHERE Tag.name = OLD.name LIMIT 1;
         DELETE FROM ModelTag WHERE ModelTag.idModel = OLD.idModel AND ModelTag.idTag = tagid;
-        COMMIT;
+        
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
@@ -531,6 +531,16 @@ INSERT INTO GroupApplication(idGroup, idMember) VALUES (:idGroup, :idMember);
 
 -- Insert group invite --
 INSERT INTO GroupInvite(idGroup, idReceiver, idSender) VALUES (:idGroup, :idReceiver, :idSender);
+
+
+CREATE OR REPLACE FUNCTION add_member(_userName VARCHAR(20), _passwordHash VARCHAR(64), _email VARCHAR(254), _name VARCHAR(70), _about VARCHAR(255), _birthDate DATE) RETURNS void AS $$
+DECLARE
+    registeredUserId BIGINT;
+BEGIN
+    INSERT INTO RegisteredUser(userName, passwordHash, email, isAdmin) VALUES ($1, $2, $3, false) RETURNING id INTO registeredUserId;
+    INSERT INTO Member(id, name, about, birthDate) VALUES (registeredUserId, $4, $5, $6);
+END;
+$$ LANGUAGE PLPGSQL;
 
 -----------------------
 -- Update statements --
