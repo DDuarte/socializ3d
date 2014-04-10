@@ -12,12 +12,15 @@ DROP INDEX IF EXISTS friendship_invite_idSender_idx;
 DROP INDEX IF EXISTS friendship_invite_createDate_idx;
 DROP INDEX IF EXISTS friendship_invite_accepted_idx;
 DROP INDEX IF EXISTS model_name_idx;
+DROP INDEX IF EXISTS model_description_idx;
 DROP INDEX IF EXISTS model_idAuthor_idx;
 DROP INDEX IF EXISTS model_createDate_idx;
 DROP INDEX IF EXISTS model_visibility_idx;
 DROP INDEX IF EXISTS group_name_idx;
+DROP INDEX IF EXISTS group_about_idx;
 DROP INDEX IF EXISTS group_visibility_idx;
 DROP INDEX IF EXISTS member_name_idx;
+DROP INDEX IF EXISTS member_about_idx;
 DROP INDEX IF EXISTS friendship_member2_idx;
 DROP INDEX IF EXISTS comment_idModel_idx;
 DROP INDEX IF EXISTS comment_createDate_idx;
@@ -55,18 +58,21 @@ CREATE INDEX friendship_invite_accepted_idx ON FriendshipInvite(accepted);
 CLUSTER FriendshipInvite USING friendship_invite_createDate_idx;
 
 -- Model --
-CREATE INDEX model_name_idx ON Model(name);
+CREATE INDEX model_name_idx ON Model USING gin(to_tsvector('english', name));
+CREATE INDEX model_description_idx ON Model USING gin(to_tsvector('english', description));
 CREATE INDEX model_idAuthor_idx ON Model(idAuthor);
 CREATE INDEX model_createDate_idx ON Model(createDate DESC);
 CREATE INDEX model_visibility_idx ON Model(visibility);
 CLUSTER Model USING model_createDate_idx;
 
 -- TGroup --
-CREATE INDEX group_name_idx ON TGroup(name);
+CREATE INDEX group_name_idx ON TGroup USING gin(to_tsvector('english', name));
+CREATE INDEX group_about_idx ON TGroup USING gin(to_tsvector('english', about));
 CREATE INDEX group_visibility_idx ON TGroup(visibility);
 
 -- Member --
-CREATE INDEX member_name_idx ON Member(name);
+CREATE INDEX member_name_idx ON Member USING gin(to_tsvector('english', name));
+CREATE INDEX member_about_idx ON Member USING gin(to_tsvector('english', about));
 
 -- Friendship --
 CREATE INDEX friendship_member2_idx ON Friendship(idMember2);

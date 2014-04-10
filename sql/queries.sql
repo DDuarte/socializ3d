@@ -66,15 +66,16 @@ $$ LANGUAGE SQL;
 -- Search results page --
 -------------------------
 
--- TGroup --
-SELECT name, about, avatarImg, createDate FROM TGroup WHERE visibility = 'public' AND TGroup.name = :groupName;
-
--- Member --
-SELECT name, about, registerDate FROM Member WHERE Member.name = :memberName;
-
--- Model --
-SELECT name, description, createDate FROM get_all_visibile_models(:userId) JOIN Model ON get_all_visibile_models.id = Model.id
-    WHERE Model.name = :modelName;
+SELECT * FROM (
+    SELECT id, 'group', ts_rank_cd(to_tsvector('english', name), :searchTerm) * 0.7 + ts_rank_cd(to_tsvector('english', about), :searchTerm) * 0.3 AS score
+    FROM TGroup WHERE visibility = 'public'
+    UNION ALL
+    SELECT id, 'member', ts_rank_cd(to_tsvector('english', name), :searchTerm) * 0.7 + ts_rank_cd(to_tsvector('english', about), :searchTerm) * 0.3 AS score
+    FROM Member
+    UNION ALL
+    SELECT Model.id, 'model', ts_rank_cd(to_tsvector('english', name), :searchTerm) * 0.7 + ts_rank_cd(to_tsvector('english', description), :searchTerm) * 0.3 AS score
+    FROM get_all_visibile_models(:userId) JOIN Model ON get_all_visibile_models.id = Model.id
+) AS q ORDER BY score DESC;
 
 ---
 
