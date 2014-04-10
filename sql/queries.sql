@@ -101,13 +101,12 @@ $$ LANGUAGE SQL;
 
 -- List all the friends of a user --
 CREATE OR REPLACE FUNCTION get_friends_of_member(memberId bigint)
-RETURNS TABLE(memberId bigint, memberName varchar) AS $$
-    SELECT Member.id, Member.name
-    FROM (
-        SELECT FriendShip.idMember1 AS idFriend FROM Friendship WHERE Friendship.idMember2 = $1
-        UNION ALL
-        SELECT FriendShip.idMember2 AS idFriend FROM Friendship WHERE Friendship.idMember1 = $1
-    ) AS friends JOIN Member ON Member.id = idFriend
+RETURNS TABLE(memberId bigint) AS $$
+    SELECT 
+        CASE $1 WHEN Friendship.idMember1 THEN Friendship.idMember2
+               WHEN Friendship.idMember2 THEN Friendship.idMember1
+        END AS memberId
+    FROM Friendship WHERE $1 IN (Friendship.idMember1, Friendship.idMember2)
 $$ LANGUAGE SQL;
 
 -- List all the groups of a user --
