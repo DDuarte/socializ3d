@@ -11,8 +11,10 @@ DROP FUNCTION IF EXISTS get_members_of_group(bigint);
 DROP FUNCTION IF EXISTS get_administrators_of_group(bigint);
 DROP FUNCTION IF EXISTS get_friends_of_member(bigint);
 DROP FUNCTION IF EXISTS get_groups_of_member(bigint);
-DROP FUNCTION IF EXISTS get_top_rated_models(integer, integer);
-DROP FUNCTION IF EXISTS get_whats_hot_models(integer, integer);
+DROP FUNCTION IF EXISTS get_top_rated_models(integer, integer, bigint);
+DROP FUNCTION IF EXISTS get_whats_hot_models(integer, integer, bigint);
+DROP FUNCTION IF EXISTS get_new_models(integer, integer, bigint);
+DROP FUNCTION IF EXISTS get_random_models(integer, integer, bigint);
 
 DROP VIEW IF EXISTS model_info;
 
@@ -168,6 +170,79 @@ BEGIN
     WHERE visibility = 'public' OR
          (visibility = 'friends' AND idAuthor IN (SELECT memberId FROM get_friends_of_member(userId)))
     UNION SELECT * FROM get_group_visibile_models(userId);
+END;
+$$ LANGUAGE plpgsql;
+
+--------------------
+-- Administration --
+--------------------
+
+-- Get number of models created per month between two dates
+DROP FUNCTION IF EXISTS get_model_counts_per_month_year(DATE, DATE);
+CREATE OR REPLACE FUNCTION get_model_counts_per_month_year(startDate DATE, endDate DATE)
+RETURNS TABLE (month INTEGER, year INTEGER, models INTEGER) AS $$
+BEGIN RETURN QUERY
+    SELECT EXTRACT(month FROM ts)::INTEGER as Month, EXTRACT(year FROM ts)::INTEGER as Year, COALESCE(count, 0)::INTEGER as Models FROM
+    (
+        SELECT EXTRACT(month FROM createDate) as Month,
+        EXTRACT(year FROM createDate) as Year,
+        COUNT(*)
+        FROM Model
+        WHERE createDate > startDate AND createDate < endDate
+        GROUP BY 1, 2
+    ) AS cnt
+    RIGHT OUTER JOIN (SELECT * FROM generate_series(startDate::timestamp, endDate - INTERVAL '1 second', '1 month') AS ts) AS dtetable ON EXTRACT(month FROM ts) = cnt.Month AND EXTRACT(year FROM ts) = cnt.Year
+    ORDER BY Year, Month ASC;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Get number of members registered per month between two dates
+DROP FUNCTION IF EXISTS get_member_counts_per_month_year(DATE, DATE);
+CREATE OR REPLACE FUNCTION get_member_counts_per_month_year(startDate DATE, endDate DATE)
+RETURNS TABLE (month INTEGER, year INTEGER, members INTEGER) AS $$
+BEGIN RETURN QUERY
+    SELECT EXTRACT(month FROM ts)::INTEGER as Month, EXTRACT(year FROM ts)::INTEGER as Year, COALESCE(count, 0)::INTEGER as Members FROM
+    (
+        SELECT EXTRACT(month FROM registerDate) as Month,
+        EXTRACT(year FROM registerDate) as Year,
+        COUNT(*)
+        FROM Member
+        WHERE registerDate > startDate AND registerDate < endDate
+        GROUP BY 1, 2
+    ) AS cnt
+    RIGHT OUTER JOIN (SELECT * FROM generate_series(startDate::timestamp, endDate - INTERVAL '1 second', '1 month') AS ts) AS dtetable ON EXTRACT(month FROM ts) = cnt.Month AND EXTRACT(year FROM ts) = cnt.Year
+    ORDER BY Year, Month ASC;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Get number of groups created per month between two dates
+DROP FUNCTION IF EXISTS get_group_counts_per_month_year(DATE, DATE);
+CREATE OR REPLACE FUNCTION get_group_counts_per_month_year(startDate DATE, endDate DATE)
+RETURNS TABLE (month INTEGER, year INTEGER, groups INTEGER) AS $$
+BEGIN RETURN QUERY
+    SELECT EXTRACT(month FROM ts)::INTEGER as Month, EXTRACT(year FROM ts)::INTEGER as Year, COALESCE(count, 0)::INTEGER as Groups FROM
+    (
+        SELECT EXTRACT(month FROM createDate) as Month,
+        EXTRACT(year FROM createDate) as Year,
+        COUNT(*)
+        FROM TGroup
+        WHERE createDate > startDate AND createDate < endDate
+        GROUP BY 1, 2
+    ) AS cnt
+    RIGHT OUTER JOIN (SELECT * FROM generate_series(startDate::timestamp, endDate - INTERVAL '1 second', '1 month') AS ts) AS dtetable ON EXTRACT(month FROM ts) = cnt.Month AND EXTRACT(year FROM ts) = cnt.Year
+    ORDER BY Year, Month ASC;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Get number of models, members and groups created per month between two dates
+-- Note: startDate = 2014-01-01, endDate = 2015-01-01 should return 12 results. that's why that "-1 second" is required
+DROP FUNCTION IF EXISTS get_counts_per_month_year(DATE, DATE);
+CREATE OR REPLACE FUNCTION get_counts_per_month_year(startDate DATE, endDate DATE)
+RETURNS TABLE (month INTEGER, year INTEGER, models INTEGER, members INTEGER, groups INTEGER) AS $$
+BEGIN RETURN QUERY
+    SELECT * FROM get_model_counts_per_month_year(startDate, endDate)
+        INNER JOIN get_member_counts_per_month_year(startDate, endDate) USING (month, year)
+        INNER JOIN get_group_counts_per_month_year(startDate, endDate) USING (month, year);
 END;
 $$ LANGUAGE plpgsql;
 
