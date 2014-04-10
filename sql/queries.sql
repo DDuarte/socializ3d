@@ -410,15 +410,51 @@ INSERT INTO GroupInvite(idGroup, idReceiver, idSender) VALUES (:idGroup, :idRece
 -----------------------
 -- Update statements --
 -----------------------
+-----------
+-- Model --
+-----------
 
--- Update model description --
+-- Update model's description --
 UPDATE Model SET description = :description WHERE id = :id;
 
 -- Update model's visibility --
 UPDATE Model SET visibility = :visibility WHERE id = :id;
 
+-- Remove Tag from Model --
+DELETE FROM model_tags WHERE model_tags.idModel = :idModel AND model_tags.name = :name;
+
+-- Remove comment from Model --
+UPDATE TComment SET TComment.deleted = true WHERE TComment.idModel = :idModel AND TComment.id = :idComment;
+
+-- Remove Model --
+DELETE FROM Model WHERE Model.id = :id;
+------------
+-- Member --
+------------
+
 -- Update member's about field --
 UPDATE Member SET about = :about WHERE id = :id;
+
+-- Remove Tag (interest) from Member --
+DELETE FROM user_tags WHERE idMember = :idMember AND name = :tagName;
+
+------------
+-- TGroup --
+------------
+
+-- Update group's about field --
+UPDATE TGroup SET about = :about WHERE id = :id;
+
+-- Update group's cover image --
+UPDATE TGroup SET coverImg = :img WHERE id = :id;
+
+-- Update group's avatar image --
+UPDATE TGroup SET avatarImg = :img WHERE id = :id;
+
+-- Update group's visibility --
+UPDATE TGroup SET visibility = :visibility WHERE id = :id;
+
+--
 
 -- Update vote --
 UPDATE Vote SET upVote = :upVote WHERE Vote.idModel = :idModel AND Vote.idMember = :idMember;
@@ -431,9 +467,3 @@ UPDATE GroupApplication SET accepted = :accepted WHERE GroupApplication.id = :id
 
 -- Answer group invite --
 UPDATE GroupInvite SET accepted = :accepted WHERE GroupInvite.id = :id;
-
--- Remove Tag from Model --
-DELETE FROM model_tags WHERE model_tags.idModel = :idModel AND model_tags.name = :name;
-
--- Remove Tag (interest) from Member --
-DELETE FROM user_tags WHERE idMember = :idMember AND name = :tagName;
