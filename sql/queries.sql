@@ -80,7 +80,7 @@ SELECT name, description, createDate FROM get_all_visibile_models(:userId) JOIN 
 
 -- Get thumbnail information for a model --
 CREATE OR REPLACE FUNCTION get_thumbnail_information(modelId BIGINT)
-RETURNS TABLE(modelName varchar, authorName varchar, createDate TIMESTAMP, fileName varchar, numUpVotes BIGINT, numDownVotes BIGINT, numComments BIGINT) AS $$
+RETURNS TABLE(modelName VARCHAR, authorName VARCHAR, createDate TIMESTAMP, fileName VARCHAR, numUpVotes BIGINT, numDownVotes BIGINT, numComments BIGINT) AS $$
     SELECT model_info.name, Member.name, model_info.createDate, fileName, numUpVotes, numDownVotes, count(TComment.id)
         FROM model_info
         JOIN Member ON Member.id = model_info.idAuthor
@@ -91,7 +91,7 @@ $$ LANGUAGE SQL;
 
 -- List all the members of a group --
 CREATE OR REPLACE FUNCTION get_members_of_group(groupId BIGINT)
-RETURNS TABLE(memberId BIGINT, memberName varchar) AS $$
+RETURNS TABLE(memberId BIGINT, memberName VARCHAR) AS $$
     SELECT Member.id, Member.name FROM GroupUser
         JOIN TGroup ON GroupUser.idGroup = $1
         JOIN Member ON Member.id = GroupUser.idMember
@@ -100,7 +100,7 @@ $$ LANGUAGE SQL;
 
 -- List all the administrators of a group --
 CREATE OR REPLACE FUNCTION get_administrators_of_group(groupId BIGINT)
-RETURNS TABLE(memberId BIGINT, memberName varchar) AS $$
+RETURNS TABLE(memberId BIGINT, memberName VARCHAR) AS $$
     SELECT Member.id, Member.name FROM GroupUser
         JOIN TGroup ON GroupUser.idGroup = $1
         JOIN Member ON (Member.id = GroupUser.idMember AND GroupUser.isAdmin = 'true')
@@ -310,7 +310,7 @@ CREATE OR REPLACE FUNCTION get_model(memberId BIGINT, oldest_date_limit TIMESTAM
 $$ LANGUAGE SQL;
 
 -- Get Model Information --
-CREATE OR REPLACE FUNCTION get_model_info(modelId BIGINT) RETURNS TABLE(idAuthor BIGINT, nameAuthor varchar(70), name varchar(70), description varchar(255), fileName varchar(255), createDate TIMESTAMP, numUpVotes BIGINT, numDownVotes BIGINT) AS $$
+CREATE OR REPLACE FUNCTION get_model_info(modelId BIGINT) RETURNS TABLE(idAuthor BIGINT, nameAuthor VARCHAR(70), name VARCHAR(70), description VARCHAR(255), fileName VARCHAR(255), createDate TIMESTAMP, numUpVotes BIGINT, numDownVotes BIGINT) AS $$
     SELECT Model.idAuthor, 
            Member.name AS nameAuthor,
            Model.name, 
@@ -323,7 +323,7 @@ CREATE OR REPLACE FUNCTION get_model_info(modelId BIGINT) RETURNS TABLE(idAuthor
     WHERE Model.id = $1
 $$ LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION get_model_info(userId BIGINT, modelId BIGINT) RETURNS TABLE(idAuthor BIGINT, nameAuthor varchar(70), name varchar(70), description varchar(255), fileName varchar(255), createDate TIMESTAMP, numUpVotes BIGINT, numDownVotes BIGINT) AS $$
+CREATE OR REPLACE FUNCTION get_model_info(userId BIGINT, modelId BIGINT) RETURNS TABLE(idAuthor BIGINT, nameAuthor VARCHAR(70), name VARCHAR(70), description VARCHAR(255), fileName VARCHAR(255), createDate TIMESTAMP, numUpVotes BIGINT, numDownVotes BIGINT) AS $$
 BEGIN
     IF ($2 IN (SELECT * FROM get_all_visibile_models($1))) THEN
         RETURN QUERY SELECT * FROM get_model_info($2);
@@ -334,7 +334,7 @@ END;
 $$ LANGUAGE PLPGSQL;
 
 -- Get Model Comments --
-CREATE OR REPLACE FUNCTION get_model_comments(modelId bigint) RETURNS TABLE(idMember bigint, name varchar(70), hash TEXT, content varchar(255), createDate timestamp) as $$
+CREATE OR REPLACE FUNCTION get_model_comments(modelId BIGINT) RETURNS TABLE(idMember BIGINT, name VARCHAR(70), hash TEXT, content VARCHAR(255), createDate TIMESTAMP) as $$
     SELECT TComment.idMember, 
            Member.name,
            get_user_hash(Member.id) AS hash,
@@ -346,7 +346,7 @@ CREATE OR REPLACE FUNCTION get_model_comments(modelId bigint) RETURNS TABLE(idMe
     WHERE TComment.deleted = false
 $$ LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION get_model_comments(userId bigint, modelId bigint) RETURNS TABLE(idMember bigint, name varchar(70), email varchar(254), content varchar(255), createDate timestamp) as $$
+CREATE OR REPLACE FUNCTION get_model_comments(userId BIGINT, modelId BIGINT) RETURNS TABLE(idMember BIGINT, name VARCHAR(70), email VARCHAR(254), content VARCHAR(255), createDate TIMESTAMP) as $$
 BEGIN
     IF ($2 IN (SELECT * FROM get_all_visibile_models($1))) THEN
         RETURN QUERY SELECT * FROM get_model_comments($2);
@@ -357,19 +357,19 @@ END;
 $$ LANGUAGE PLPGSQL;
 
 -- Get Model Tags --
-CREATE OR REPLACE FUNCTION get_model_tags(modelId bigint) RETURNS TABLE(name varchar(20)) AS $$
+CREATE OR REPLACE FUNCTION get_model_tags(modelId BIGINT) RETURNS TABLE(name VARCHAR(20)) AS $$
     SELECT model_tags.name FROM model_tags WHERE model_tags.idModel = $1
 $$ LANGUAGE SQL;
 
 -- List groups where model is shared --
-CREATE OR REPLACE FUNCTION get_model_shared_groups(modelId bigint) RETURNS TABLE(idGroup bigint) AS $$
+CREATE OR REPLACE FUNCTION get_model_shared_groups(modelId BIGINT) RETURNS TABLE(idGroup BIGINT) AS $$
     SELECT GroupModel.idGroup 
     FROM GroupModel JOIN TGroup ON TGroup.id = GroupModel.idGroup
     WHERE GroupModel.idModel = $1 AND TGroup.visibility = 'public'
 $$ LANGUAGE SQL;
 
 -- Member profile --
-CREATE OR REPLACE FUNCTION get_member_profile(userId bigint) RETURNS TABLE(name varchar(70), about varchar(255), birthDate date, hash TEXT) AS $$
+CREATE OR REPLACE FUNCTION get_member_profile(userId BIGINT) RETURNS TABLE(name VARCHAR(70), about VARCHAR(255), birthDate DATE, hash TEXT) AS $$
     SELECT Member.name,
            Member.about,
            Member.birthDate,
@@ -378,11 +378,22 @@ CREATE OR REPLACE FUNCTION get_member_profile(userId bigint) RETURNS TABLE(name 
     WHERE Member.id = $1
 $$ LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION get_member_tags(userId bigint) RETURNS TABLE(name varchar(20)) AS $$
+CREATE OR REPLACE FUNCTION get_member_tags(userId BIGINT) RETURNS TABLE(name VARCHAR(20)) AS $$
     SELECT name 
     FROM user_tags
     WHERE user_tags.idMember = $1
 $$ LANGUAGE SQL;
+
+-- Group Profile --
+CREATE OR REPLACE FUNCTION get_group_profile(groupId BIGINT) RETURNS TABLE(name VARCHAR(70), about VARCHAR(255), avatarImg VARCHAR(255), coverImg VARCHAR(255)) AS $$
+    SELECT TGroup.name, 
+           TGroup.about, 
+           TGroup.avatarImg, 
+           TGroup.coverImg
+    FROM TGroup
+    WHERE TGroup.id = $1
+$$ LANGUAGE SQL;
+
 -----------
 -- Views --
 -----------
