@@ -354,6 +354,12 @@ CREATE OR REPLACE FUNCTION get_model_tags(modelId bigint) RETURNS TABLE(name var
     SELECT model_tags.name FROM model_tags WHERE model_tags.idModel = $1
 $$ LANGUAGE SQL;
 
+-- List groups where model is shared --
+CREATE OR REPLACE FUNCTION get_model_shared_groups(modelId bigint) RETURNS TABLE(idGroup bigint) AS $$
+    SELECT GroupModel.idGroup 
+    FROM GroupModel JOIN TGroup ON TGroup.id = GroupModel.idGroup
+    WHERE GroupModel.idModel = $1 AND TGroup.visibility = 'public'
+$$ LANGUAGE SQL;
 -----------
 -- Views --
 -----------
