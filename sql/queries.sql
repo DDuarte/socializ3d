@@ -266,6 +266,76 @@ CREATE TRIGGER delete_from_model_tags_view_trigger INSTEAD OF DELETE ON model_ta
 
 --
 -----------------------
+-- Insert Statements --
+-----------------------
+
+-- Insert comments into model --
+CREATE OR REPLACE FUNCTION insert_comment(authorId bigint, modelId bigint, commentContent bigint)
+RETURNS VOID AS $$
+	INSERT INTO TComment(idMember, idModel, content) VALUES ($1, $2, $3);
+$$ LANGUAGE SQL;
+
+-- Insert new group --
+CREATE OR REPLACE FUNCTION insert_group(name varchar, about varchar, avatarImg varchar, coverImg varchar, visibility visibility_group)
+RETURNS VOID AS $$
+	INSERT INTO TGroup(name, about, avatarImg, coverImg, visibility) VALUES ($1, $2, $3, $4, $5);
+$$ LANGUAGE SQL;
+
+-- Insert member into group --
+CREATE OR REPLACE FUNCTION insert_member_into_group(idGroup bigint, idMember bigint, isAdmin boolean default false)
+RETURNS VOID AS $$
+	INSERT INTO GroupUser(idGroup, idMember, isAdmin) VALUES ($1, $2, $3);
+$$ LANGUAGE SQL;
+
+-- Insert model into group --
+CREATE OR REPLACE FUNCTION insert_model_into_group(idGroup bigint, idModel bigint)
+RETURNS VOID AS $$
+	INSERT INTO GroupModel(idGroup, idModel) VALUES ($1, $2);
+$$ LANGUAGE SQL;
+
+-- Insert new model --
+CREATE OR REPLACE FUNCTION insert_model(idAuthor bigint, name varchar, description varchar, userFileName varchar, fileName varchar, visibility visibility_model)
+RETURNS VOID AS $$
+	INSERT INTO Model(idAuthor, name, description, userFileName, fileName, visibility) VALUES ($1, $2, $3, $4, $5, $6);
+$$ LANGUAGE SQL;
+
+-- Insert new friendship --
+CREATE OR REPLACE FUNCTION insert_friendship(idMember1 bigint, idMember2 bigint)
+RETURNS VOID AS $$
+	INSERT INTO Friendship(idMember1, idMember2) VALUES ($1, $2);
+$$ LANGUAGE SQL;
+
+-- Insert vote in model --
+CREATE OR REPLACE FUNCTION insert_vote(idAuthor bigint, idModel bigint, upVote boolean)
+RETURNS VOID AS $$
+	INSERT INTO Vote(idMember, idModel, upVote) VALUES($1, $2, $3);
+$$ LANGUAGE SQL;
+
+-- Insert registered user --
+CREATE OR REPLACE FUNCTION insert_user(username varchar, passwordHash varchar, email varchar, isAdmin boolean default false)
+RETURNS VOID AS $$
+	INSERT INTO RegisteredUser(userName, passwordHash, email, isAdmin) VALUES ($1, $2, $3, $4);
+$$ LANGUAGE SQL;
+
+-- Insert friendship invite --
+CREATE OR REPLACE FUNCTION insert_friendship_invite(idReceiver bigint, idSender bigint)
+RETURNS VOID AS $$
+	INSERT INTO FriendshipInvite(idReceiver, idSender) VALUES ($1, $2);
+$$ LANGUAGE SQL;
+
+-- Insert group application --
+CREATE OR REPLACE FUNCTION insert_group_application(idGroup bigint, idMember bigint)
+RETURNS VOID AS $$
+	INSERT INTO GroupApplication(idGroup, idMember) VALUES ($1, $2);
+$$ LANGUAGE SQL;
+
+-- Insert group invite --
+CREATE OR REPLACE FUNCTION insert_group_invite(idGroup bigint, idReceiver bigint, idSender bigint)
+RETURNS VOID AS $$
+	INSERT INTO GroupInvite(idGroup, idReceiver, idSender) VALUES ($1, $2, $3);
+$$ LANGUAGE SQL;
+--
+-----------------------
 -- Update statements --
 -----------------------
 
