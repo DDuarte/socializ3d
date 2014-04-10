@@ -37,7 +37,7 @@ CREATE VIEW model_info AS SELECT id, idAuthor, name, description, userFileName, 
 CREATE OR REPLACE FUNCTION get_group_visibile_models(userId BIGINT)
 RETURNS TABLE (id BIGINT) AS $$
 BEGIN
-    RETURN QUERY SELECT idModel
+    RETURN QUERY SELECT DISTINCT idModel
     FROM GroupModel
     WHERE idGroup IN (SELECT get_groups_of_member(userId));
 END;
@@ -48,9 +48,10 @@ RETURNS TABLE (id BIGINT) AS $$
 BEGIN
     RETURN QUERY SELECT Model.id
     FROM Model
-    WHERE visibility = 'public' OR
-         (visibility = 'friends' AND idAuthor IN (SELECT memberId FROM get_friends_of_member(userId)))
-    UNION SELECT * FROM get_group_visibile_models(userId);
+    WHERE idAuthor = userId OR -- my models
+          visibility = 'public' OR -- public model
+         (visibility = 'friends' AND idAuthor IN (SELECT memberId FROM get_friends_of_member(userId))) OR -- my friends
+    UNION SELECT get_group_visibile_models(userId);
 END;
 $$ LANGUAGE plpgsql;
 
@@ -171,6 +172,30 @@ BEGIN
     RETURN QUERY SELECT id
     FROM get_all_visibile_models(userId)
     ORDER BY RANDOM() LIMIT max_model_number_limit;
+END;
+$$ LANGUAGE plpgsql;
+
+-- List user models --
+CREATE OR REPLACE FUNCTION get_user_models(max_model_number_limit INTEGER, skip INTEGER, userId BIGINT, whoUserId BIGINT)
+RETURNS TABLE (modelId BIGINT) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT get_all_visibile_models.id
+    FROM get_all_visibile_models(userId) JOIN Model ON get_all_visibile_models.id = Model.id
+    WHERE idAuthor = whoUserId LIMIT max_model_number_limit OFFSET skip;
+END;
+$$ LANGUAGE plpgsql;
+
+-- List group models --
+CREATE OR REPLACE FUNCTION get_group_models(max_model_number_limit INTEGER, skip INTEGER, userId BIGINT, whoGroupId BIGINT)
+RETURNS TABLE (modelId BIGINT) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT idModel
+    FROM GroupModel JOIN TGroup ON TGroup.id = whoGroupId
+    WHERE idGroup = whoGroupId AND
+    (visibility = 'public' OR
+     (visibility = 'private' AND userId IN (SELECT idMember FROM GroupUser WHERE idGroup = whoGroupId)));
 END;
 $$ LANGUAGE plpgsql;
 
