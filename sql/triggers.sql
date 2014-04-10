@@ -38,7 +38,7 @@ CREATE OR REPLACE FUNCTION generate_publication_Notification() RETURNS TRIGGER A
         END IF;
 
         IF NEW.visibility IN ('public', 'friends') THEN 
-            FOR friendId IN SELECT idMember1 FROM Friendship WHERE idMember2 = NEW.idAuthor UNION ALL SELECT idMember2 FROM Friendship WHERE idMember1 = NEW.idAuthor
+            FOR friendId IN SELECT memberId FROM get_friends_of_member(NEW.idAuthor)
             LOOP
                 INSERT INTO UserNotification (idNotification, idMember) SELECT notificationId, friendId WHERE NOT EXISTS ( 
                     SELECT 1 FROM UserNotification 
@@ -409,7 +409,7 @@ CREATE OR REPLACE FUNCTION generate_publication_Notification() RETURNS TRIGGER A
         END IF;
 
         IF NEW.visibility IN ('public', 'friends') THEN 
-            FOR friendId IN SELECT idMember1 FROM Friendship WHERE idMember2 = NEW.idAuthor UNION ALL SELECT idMember2 FROM Friendship WHERE idMember1 = NEW.idAuthor
+            FOR friendId IN SELECT memberId FROM get_friends_of_member(NEW.idAuthor)
             LOOP
                 INSERT INTO UserNotification (idNotification, idMember) SELECT notificationId, friendId WHERE NOT EXISTS ( 
                     SELECT 1 FROM UserNotification 

@@ -272,10 +272,7 @@ CREATE OR REPLACE FUNCTION get_model(memberId bigint, oldest_date_limit timestam
     FROM Model
     WHERE Model.createDate < $2
         AND (   visibility = 'public'
-            OR (visibility = 'friends' AND $1 IN (SELECT FriendShip.idMember1 AS idFriend FROM Friendship WHERE Friendship.idMember2 = Model.idAuthor
-                                                        UNION ALL
-                                                        SELECT FriendShip.idMember2 AS idFriend FROM Friendship WHERE Friendship.idMember1 = Model.idAuthor)
-                )
+        OR (visibility = 'friends' AND $1 IN (SELECT memberId FROM get_friends_of_member(Model.idAuthor)))
             )
     LIMIT $3
 $$ LANGUAGE SQL;
