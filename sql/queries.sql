@@ -389,10 +389,16 @@ INSERT INTO Model(idAuthor, name, description, userFileName, fileName, visibilit
 INSERT INTO Friendship(idMember1, idMember2) VALUES (:idMember1, :idMember2);
 
 -- Insert vote in model --
-INSERT INTO Vote(idMember, idModel, upVote) VALUES(:idMember, :idModel, :upVote);
+INSERT INTO Vote(idMember, idModel, upVote) VALUES (:idMember, :idModel, :upVote);
+
+-- Insert Tag in model (insert into view) --
+INSERT INTO model_tags(idModel, name) VALUES (:idModel, :name);
 
 -- Insert registered user --
 INSERT INTO RegisteredUser(userName, passwordHash, email, isAdmin) VALUES (:userName, :passwordHash, :email, :isAdmin);
+
+-- Insert tag (interest) in Member --
+INSERT INTO user_tags(idMember, name) VALUES (:idMember, :name);
 
 -- Insert friendship invite --
 INSERT INTO FriendshipInvite(idReceiver, idSender) VALUES (:idReceiver, :idSender);
@@ -429,7 +435,7 @@ UPDATE GroupApplication SET accepted = true WHERE GroupApplication.id = :id;
 UPDATE GroupInvite SET accepted = true WHERE GroupInvite.id = :id;
 
 -- Remove Tag from Model --
-DELETE FROM ModelTag WHERE ModelTag.idModel = :idModel AND ModelTag.idTag = :idTag;
+DELETE FROM model_tags WHERE model_tags.idModel = :idModel AND model_tags.name = :name;
 
 -- Remove Tag (interest) from Member --
-DELETE FROM UserInterest WHERE UserInterest.idMember = :idMember AND UserInterest.idTag = :idTag;
+DELETE FROM user_tags WHERE idMember = :idMember AND name = :tagName;
