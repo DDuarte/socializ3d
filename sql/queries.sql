@@ -395,6 +395,17 @@ CREATE OR REPLACE FUNCTION get_group_profile(groupId BIGINT) RETURNS TABLE(name 
     WHERE TGroup.id = $1
 $$ LANGUAGE SQL;
 
+CREATE OR REPLACE FUNCTION get_group_profile(memberId BIGINT, groupId BIGINT) RETURNS TABLE(name VARCHAR(70), about VARCHAR(255), avatarImg VARCHAR(255), coverImg VARCHAR(255)) AS $$
+BEGIN
+    IF ('public' NOT IN (SELECT TGroup.visibility FROM TGroup WHERE TGroup.id = $2) AND 
+        $1 NOT IN (SELECT GroupUser.idMember FROM GroupUser WHERE GroupUser.idGroup = $2)) THEN
+        RAISE EXCEPTION 'User % does not have permission to access group % profile.', $1, $2;
+    ELSE
+        RETURN QUERY SELECT * FROM get_group_profile($2);
+    END IF;
+END;
+$$ LANGUAGE PLPGSQL;
+
 -----------
 -- Views --
 -----------
