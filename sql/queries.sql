@@ -5,6 +5,7 @@ DROP TRIGGER IF EXISTS delete_from_model_tags_view_trigger ON model_tags;
 
 DROP FUNCTION IF EXISTS get_group_visibile_models(BIGINT);
 DROP FUNCTION IF EXISTS get_all_visibile_models(BIGINT);
+DROP FUNCTION IF EXISTS get_user_hash(BIGINT);
 DROP FUNCTION IF EXISTS get_thumbnail_information(BIGINT);
 DROP FUNCTION IF EXISTS get_members_of_group(BIGINT);
 DROP FUNCTION IF EXISTS get_administrators_of_group(BIGINT)
@@ -54,6 +55,12 @@ BEGIN
     UNION SELECT get_group_visibile_models(userId);
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_user_hash(userId BIGINT)
+-- hash used to get avatar from email with Gravatar
+RETURNS TEXT AS $$
+    SELECT md5(lower(btrim(email))) FROM RegisteredUser WHERE id = $1;
+$$ LANGUAGE SQL;
 
 -------------------------
 -- Search results page --
