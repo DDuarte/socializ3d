@@ -542,6 +542,12 @@ BEGIN
 END;
 $$ LANGUAGE PLPGSQL;
 
+CREATE OR REPLACE FUNCTION add_administrator(_userName VARCHAR(20), _passwordHash VARCHAR(64), _email VARCHAR(254)) RETURNS void AS $$
+BEGIN
+    INSERT INTO RegisteredUser(userName, passwordHash, email, isAdmin) VALUES ($1, $2, $3, true);
+END;
+$$ LANGUAGE PLPGSQL;
+
 -----------------------
 -- Update statements --
 -----------------------
