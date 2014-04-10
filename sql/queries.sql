@@ -3,45 +3,70 @@ DROP TRIGGER IF EXISTS delete_from_user_tags_view_trigger ON user_tags;
 DROP TRIGGER IF EXISTS insert_on_model_tags_view_trigger ON model_tags;
 DROP TRIGGER IF EXISTS delete_from_model_tags_view_trigger ON model_tags;
 
-DROP FUNCTION IF EXISTS get_groups_with_name(varchar);
-DROP FUNCTION IF EXISTS get_members_with_name(varchar);
-DROP FUNCTION IF EXISTS get_models_with_name(varchar);
+DROP FUNCTION IF EXISTS get_group_visibile_models(BIGINT);
+DROP FUNCTION IF EXISTS get_all_visibile_models(BIGINT);
 DROP FUNCTION IF EXISTS get_thumbnail_information(bigint);
 DROP FUNCTION IF EXISTS get_members_of_group(bigint);
-DROP FUNCTION IF EXISTS get_administrators_of_group(bigint);
+DROP FUNCTION IF EXISTS get_administrators_of_group(bigint)
 DROP FUNCTION IF EXISTS get_friends_of_member(bigint);
-DROP FUNCTION IF EXISTS get_groups_of_member(bigint);
-DROP FUNCTION IF EXISTS get_top_rated_models(integer, integer, bigint);
-DROP FUNCTION IF EXISTS get_whats_hot_models(integer, integer, bigint);
-DROP FUNCTION IF EXISTS get_new_models(integer, integer, bigint);
-DROP FUNCTION IF EXISTS get_random_models(integer, integer, bigint);
+DROP FUNCTION IF EXISTS get_groups_of_member(BIGINT);
+DROP FUNCTION IF EXISTS get_top_rated_models(integer, integer, BIGINT);
+DROP FUNCTION IF EXISTS get_whats_hot_models(integer, integer, BIGINT);
+DROP FUNCTION IF EXISTS get_new_models(INTEGER, INTEGER, BIGINT);
+DROP FUNCTION IF EXISTS get_random_models(INTEGER, INTEGER, BIGINT);
+DROP FUNCTION IF EXISTS get_model_counts_per_month_year(DATE, DATE)
+DROP FUNCTION IF EXISTS get_member_counts_per_month_year(DATE, DATE);
+DROP FUNCTION IF EXISTS get_group_counts_per_month_year(DATE, DATE);
+DROP FUNCTION IF EXISTS get_counts_per_month_year(DATE, DATE);
+DROP FUNCTION IF EXISTS get_notifications(timestamp, integer);
+DROP FUNCTION IF EXISTS get_member_notifications(bigint, timestamp, integer);
+DROP FUNCTION IF EXISTS get_group_notifications(bigint, timestamp, integer);
+DROP FUNCTION IF EXISTS get_model(bigint, timestamp, integer);
+DROP FUNCTION IF EXISTS insert_on_user_tags_view();
+DROP FUNCTION IF EXISTS delete_from_user_tags_view();
+DROP FUNCTION IF EXISTS insert_on_model_tags_view();
+DROP FUNCTION IF EXISTS delete_from_model_tags_view();
+
+-------------
+-- Helpers --
+-------------
 
 DROP VIEW IF EXISTS model_info;
+CREATE VIEW model_info AS SELECT id, idAuthor, name, description, userFileName, fileName, createDate, visibility, numUpVotes, numDownVotes FROM model JOIN modelvote ON model.id = modelvote.idModel;
+
+CREATE OR REPLACE FUNCTION get_group_visibile_models(userId BIGINT)
+RETURNS TABLE (id BIGINT) AS $$
+BEGIN
+    RETURN QUERY SELECT idModel
+    FROM GroupModel
+    WHERE idGroup IN (SELECT get_groups_of_member(userId));
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_all_visibile_models(userId BIGINT)
+RETURNS TABLE (id BIGINT) AS $$
+BEGIN
+    RETURN QUERY SELECT Model.id
+    FROM Model
+    WHERE visibility = 'public' OR
+         (visibility = 'friends' AND idAuthor IN (SELECT memberId FROM get_friends_of_member(userId)))
+    UNION SELECT * FROM get_group_visibile_models(userId);
+END;
+$$ LANGUAGE plpgsql;
 
 -------------------------
 -- Search results page --
 -------------------------
 
 -- TGroup --
-CREATE OR REPLACE FUNCTION get_groups_with_name(name varchar)
-RETURNS TABLE(name varchar, about varchar, avatarImg varchar, createDate timestamp) AS $$
-    SELECT name, about, avatarImg, createDate
-    FROM TGroup WHERE visibility = 'public' AND TGroup.name = $1
-$$ LANGUAGE SQL;
+SELECT name, about, avatarImg, createDate FROM TGroup WHERE visibility = 'public' AND TGroup.name = :groupName;
 
 -- Member --
-CREATE OR REPLACE FUNCTION get_members_with_name(name varchar)
-RETURNS TABLE(name varchar, about varchar, registerDate timestamp) AS $$
-    SELECT name, about, registerDate
-    FROM Member WHERE Member.name = $1
-$$ LANGUAGE SQL;
+SELECT name, about, registerDate FROM Member WHERE Member.name = :memberName;
 
 -- Model --
-CREATE OR REPLACE FUNCTION get_models_with_name(name varchar)
-RETURNS TABLE(name varchar, description varchar, createDate timestamp) AS $$
-    SELECT name, description, createDate
-    FROM Model WHERE Model.name = $1 AND visibility = 'public'
-$$ LANGUAGE SQL;
+SELECT name, description, createDate FROM get_all_visibile_models(:userId) JOIN Model ON get_all_visibile_models.id = Model.id
+    WHERE Model.name = :modelName;
 
 ---
 
@@ -136,7 +161,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- List random models --
-
 CREATE OR REPLACE FUNCTION get_random_models(max_model_number_limit INTEGER, skip INTEGER, userId BIGINT) -- skip is not actually used
 /* multiple solutions to select N random model ids were tested
    with "order by rnd" being the most simple and reliable one
@@ -148,28 +172,6 @@ BEGIN
     RETURN QUERY SELECT id
     FROM get_all_visibile_models(userId)
     ORDER BY RANDOM() LIMIT max_model_number_limit;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE VIEW model_info AS SELECT id, idAuthor, name, description, userFileName, fileName, createDate, visibility, numUpVotes, numDownVotes FROM model JOIN modelvote ON model.id = modelvote.idModel;
-
-CREATE OR REPLACE FUNCTION get_group_visibile_models(userId BIGINT)
-RETURNS TABLE (id BIGINT) AS $$
-BEGIN
-    RETURN QUERY SELECT idModel
-    FROM GroupModel
-    WHERE idGroup IN (SELECT get_groups_of_member(userId));
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION get_all_visibile_models(userId BIGINT)
-RETURNS TABLE (id BIGINT) AS $$
-BEGIN
-    RETURN QUERY SELECT Model.id
-    FROM Model
-    WHERE visibility = 'public' OR
-         (visibility = 'friends' AND idAuthor IN (SELECT memberId FROM get_friends_of_member(userId)))
-    UNION SELECT * FROM get_group_visibile_models(userId);
 END;
 $$ LANGUAGE plpgsql;
 
@@ -416,23 +418,23 @@ INSERT INTO GroupInvite(idGroup, idReceiver, idSender) VALUES (:idGroup, :idRece
 -- Update model description --
 UPDATE Model SET description = :description WHERE id = :id;
 
--- Update member's about field --
-UPDATE Member SET about = :about WHERE id = :id;
-
 -- Update model's visibility --
 UPDATE Model SET visibility = :visibility WHERE id = :id;
+
+-- Update member's about field --
+UPDATE Member SET about = :about WHERE id = :id;
 
 -- Update vote --
 UPDATE Vote SET upVote = :upVote WHERE Vote.idModel = :idModel AND Vote.idMember = :idMember;
 
--- Accept friendship invite --
-UPDATE FriendshipInvite SET accepted = true WHERE FriendshipInvite.id = :id;
+-- Answer friendship invite --
+UPDATE FriendshipInvite SET accepted = :accepted WHERE FriendshipInvite.id = :id;
 
--- Accept group application --
-UPDATE GroupApplication SET accepted = true WHERE GroupApplication.id = :id;
+-- Answer group application --
+UPDATE GroupApplication SET accepted = :accepted WHERE GroupApplication.id = :id;
 
--- Accept group invite --
-UPDATE GroupInvite SET accepted = true WHERE GroupInvite.id = :id;
+-- Answer group invite --
+UPDATE GroupInvite SET accepted = :accepted WHERE GroupInvite.id = :id;
 
 -- Remove Tag from Model --
 DELETE FROM model_tags WHERE model_tags.idModel = :idModel AND model_tags.name = :name;
