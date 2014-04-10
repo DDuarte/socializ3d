@@ -46,12 +46,12 @@ $$ LANGUAGE SQL;
 -- Get thumbnail information for a model --
 CREATE OR REPLACE FUNCTION get_thumbnail_information(modelId bigint)
 RETURNS TABLE(modelName varchar, authorName varchar, createDate timestamp, fileName varchar, numUpVotes bigint, numDownVotes bigint, numComments bigint) AS $$
-    SELECT DISTINCT model_info.name, Member.name, model_info.createDate, fileName, numUpVotes, numDownVotes, count(TComment.id)
+    SELECT model_info.name, Member.name, model_info.createDate, fileName, numUpVotes, numDownVotes, count(TComment.id)
         FROM model_info
         JOIN Member ON Member.id = model_info.idAuthor
         LEFT JOIN TComment ON TComment.idModel = model_info.id
         WHERE model_info.id = $1
-        GROUP BY model_info.name, Member.name, numUpVotes, numDownVotes
+        GROUP BY model_info.name, Member.name, model_info.createDate, fileName, numUpVotes, numDownVotes
 $$ LANGUAGE SQL;
 
 -- List all the members of a group --
@@ -123,6 +123,32 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- List the new models --
+CREATE OR REPLACE FUNCTION get_new_models(max_model_number_limit INTEGER, skip INTEGER, userId BIGINT)
+RETURNS TABLE (modelId BIGINT) AS $$
+BEGIN
+    RETURN QUERY SELECT get_all_visibile_models.id
+    FROM get_all_visibile_models(userId) JOIN Model ON get_all_visibile_models.id = Model.id
+    ORDER BY (createDate) DESC LIMIT max_model_number_limit OFFSET skip;
+END;
+$$ LANGUAGE plpgsql;
+
+-- List random models --
+
+CREATE OR REPLACE FUNCTION get_random_models(max_model_number_limit INTEGER, skip INTEGER, userId BIGINT) -- skip is not actually used
+/* multiple solutions to select N random model ids were tested
+   with "order by rnd" being the most simple and reliable one
+   the downside is that it does a full scan + sort on the table,
+   which can be slow if the table gets very large.
+   an alternative is to implement this logic in PHP */
+RETURNS TABLE (modelId BIGINT) AS $$
+BEGIN
+    RETURN QUERY SELECT id
+    FROM get_all_visibile_models(userId)
+    ORDER BY RANDOM() LIMIT max_model_number_limit;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE VIEW model_info AS SELECT id, idAuthor, name, description, userFileName, fileName, createDate, visibility, numUpVotes, numDownVotes FROM model JOIN modelvote ON model.id = modelvote.idModel;
 
 CREATE OR REPLACE FUNCTION get_group_visibile_models(userId BIGINT)
@@ -137,8 +163,8 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION get_all_visibile_models(userId BIGINT)
 RETURNS TABLE (id BIGINT) AS $$
 BEGIN
-    RETURN QUERY SELECT model_info.id
-    FROM model_info
+    RETURN QUERY SELECT Model.id
+    FROM Model
     WHERE visibility = 'public' OR
          (visibility = 'friends' AND idAuthor IN (SELECT memberId FROM get_friends_of_member(userId)))
     UNION SELECT * FROM get_group_visibile_models(userId);
