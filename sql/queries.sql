@@ -326,6 +326,34 @@ BEGIN
 END;
 $$ LANGUAGE PLPGSQL;
 
+-- Get Model Comments --
+CREATE OR REPLACE FUNCTION get_model_comments(modelId bigint) RETURNS TABLE(idMember bigint, name varchar(70), email varchar(254), content varchar(255), createDate timestamp) as $$
+    SELECT TComment.idMember, 
+           Member.name,
+           RegisteredUser.email,
+           TComment.content,
+           TComment.createDate
+    FROM TComment JOIN Model ON Model.id = $1
+                  JOIN Member ON Member.id = TComment.idMember
+                  JOIN RegisteredUser ON Member.id = RegisteredUser.id
+    WHERE TComment.deleted = false
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION get_model_comments(userId bigint, modelId bigint) RETURNS TABLE(idMember bigint, name varchar(70), email varchar(254), content varchar(255), createDate timestamp) as $$
+BEGIN
+    IF ($2 IN (SELECT * FROM get_all_visibile_models($1))) THEN
+        RETURN QUERY SELECT * FROM get_model_comments($2);
+    ELSE
+        RAISE EXCEPTION 'User % does not have permission to access model % comments.', $1, $2;
+    END IF;
+END;
+$$ LANGUAGE PLPGSQL;
+
+-- Get Model Tags --
+CREATE OR REPLACE FUNCTION get_model_tags(modelId bigint) RETURNS TABLE(name varchar(20)) AS $$
+    SELECT model_tags.name FROM model_tags WHERE model_tags.idModel = $1
+$$ LANGUAGE SQL;
+
 -----------
 -- Views --
 -----------
@@ -338,7 +366,6 @@ CREATE OR REPLACE FUNCTION insert_on_user_tags_view() RETURNS TRIGGER AS $$
     DECLARE
         tagid bigint;
     BEGIN
-        BEGIN;
         IF NOT EXISTS(SELECT 1 FROM Tag WHERE Tag.name = NEW.name LIMIT 1) THEN
             INSERT INTO Tag (name) VALUES (NEW.name) RETURNING Tag.id INTO tagid;
         ELSE
@@ -360,7 +387,6 @@ CREATE OR REPLACE FUNCTION delete_from_user_tags_view() RETURNS TRIGGER AS $$
     DECLARE
         tagid bigint;
     BEGIN
-        BEGIN;
         SELECT Tag.id INTO tagid FROM Tag WHERE Tag.name = OLD.name LIMIT 1;
         DELETE FROM UserInterest WHERE UserInterest.idMember = OLD.idMember AND UserInterest.idTag = tagid;
         COMMIT;
@@ -379,7 +405,6 @@ CREATE OR REPLACE FUNCTION insert_on_model_tags_view() RETURNS TRIGGER AS $$
     DECLARE
         tagid bigint;
     BEGIN
-        BEGIN;
         IF NOT EXISTS(SELECT 1 FROM Tag WHERE Tag.name = NEW.name LIMIT 1) THEN
             INSERT INTO Tag (name) VALUES (NEW.name) RETURNING Tag.id INTO tagid;
         ELSE
@@ -401,7 +426,6 @@ CREATE OR REPLACE FUNCTION delete_from_model_tags_view() RETURNS TRIGGER AS $$
     DECLARE
         tagid bigint;
     BEGIN
-        BEGIN;
         SELECT Tag.id INTO tagid FROM TAG WHERE Tag.name = OLD.name LIMIT 1;
         DELETE FROM ModelTag WHERE ModelTag.idModel = OLD.idModel AND ModelTag.idTag = tagid;
         COMMIT;
