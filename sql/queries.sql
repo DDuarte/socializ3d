@@ -444,6 +444,9 @@ UPDATE Model SET description = :description WHERE id = :id;
 -- Update model's visibility --
 UPDATE Model SET visibility = :visibility WHERE id = :id;
 
+-- Update vote --
+UPDATE Vote SET upVote = :upVote WHERE Vote.idModel = :idModel AND Vote.idMember = :idMember;
+
 -- Remove Tag from Model --
 DELETE FROM model_tags WHERE model_tags.idModel = :idModel AND model_tags.name = :name;
 
@@ -452,6 +455,7 @@ UPDATE TComment SET TComment.deleted = true WHERE TComment.idModel = :idModel AN
 
 -- Remove Model --
 DELETE FROM Model WHERE Model.id = :id;
+
 ------------
 -- Member --
 ------------
@@ -479,9 +483,6 @@ UPDATE TGroup SET avatarImg = :img WHERE id = :id;
 UPDATE TGroup SET visibility = :visibility WHERE id = :id;
 
 --
-
--- Update vote --
-UPDATE Vote SET upVote = :upVote WHERE Vote.idModel = :idModel AND Vote.idMember = :idMember;
 
 -- Answer friendship invite --
 UPDATE FriendshipInvite SET accepted = :accepted WHERE FriendshipInvite.id = :id;
