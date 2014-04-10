@@ -277,6 +277,30 @@ CREATE OR REPLACE FUNCTION get_model(memberId bigint, oldest_date_limit timestam
     LIMIT $3
 $$ LANGUAGE SQL;
 
+-- Get Model Information --
+CREATE OR REPLACE FUNCTION get_model_info(modelId bigint) RETURNS TABLE(idAuthor bigint, nameAuthor varchar(70), name varchar(70), description varchar(255), fileName varchar(255), createDate timestamp, numUpVotes bigint, numDownVotes bigint) AS $$
+    SELECT Model.idAuthor, 
+           Member.name AS nameAuthor,
+           Model.name, 
+           Model.description, 
+           Model.fileName, 
+           Model.createDate,
+           ModelVote.numUpVotes,
+           ModelVote.numDownVotes
+    FROM model_info JOIN Member ON Model.idAuthor = Member.id
+    WHERE Model.id = $1
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION get_model_info(userId bigint, modelId bigint) RETURNS TABLE(idAuthor bigint, nameAuthor varchar(70), name varchar(70), description varchar(255), fileName varchar(255), createDate timestamp, numUpVotes bigint, numDownVotes bigint) AS $$
+BEGIN
+    IF ($2 IN (SELECT * FROM get_all_visibile_models($1))) THEN
+        RETURN QUERY SELECT * FROM get_model_info($2);
+    ELSE
+        RAISE EXCEPTION 'User % does not have permission to access model %.', $1, $2;
+    END IF;
+END;
+$$ LANGUAGE PLPGSQL;
+
 -----------
 -- Views --
 -----------
