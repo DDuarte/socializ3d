@@ -402,7 +402,7 @@ INSERT INTO GroupApplication(idGroup, idMember) VALUES (:idGroup, :idMember);
 
 -- Insert group invite --
 INSERT INTO GroupInvite(idGroup, idReceiver, idSender) VALUES (:idGroup, :idReceiver, :idSender);
---
+
 -----------------------
 -- Update statements --
 -----------------------
@@ -417,7 +417,7 @@ UPDATE Member SET about = :about WHERE id = :id;
 UPDATE Model SET visibility = :visibility WHERE id = :id;
 
 -- Update vote --
-UPDATE Vote SET upVote = $3 WHERE Vote.idModel = :idModel AND Vote.idMember = :idMember;
+UPDATE Vote SET upVote = :upVote WHERE Vote.idModel = :idModel AND Vote.idMember = :idMember;
 
 -- Accept friendship invite --
 UPDATE FriendshipInvite SET accepted = true WHERE FriendshipInvite.id = :id;
