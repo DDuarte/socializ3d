@@ -7,20 +7,15 @@
 -------------------------
 
 SELECT * FROM (
-    SELECT id, 'group', ts_rank_cd(to_tsvector('english', name), :searchTerm) * 0.7 + ts_rank_cd(to_tsvector('english', about), :searchTerm) * 0.3 AS score
+    SELECT id, 'group', ts_rank_cd(to_tsvector('english', name), lower(:searchTerm)) * 0.7 + ts_rank_cd(to_tsvector('english', about), lower(:searchTerm)) * 0.3 AS score
     FROM TGroup WHERE visibility = 'public'
     UNION ALL
-    SELECT id, 'member', ts_rank_cd(to_tsvector('english', name), :searchTerm) * 0.7 + ts_rank_cd(to_tsvector('english', about), :searchTerm) * 0.3 AS score
+    SELECT id, 'member', ts_rank_cd(to_tsvector('english', name), lower(:searchTerm)) * 0.7 + ts_rank_cd(to_tsvector('english', about), lower(:searchTerm)) * 0.3 AS score
     FROM Member
     UNION ALL
-    SELECT Model.id, 'model', ts_rank_cd(to_tsvector('english', name), :searchTerm) * 0.7 + ts_rank_cd(to_tsvector('english', description), :searchTerm) * 0.3 AS score
+    SELECT Model.id, 'model', ts_rank_cd(to_tsvector('english', name), lower(:searchTerm)) * 0.7 + ts_rank_cd(to_tsvector('english', description), lower(:searchTerm)) * 0.3 AS score
     FROM get_all_visibile_models(:userId) JOIN Model ON get_all_visibile_models.id = Model.id
 ) AS q ORDER BY score DESC LIMIT :limit;
-
----
-
--- List all the groups of a user --
-SELECT TGroup.id FROM TGroup JOIN GroupUser ON GroupUser.idGroup = TGroup.id AND GroupUser.idMember = :memberId;
 
 --------------------
 -- Administration --
