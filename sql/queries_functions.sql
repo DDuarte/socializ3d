@@ -1,21 +1,16 @@
-DROP TRIGGER IF EXISTS insert_on_user_tags_view_trigger ON user_tags;
-DROP TRIGGER IF EXISTS delete_from_user_tags_view_trigger ON user_tags;
-DROP TRIGGER IF EXISTS insert_on_model_tags_view_trigger ON model_tags;
-DROP TRIGGER IF EXISTS delete_from_model_tags_view_trigger ON model_tags;
-
 DROP FUNCTION IF EXISTS get_group_visibile_models(BIGINT);
 DROP FUNCTION IF EXISTS get_all_visibile_models(BIGINT);
 DROP FUNCTION IF EXISTS get_user_hash(BIGINT);
 DROP FUNCTION IF EXISTS get_thumbnail_information(BIGINT);
 DROP FUNCTION IF EXISTS get_members_of_group(BIGINT);
-DROP FUNCTION IF EXISTS get_administrators_of_group(BIGINT)
+DROP FUNCTION IF EXISTS get_administrators_of_group(BIGINT);
 DROP FUNCTION IF EXISTS get_friends_of_member(BIGINT);
 DROP FUNCTION IF EXISTS get_groups_of_member(BIGINT);
 DROP FUNCTION IF EXISTS get_top_rated_models(INTEGER, INTEGER, BIGINT);
 DROP FUNCTION IF EXISTS get_whats_hot_models(INTEGER, INTEGER, BIGINT);
 DROP FUNCTION IF EXISTS get_new_models(INTEGER, INTEGER, BIGINT);
 DROP FUNCTION IF EXISTS get_random_models(INTEGER, INTEGER, BIGINT);
-DROP FUNCTION IF EXISTS get_model_counts_per_month_year(DATE, DATE)
+DROP FUNCTION IF EXISTS get_model_counts_per_month_year(DATE, DATE);
 DROP FUNCTION IF EXISTS get_member_counts_per_month_year(DATE, DATE);
 DROP FUNCTION IF EXISTS get_group_counts_per_month_year(DATE, DATE);
 DROP FUNCTION IF EXISTS get_counts_per_month_year(DATE, DATE);
@@ -62,21 +57,6 @@ RETURNS TEXT AS $$
     SELECT md5(lower(btrim(email))) FROM RegisteredUser WHERE id = $1;
 $$ LANGUAGE SQL;
 
--------------------------
--- Search results page --
--------------------------
-
-SELECT * FROM (
-    SELECT id, 'group', ts_rank_cd(to_tsvector('english', name), :searchTerm) * 0.7 + ts_rank_cd(to_tsvector('english', about), :searchTerm) * 0.3 AS score
-    FROM TGroup WHERE visibility = 'public'
-    UNION ALL
-    SELECT id, 'member', ts_rank_cd(to_tsvector('english', name), :searchTerm) * 0.7 + ts_rank_cd(to_tsvector('english', about), :searchTerm) * 0.3 AS score
-    FROM Member
-    UNION ALL
-    SELECT Model.id, 'model', ts_rank_cd(to_tsvector('english', name), :searchTerm) * 0.7 + ts_rank_cd(to_tsvector('english', description), :searchTerm) * 0.3 AS score
-    FROM get_all_visibile_models(:userId) JOIN Model ON get_all_visibile_models.id = Model.id
-) AS q ORDER BY score DESC LIMIT :limit;
-
 ---
 
 -- Get thumbnail information for a model --
@@ -117,9 +97,6 @@ RETURNS TABLE(memberId BIGINT) AS $$
         END AS memberId
     FROM Friendship WHERE $1 IN (Friendship.idMember1, Friendship.idMember2)
 $$ LANGUAGE SQL;
-
--- List all the groups of a user --
-SELECT TGroup.id FROM TGroup JOIN GroupUser ON GroupUser.idGroup = TGroup.id AND GroupUser.idMember = :memberId;
 
 -- List the top rated models --
 CREATE OR REPLACE FUNCTION get_top_rated_models(max_model_number_limit INTEGER, skip INTEGER, userId BIGINT)
@@ -299,9 +276,7 @@ CREATE OR REPLACE FUNCTION get_model(memberId BIGINT, oldest_date_limit TIMESTAM
     SELECT Model.id
     FROM Model
     WHERE Model.createDate < $2
-        AND (   visibility = 'public'
-        OR (visibility = 'friends' AND $1 IN (SELECT memberId FROM get_friends_of_member(Model.idAuthor)))
-            )
+        AND (visibility = 'public' OR (visibility = 'friends' AND $1 IN (SELECT memberId FROM get_friends_of_member(Model.idAuthor))))
     LIMIT $3
 $$ LANGUAGE SQL;
 
@@ -352,20 +327,6 @@ BEGIN
 END;
 $$ LANGUAGE PLPGSQL;
 
--- Get Model Tags --
-SELECT model_tags.name FROM model_tags WHERE model_tags.idModel = :modelId;
-
--- List groups where model is shared --
-SELECT GroupModel.idGroup FROM GroupModel JOIN TGroup ON TGroup.id = GroupModel.idGroup WHERE GroupModel.idModel = :modelId AND TGroup.visibility = 'public';
-
--- Member profile --
-SELECT name, about, birthDate, get_user_hash($1) AS hash FROM Member WHERE id = :userId;
-
-SELECT name FROM user_tags WHERE user_tags.idMember = :userId;
-
--- Group Profile --
-SELECT TGroup.name, TGroup.about, TGroup.avatarImg, TGroup.coverImg FROM TGroup WHERE TGroup.id = :groupId;
-
 CREATE OR REPLACE FUNCTION get_group_profile(memberId BIGINT, groupId BIGINT) RETURNS TABLE(name VARCHAR(70), about VARCHAR(255), avatarImg VARCHAR(255), coverImg VARCHAR(255)) AS $$
 BEGIN
     IF ('public' NOT IN (SELECT TGroup.visibility FROM TGroup WHERE TGroup.id = $2) AND 
@@ -402,9 +363,10 @@ CREATE OR REPLACE FUNCTION insert_on_user_tags_view() RETURNS TRIGGER AS $$
     END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS insert_on_user_tags_view_trigger ON user_tags;
+
 CREATE TRIGGER insert_on_user_tags_view_trigger INSTEAD OF INSERT ON user_tags FOR EACH ROW
     EXECUTE PROCEDURE insert_on_user_tags_view();
-
 
 CREATE OR REPLACE FUNCTION delete_from_user_tags_view() RETURNS TRIGGER AS $$
     DECLARE
@@ -417,6 +379,7 @@ CREATE OR REPLACE FUNCTION delete_from_user_tags_view() RETURNS TRIGGER AS $$
     END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS delete_from_user_tags_view_trigger ON user_tags;
 CREATE TRIGGER delete_from_user_tags_view_trigger INSTEAD OF DELETE ON user_tags FOR EACH ROW
     EXECUTE PROCEDURE delete_from_user_tags_view();
 
@@ -441,9 +404,9 @@ CREATE OR REPLACE FUNCTION insert_on_model_tags_view() RETURNS TRIGGER AS $$
     END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS insert_on_model_tags_view_trigger ON model_tags;
 CREATE TRIGGER insert_on_model_tags_view_trigger INSTEAD OF INSERT ON model_tags FOR EACH ROW
     EXECUTE PROCEDURE insert_on_model_tags_view();
-
 
 CREATE OR REPLACE FUNCTION delete_from_model_tags_view() RETURNS TRIGGER AS $$
     DECLARE
@@ -456,53 +419,11 @@ CREATE OR REPLACE FUNCTION delete_from_model_tags_view() RETURNS TRIGGER AS $$
     END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS delete_from_model_tags_view_trigger ON model_tags;
 CREATE TRIGGER delete_from_model_tags_view_trigger INSTEAD OF DELETE ON model_tags FOR EACH ROW
     EXECUTE PROCEDURE delete_from_model_tags_view();
 
 --
------------------------
--- Insert Statements --
------------------------
-
--- Insert comments into model --
-INSERT INTO TComment(idMember, idModel, content) VALUES (:authorId, :modelId, :commentContent);
-
--- Insert new group --
-INSERT INTO TGroup(name, about, avatarImg, coverImg, visibility) VALUES (:name, :about, :avatarImg, :coverImg, :visibility);
-
--- Insert member into group --
-INSERT INTO GroupUser(idGroup, idMember, isAdmin) VALUES (:idGroup, :idMember, :isAdmin);
-
--- Insert model into group --
-INSERT INTO GroupModel(idGroup, idModel) VALUES (:idGroup, :idModel);
-
--- Insert new model --
-INSERT INTO Model(idAuthor, name, description, userFileName, fileName, visibility) VALUES (:idAuthor, :name, :description, :userFileName, :fileName, :visibility);
-
--- Insert new friendship --
-INSERT INTO Friendship(idMember1, idMember2) VALUES (:idMember1, :idMember2);
-
--- Insert vote in model --
-INSERT INTO Vote(idMember, idModel, upVote) VALUES (:idMember, :idModel, :upVote);
-
--- Insert Tag in model (insert into view) --
-INSERT INTO model_tags(idModel, name) VALUES (:idModel, :name);
-
--- Insert registered user --
-INSERT INTO RegisteredUser(userName, passwordHash, email, isAdmin) VALUES (:userName, :passwordHash, :email, :isAdmin);
-
--- Insert tag (interest) in Member --
-INSERT INTO user_tags(idMember, name) VALUES (:idMember, :name);
-
--- Insert friendship invite --
-INSERT INTO FriendshipInvite(idReceiver, idSender) VALUES (:idReceiver, :idSender);
-
--- Insert group application --
-INSERT INTO GroupApplication(idGroup, idMember) VALUES (:idGroup, :idMember);
-
--- Insert group invite --
-INSERT INTO GroupInvite(idGroup, idReceiver, idSender) VALUES (:idGroup, :idReceiver, :idSender);
-
 
 CREATE OR REPLACE FUNCTION add_member(_userName VARCHAR(20), _passwordHash VARCHAR(64), _email VARCHAR(254), _name VARCHAR(70), _about VARCHAR(255), _birthDate DATE) RETURNS void AS $$
 DECLARE
@@ -518,65 +439,3 @@ BEGIN
     INSERT INTO RegisteredUser(userName, passwordHash, email, isAdmin) VALUES ($1, $2, $3, true);
 END;
 $$ LANGUAGE PLPGSQL;
-
------------------------
--- Update statements --
------------------------
------------
--- Model --
------------
-
--- Update model's description --
-UPDATE Model SET description = :description WHERE id = :id;
-
--- Update model's visibility --
-UPDATE Model SET visibility = :visibility WHERE id = :id;
-
--- Update vote --
-UPDATE Vote SET upVote = :upVote WHERE Vote.idModel = :idModel AND Vote.idMember = :idMember;
-
--- Remove Tag from Model --
-DELETE FROM model_tags WHERE model_tags.idModel = :idModel AND model_tags.name = :name;
-
--- Remove comment from Model --
-UPDATE TComment SET TComment.deleted = true WHERE TComment.idModel = :idModel AND TComment.id = :idComment;
-
--- Remove Model --
-DELETE FROM Model WHERE Model.id = :id;
-
-------------
--- Member --
-------------
-
--- Update member's about field --
-UPDATE Member SET about = :about WHERE id = :id;
-
--- Remove Tag (interest) from Member --
-DELETE FROM user_tags WHERE idMember = :idMember AND name = :tagName;
-
-------------
--- TGroup --
-------------
-
--- Update group's about field --
-UPDATE TGroup SET about = :about WHERE id = :id;
-
--- Update group's cover image --
-UPDATE TGroup SET coverImg = :img WHERE id = :id;
-
--- Update group's avatar image --
-UPDATE TGroup SET avatarImg = :img WHERE id = :id;
-
--- Update group's visibility --
-UPDATE TGroup SET visibility = :visibility WHERE id = :id;
-
---
-
--- Answer friendship invite --
-UPDATE FriendshipInvite SET accepted = :accepted WHERE FriendshipInvite.id = :id;
-
--- Answer group application --
-UPDATE GroupApplication SET accepted = :accepted WHERE GroupApplication.id = :id;
-
--- Answer group invite --
-UPDATE GroupInvite SET accepted = :accepted WHERE GroupInvite.id = :id;
