@@ -75,7 +75,7 @@ SELECT * FROM (
     UNION ALL
     SELECT Model.id, 'model', ts_rank_cd(to_tsvector('english', name), :searchTerm) * 0.7 + ts_rank_cd(to_tsvector('english', description), :searchTerm) * 0.3 AS score
     FROM get_all_visibile_models(:userId) JOIN Model ON get_all_visibile_models.id = Model.id
-) AS q ORDER BY score DESC;
+) AS q ORDER BY score DESC LIMIT :limit;
 
 ---
 
