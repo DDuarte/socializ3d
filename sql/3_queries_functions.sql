@@ -27,6 +27,14 @@ DROP FUNCTION IF EXISTS delete_from_model_tags_view();
 -- Helpers --
 -------------
 
+-- List all the groups of a user --
+CREATE OR REPLACE FUNCTION get_groups_of_member(memberId BIGINT)
+RETURNS TABLE(groupId BIGINT) AS $$
+    SELECT TGroup.id
+    FROM TGroup
+    JOIN GroupUser ON GroupUser.idGroup = TGroup.id AND GroupUser.idMember = $1
+$$ LANGUAGE SQL;
+
 DROP VIEW IF EXISTS model_info;
 CREATE VIEW model_info AS SELECT id, idAuthor, name, description, userFileName, fileName, createDate, visibility, numUpVotes, numDownVotes FROM model JOIN modelvote ON model.id = modelvote.idModel;
 
