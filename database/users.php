@@ -1,5 +1,10 @@
 <?php
 
+function getUser($id)
+{
+    return null;
+}
+
 function getUserHash($id)
 {
     global $conn;
