@@ -35,10 +35,10 @@
                                     </div>
                                     <div class="pull-left info">
                                         <p>Author:
-                                            <a href="#page_profile">{$model.nameauthor}</a> <!-- TODO: Author's name -->
+                                            <a href="{$BASE_URL}pages/users/user.php?id={$model.idauthor}">{$model.nameauthor}</a> <!-- TODO: Author's name -->
                                         </p>
                                         <p>
-                                            <time class="timeago" datetime="2013-02-28T09:24:17Z">{$model.createdate}</time> <!-- TODO: Creation Date -->
+                                            <time class="timeago" datetime="{$model.createdate}">{$model.createdate}</time> <!-- TODO: Creation Date -->
                                         </p>
                                     </div>
                                 </div>
@@ -62,10 +62,9 @@
                                         <h3 class="box-title">Tags</h3>
                                     </div>
                                     <div class="box-body"> <!-- TODO: Tags -->
-                                        <span class="btn bg-white btn-flat margin text-black">3D</span>
-                                        <span class="btn bg-white btn-flat margin text-black">Model</span>
-                                        <span class="btn bg-white btn-flat margin text-black">Bland</span>
-                                        <span class="btn bg-white btn-flat margin text-black">CG</span>
+                                        {foreach $model.tags as $tag}
+                                        <span class="btn bg-white btn-flat margin text-black">{$tag.name}</span>
+                                        {/foreach}
                                     </div>
                                 </div>
                             </div>
@@ -80,10 +79,10 @@
                                     <div class="item">
                                         <img src="{$GRAVATAR_URL}{$comment.hash}" alt="user image" class="offline" />
                                         <p class="message">
-                                            <a href="#page_profile" class="name">
+                                            <a href="{$BASE_URL}pages/users/user.php?id={$comment.idmember}" class="name">
                                                 <small class="text-muted pull-right">
                                                     <i class="fa fa-clock-o"></i>
-                                                    <time class="timeago" datetime="2014-03-06T17:15:00Z">{$comment.createdate}</time>
+                                                    <time class="timeago" datetime="{$comment.createdate}">{$comment.createdate}</time>
                                                 </small>
                                                 {$comment.name}
                                             </a>
@@ -219,6 +218,8 @@
             data[1].value += num ? num : 1;
             donut.setData(data);
         }
+
+        $("time.timeago").timeago();
     });
 </script>
 
