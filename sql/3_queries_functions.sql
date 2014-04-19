@@ -99,7 +99,7 @@ $$ LANGUAGE SQL;
 -- List all the friends of a user --
 CREATE OR REPLACE FUNCTION get_friends_of_member(memberId BIGINT)
 RETURNS TABLE(memberId BIGINT) AS $$
-    SELECT 
+    SELECT
         CASE $1 WHEN Friendship.idMember1 THEN Friendship.idMember2
                WHEN Friendship.idMember2 THEN Friendship.idMember1
         END AS memberId
@@ -290,11 +290,11 @@ $$ LANGUAGE SQL;
 
 -- Get Model Information --
 CREATE OR REPLACE FUNCTION get_model_info(modelId BIGINT) RETURNS TABLE(idAuthor BIGINT, nameAuthor VARCHAR(70), name VARCHAR(70), description VARCHAR(255), fileName VARCHAR(255), createDate TIMESTAMP, numUpVotes BIGINT, numDownVotes BIGINT) AS $$
-    SELECT model_info.idAuthor, 
+    SELECT model_info.idAuthor,
            Member.name AS nameAuthor,
-           model_info.name, 
-           model_info.description, 
-           model_info.fileName, 
+           model_info.name,
+           model_info.description,
+           model_info.fileName,
            model_info.createDate,
            model_info.numUpVotes,
            model_info.numDownVotes
@@ -314,7 +314,7 @@ $$ LANGUAGE PLPGSQL;
 
 -- Get Model Comments --
 CREATE OR REPLACE FUNCTION get_model_comments(modelId BIGINT) RETURNS TABLE(idMember BIGINT, name VARCHAR(70), hash TEXT, content VARCHAR(255), createDate TIMESTAMP) as $$
-    SELECT TComment.idMember, 
+    SELECT TComment.idMember,
            Member.name,
            get_user_hash(Member.id) AS hash,
            TComment.content,
@@ -322,7 +322,7 @@ CREATE OR REPLACE FUNCTION get_model_comments(modelId BIGINT) RETURNS TABLE(idMe
     FROM TComment JOIN Model ON Model.id = $1
                   JOIN Member ON Member.id = TComment.idMember
                   JOIN RegisteredUser ON Member.id = RegisteredUser.id
-    WHERE TComment.deleted = false
+    WHERE TComment.idmodel = $1 AND TComment.deleted = false
 $$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION get_model_comments(userId BIGINT, modelId BIGINT) RETURNS TABLE(idMember BIGINT, name VARCHAR(70), email VARCHAR(254), content VARCHAR(255), createDate TIMESTAMP) as $$
@@ -337,7 +337,7 @@ $$ LANGUAGE PLPGSQL;
 
 CREATE OR REPLACE FUNCTION get_group_profile(memberId BIGINT, groupId BIGINT) RETURNS TABLE(name VARCHAR(70), about VARCHAR(255), avatarImg VARCHAR(255), coverImg VARCHAR(255)) AS $$
 BEGIN
-    IF ('public' NOT IN (SELECT TGroup.visibility FROM TGroup WHERE TGroup.id = $2) AND 
+    IF ('public' NOT IN (SELECT TGroup.visibility FROM TGroup WHERE TGroup.id = $2) AND
         $1 NOT IN (SELECT GroupUser.idMember FROM GroupUser WHERE GroupUser.idGroup = $2)) THEN
         RAISE EXCEPTION 'User % does not have permission to access group % profile.', $1, $2;
     ELSE
@@ -366,7 +366,7 @@ CREATE OR REPLACE FUNCTION insert_on_user_tags_view() RETURNS TRIGGER AS $$
 
         INSERT INTO UserInterest (idMember, idTag) SELECT NEW.idMember, tagid
             WHERE NOT EXISTS (SELECT 1 FROM UserInterest WHERE UserInterest.idMember= NEW.idMember AND UserInterest.idTag = tagid);
-        
+
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
@@ -382,7 +382,7 @@ CREATE OR REPLACE FUNCTION delete_from_user_tags_view() RETURNS TRIGGER AS $$
     BEGIN
         SELECT Tag.id INTO tagid FROM Tag WHERE Tag.name = OLD.name LIMIT 1;
         DELETE FROM UserInterest WHERE UserInterest.idMember = OLD.idMember AND UserInterest.idTag = tagid;
-        
+
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
@@ -407,7 +407,7 @@ CREATE OR REPLACE FUNCTION insert_on_model_tags_view() RETURNS TRIGGER AS $$
 
         INSERT INTO ModelTag (idModel, idTag) SELECT NEW.idModel, tagid
             WHERE NOT EXISTS (SELECT 1 FROM ModelTag WHERE ModelTag.idModel= NEW.idModel AND ModelTag.idTag = tagid);
-        
+
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
@@ -422,7 +422,7 @@ CREATE OR REPLACE FUNCTION delete_from_model_tags_view() RETURNS TRIGGER AS $$
     BEGIN
         SELECT Tag.id INTO tagid FROM TAG WHERE Tag.name = OLD.name LIMIT 1;
         DELETE FROM ModelTag WHERE ModelTag.idModel = OLD.idModel AND ModelTag.idTag = tagid;
-        
+
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
