@@ -35,6 +35,14 @@ RETURNS TABLE(groupId BIGINT) AS $$
     JOIN GroupUser ON GroupUser.idGroup = TGroup.id AND GroupUser.idMember = $1
 $$ LANGUAGE SQL;
 
+-- List the id and name of all the groups of a user --
+CREATE OR REPLACE FUNCTION get_complete_groups_of_member(memberId BIGINT)
+RETURNS TABLE(groupId BIGINT, groupName BIGINT) AS $$
+    SELECT TGroup.id, TGroup.name
+    FROM TGroup
+    JOIN GroupUser ON GroupUser.idGroup = TGroup.id AND GroupUser.idMember = $1
+$$ LANGUAGE SQL;
+
 DROP VIEW IF EXISTS model_info;
 CREATE VIEW model_info AS SELECT id, idAuthor, name, description, userFileName, fileName, createDate, visibility, numUpVotes, numDownVotes FROM model JOIN modelvote ON model.id = modelvote.idModel;
 
@@ -96,14 +104,22 @@ RETURNS TABLE(memberId BIGINT, memberName VARCHAR) AS $$
         ORDER BY Member.name ASC
 $$ LANGUAGE SQL;
 
--- List all the friends of a user --
+-- List all the friend id's of a user --
 CREATE OR REPLACE FUNCTION get_friends_of_member(memberId BIGINT)
-RETURNS TABLE(memberId BIGINT) AS $$
+RETURNS TABLE(friendId BIGINT) AS $$
     SELECT
         CASE $1 WHEN Friendship.idMember1 THEN Friendship.idMember2
                WHEN Friendship.idMember2 THEN Friendship.idMember1
         END AS memberId
     FROM Friendship WHERE $1 IN (Friendship.idMember1, Friendship.idMember2)
+$$ LANGUAGE SQL;
+
+-- List all the friend id's and name of a user --
+CREATE OR REPLACE FUNCTION get_complete_friends_of_member(memberId BIGINT)
+RETURNS TABLE(memberId BIGINT, memberName VARCHAR) AS $$
+    SELECT *
+    FROM get_friends_of_member($1)
+    JOIN Member ON Member.id = friendId
 $$ LANGUAGE SQL;
 
 -- List the top rated models --
