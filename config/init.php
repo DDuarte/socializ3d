@@ -6,6 +6,7 @@ $BASE_DIR = '/opt/lbaw/lbaw1313/public_html/proto/';
 $BASE_URL = '/~lbaw1313/proto/';
 
 $conn = new PDO('pgsql:host=vdbm;dbname=lbaw1313', 'lbaw1313', 'sM553sn4');
+$GRAVATAR_BASE_URL = 'http://www.gravatar.com/avatar/';
 $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $conn->exec("SET SCHEMA 'proto'");
@@ -23,6 +24,7 @@ if(!isset($_SESSION['success_messages'])){ $_SESSION['success_messages'] = null;
 if(!isset($_SESSION['field_errors'])){ $_SESSION['field_errors'] = null; }
 
 $smarty->assign('BASE_URL', $BASE_URL);
+$smarty->assign('GRAVATAR_URL', $GRAVATAR_BASE_URL);
 $smarty->assign('ERROR_MESSAGES', $_SESSION['error_messages']);
 $smarty->assign('FIELD_ERRORS', $_SESSION['field_errors']);
 $smarty->assign('SUCCESS_MESSAGES', $_SESSION['success_messages']);
