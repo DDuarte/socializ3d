@@ -37,7 +37,7 @@ $$ LANGUAGE SQL;
 
 -- List the id and name of all the groups of a user --
 CREATE OR REPLACE FUNCTION get_complete_groups_of_member(memberId BIGINT)
-RETURNS TABLE(groupId BIGINT, groupName BIGINT) AS $$
+RETURNS TABLE(groupId BIGINT, groupName VARCHAR(70)) AS $$
     SELECT TGroup.id, TGroup.name
     FROM TGroup
     JOIN GroupUser ON GroupUser.idGroup = TGroup.id AND GroupUser.idMember = $1
@@ -117,7 +117,7 @@ $$ LANGUAGE SQL;
 -- List all the friend id's and name of a user --
 CREATE OR REPLACE FUNCTION get_complete_friends_of_member(memberId BIGINT)
 RETURNS TABLE(memberId BIGINT, memberName VARCHAR) AS $$
-    SELECT *
+    SELECT Member.id, Member.name
     FROM get_friends_of_member($1)
     JOIN Member ON Member.id = friendId
 $$ LANGUAGE SQL;
@@ -300,7 +300,7 @@ CREATE OR REPLACE FUNCTION get_model(memberId BIGINT, oldest_date_limit TIMESTAM
     SELECT Model.id
     FROM Model
     WHERE Model.createDate < $2
-        AND (visibility = 'public' OR (visibility = 'friends' AND $1 IN (SELECT memberId FROM get_friends_of_member(Model.idAuthor))))
+        AND (visibility = 'public' OR (visibility = 'friends' AND $1 IN (SELECT friendId FROM get_friends_of_member(Model.idAuthor))))
     LIMIT $3
 $$ LANGUAGE SQL;
 
