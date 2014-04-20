@@ -14,7 +14,7 @@ function getUserHash($id)
     return $result['get_user_hash'];
 }
 
-function getUserInfo($id) {
+function getUserSidebarInfo($id) {
     global $conn;
     $stmt = $conn->prepare("SELECT Member.name FROM Member WHERE Member.id = ?");
     $stmt->execute(array($id));
@@ -28,10 +28,28 @@ function getUserInfo($id) {
     $stmt->execute((array($id)));
     $groups = $stmt->fetchAll();
 
+    $userHash = getUserHash($id);
+
     $result['userId'] = $id;
     $result['username'] = $username;
+    $result['userHash'] = $userHash;
     $result['friends'] = $friends;
     $result['groups'] = $groups;
+
+    return $result;
+}
+
+function getUserNavbarInfo($id) {
+    global $conn;
+    $stmt = $conn->prepare("SELECT Member.name FROM Member WHERE Member.id = ?");
+    $stmt->execute(array($id));
+    $username = $stmt->fetchAll()[0];
+
+    $userHash = getUserHash($id);
+
+    $result['userId'] = $id;
+    $result['username'] = $username;
+    $result['userHash'] = $userHash;
 
     return $result;
 }
