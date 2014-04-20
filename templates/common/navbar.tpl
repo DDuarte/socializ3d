@@ -98,16 +98,16 @@
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="glyphicon glyphicon-user"></i>
-                            <span id="username_drop">Jane Doe
+                            <span id="username_drop">{$userInfo.username}
                                 <i class="caret"></i>
                             </span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header bg-light-blue">
-                            <img src="img/avatar3.png" class="img-circle" alt="User Image" />
+                            <img src="{$GRAVATAR_URL}{$userInfo.userHash}" class="img-circle" alt="User Image" />
                             <p>
-                                Jane Doe - Web Developer
+                                {$userInfo.username}
                                 <small>Member since Nov. 2012</small>
                             </p>
                         </li>
@@ -121,7 +121,7 @@
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a href="#page_profile" class="btn btn-default btn-flat">Profile</a>
+                                <a href="{$BASE_URL}pages/users/user.php?id={$userInfo.userId}" class="btn btn-default btn-flat">Profile</a>
                             </div>
                             <div class="pull-right">
                                 <a href="#" class="btn btn-default btn-flat">Sign out</a>
@@ -132,4 +132,4 @@
             </ul>
         </div>
     </nav>
-</header>
+</header> <!-- /.navbar -->
