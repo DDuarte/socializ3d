@@ -1,3 +1,5 @@
+SET search_path TO proto;
+
 DROP FUNCTION IF EXISTS get_group_visibile_models(BIGINT);
 DROP FUNCTION IF EXISTS get_all_visibile_models(BIGINT);
 DROP FUNCTION IF EXISTS get_user_hash(BIGINT);

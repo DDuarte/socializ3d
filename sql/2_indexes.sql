@@ -1,3 +1,5 @@
+SET search_path TO proto;
+
 DROP INDEX IF EXISTS notification_idx;
 DROP INDEX IF EXISTS group_invite_idGroup_idx;
 DROP INDEX IF EXISTS group_invite_idReceiver_idx;

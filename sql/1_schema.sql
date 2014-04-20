@@ -1,3 +1,7 @@
+-- DROP SCHEMA proto CASCADE;
+-- CREATE SCHEMA proto;
+SET search_path TO proto;
+
 DROP TYPE IF EXISTS visibility_group CASCADE;
 DROP TYPE IF EXISTS visibility_model CASCADE;
 DROP TYPE IF EXISTS notification_type CASCADE;

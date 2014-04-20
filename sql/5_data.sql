@@ -1,3 +1,5 @@
+SET search_path TO proto;
+
 INSERT INTO registereduser (userName, passwordHash, email, isAdmin) VALUES ('Oscar', '9941d231bb8060c3ece285e40ba46c5ab37bbed5d5cacfeb3a465b1edc1e8da5', 'JHendrix1@telfort.co.uk', false);
 INSERT INTO registereduser (userName, passwordHash, email, isAdmin) VALUES ('Jim18', '74008a8dcb07e7fe3aa831bb6f464e3fa2c6875b7c86d933401477cecc367d89', 'NadineDavis1@aol.nl', false);
 INSERT INTO registereduser (userName, passwordHash, email, isAdmin) VALUES ('Sherm87', '037c61a03d77d25d14ebb43d2c740dff1faa68b71f286e06b3cd6cae7d9f8740', 'V.Daniel5@web.dk', false);

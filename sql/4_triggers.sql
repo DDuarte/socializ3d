@@ -1,3 +1,5 @@
+SET search_path TO proto;
+
 DROP TRIGGER IF EXISTS generate_publication_notification_trigger ON Model;
 DROP TRIGGER IF EXISTS generate_publication_notification_trigger_on_change ON Model;
 DROP TRIGGER IF EXISTS generate_group_publication_notification_trigger ON GroupModel;
