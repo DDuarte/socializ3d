@@ -3,13 +3,13 @@
         <div class="user-panel">
             <div class="pull-left image">
                 <a href="#page_profile">
-                    <img src="img/avatar3.png" class="img-circle" alt="User Image" />
+                    <img src="{$GRAVATAR_URL}{$userInfo.userHash}" class="img-circle" alt="User Image" />
                 </a>
             </div>
             <div class="pull-left info">
-                <p>Hello, Jane</p>
+                <p>Hello, {$userInfo.username}</p>
 
-                <a href="#">
+                <a href="{$BASE_URL}pages/users/user.php?id={$userInfo.userId}">
                     <i class="fa fa-circle text-success"></i>Online</a>
             </div>
         </div>
@@ -33,9 +33,10 @@
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
+                    {foreach $userInfo.groups as $group}
                     <li>
-                        <a href="#page_group" class="pull-left">
-                            <i class="fa fa-angle-double-right"></i>Top Model Crew</a>
+                        <a href="{$BASE_URL}pages/users/group.php?id={$group.groupId}" class="pull-left">
+                            <i class="fa fa-angle-double-right"></i>{$group.groupName}</a>
                         <div class="btn-group pull-right" style="margin-right: 10px">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-sort-down"></i>
@@ -47,6 +48,7 @@
                             </ul>
                         </div>
                     </li>
+                    {/foreach}
                 </ul>
             </li>
             <li class="treeview friends-panel">
@@ -56,18 +58,12 @@
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
+                    {foreach $userInfo.friends as $friend}
                     <li>
-                        <a href="#">
-                            <i class="fa fa-angle-double-right"></i>Morris Pratchett</a>
+                        <a href="{$BASE_URL}pages/users/user.php?id={$friend.memberId}">
+                            <i class="fa fa-angle-double-right"></i>{$friend.memberName}</a>
                     </li>
-                    <li>
-                        <a href="#">
-                            <i class="fa fa-angle-double-right"></i>Joseph Flynn</a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="fa fa-angle-double-right"></i>Justin Bieber</a>
-                    </li>
+                    {/foreach}
                 </ul>
             </li>
             <li class="create-group-panel">
