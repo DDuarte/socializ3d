@@ -20,6 +20,11 @@
     <script src="{$BASE_URL}js/jquery-2.1.0.min.js"></script>
     <script src="{$BASE_URL}js/plugins/timeago/jquery.timeago.js" type="text/javascript"></script>
     <script src="{$BASE_URL}js/plugins/bootstrap.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        if (typeof Socializ3d === 'undefined')
+            Socializ3d = {};
+        Socializ3d.BASE_URL = "{$BASE_URL}";
+    </script>
     <script src="{$BASE_URL}js/plugins/AdminLTE/app.js" type="text/javascript"></script>
 </head>
 

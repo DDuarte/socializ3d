@@ -5,7 +5,8 @@
  *      This file should be included in all pages
  !**/
 
-Socializ3d = {}
+if (typeof Socializ3d === 'undefined')
+    Socializ3d = {};
 
 Socializ3d.update_hash = function () {
     var str = "#";
@@ -84,11 +85,11 @@ function hash_change() {
 
 function load_page(event) {
     function load_ajax(page) {
-        var pageURL= document.location.origin + "/pages" + page;
+        var pageURL= Socializ3d.BASE_URL + "pages/" + page;
         console.log(pageURL);
         $("#content-ajax").load(pageURL, function(response, status, xhr) {
-            if (status == "error" && page != "/404.html") {
-                load_ajax("/404.html");
+            if (status == "error" && page != "404.html") {
+                load_ajax("404.html");
             } else {
                 window.history.pushState({html: response}, "", href);
                 hash_change();
@@ -98,7 +99,7 @@ function load_page(event) {
     }
 
     var href = $(this).attr('href');
-    var org = document.location.origin;
+    var org = Socializ3d.BASE_URL;
     if (href.indexOf(org) == 0 && href.slice(org.length) != "") {
         event.preventDefault();
         load_ajax(href.slice(org.length));
