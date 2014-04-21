@@ -11,7 +11,7 @@ if (!$_GET['id']) {
 
 $id = $_GET['id'];
 
-$model = getUser($id);
+$model = getMember($id);
 
-$smarty->assign("user", $model);
-$smarty->display('users/user.tpl');
+$smarty->assign("member", $model);
+$smarty->display('members/member.tpl');

@@ -21,19 +21,14 @@
     <script src="{$BASE_URL}js/plugins/timeago/jquery.timeago.js" type="text/javascript"></script>
     <script src="{$BASE_URL}js/plugins/bootstrap.min.js" type="text/javascript"></script>
     <script src="{$BASE_URL}js/plugins/AdminLTE/app.js" type="text/javascript"></script>
-    <script>
-        $(document).ready(function() {
-            hash_change();
-        });
-    </script>
 </head>
 
 <body class="skin-blue fixed">
 
-{include file='common/navbar.tpl'}
+{$navbar}
 
 <div class="wrapper row-offcanvas row-offcanvas-left">
 
-{include file='common/sidebar.tpl'}
+{$sidebar}
 
-<aside class="right-side">
+<aside id="content-ajax" class="right-side">

@@ -1,5 +1,3 @@
-{include file='common/header.tpl'}
-
 <section class="content">
     <div class="row">
         <div id="model-display" class="col-md-8 col-md-offset-2">
@@ -35,7 +33,7 @@
                                     </div>
                                     <div class="pull-left info">
                                         <p>Author:
-                                            <a href="{$BASE_URL}pages/users/user.php?id={$model.idauthor}">{$model.nameauthor}</a> <!-- TODO: Author's name -->
+                                            <a href="{$BASE_URL}member/{$model.idauthor}">{$model.nameauthor}</a> <!-- TODO: Author's name -->
                                         </p>
                                         <p>
                                             <time class="timeago" datetime="{$model.createdate}">{$model.createdate}</time> <!-- TODO: Creation Date -->
@@ -75,20 +73,7 @@
                             <div class="col-md-8">
                                 <div class="box-body chat" id="chat-box">
                                     {foreach $model.comments as $comment}
-                                    <!-- TODO: Comments -->
-                                    <div class="item">
-                                        <img src="{$GRAVATAR_URL}{$comment.hash}" alt="user image" class="offline" />
-                                        <p class="message">
-                                            <a href="{$BASE_URL}pages/users/user.php?id={$comment.idmember}" class="name">
-                                                <small class="text-muted pull-right">
-                                                    <i class="fa fa-clock-o"></i>
-                                                    <time class="timeago" datetime="{$comment.createdate}">{$comment.createdate}</time>
-                                                </small>
-                                                {$comment.name}
-                                            </a>
-                                            {$comment.content}
-                                        </p>
-                                    </div>
+                                    {include file="models/comment.tpl" comment=$comment}
                                     {/foreach}
                                 </div>
                                 <div class="box-footer">
@@ -157,10 +142,10 @@
 
         var donut = new Morris.Donut({
             element: 'votes-chart',
-            resize: true,
+            /*resize: true,*/
             colors: ["green", "red"],
-            data: data,
-            hideHover: 'auto'
+            data: data/*,
+            hideHover: 'auto'*/
         });
 
         var voted_up = false;
@@ -218,11 +203,7 @@
             data[1].value += num ? num : 1;
             donut.setData(data);
         }
-
-        $("time.timeago").timeago();
     });
 </script>
 
-<script src="js/bootstrap-tagsinput.min.js" type="text/javascript"></script>
-
-{include file='common/footer.tpl'}
+<script src="{$BASE_URL}js/bootstrap-tagsinput.min.js" type="text/javascript"></script>

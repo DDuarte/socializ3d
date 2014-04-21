@@ -10,7 +10,7 @@ function getModel($id)
     $result = $stmt->fetch();
 
     $result['createdate'] = date(DATE_ISO8601, strtotime($result['createdate']));
-    $result['hash'] = getUserHash($result['idauthor']);
+    $result['hash'] = getMemberHash($result['idauthor']);
     $result['comments'] = getModelComments($id);
     $result['numComments'] = count($result['comments']);
     $result['tags'] = getModelTags($id);
@@ -32,7 +32,7 @@ function getModelComments($id)
 function getModelTags($id)
 {
     global $conn;
-    $stmt = $conn->prepare("SELECT * FROM get_model_tags(?)");
+    $stmt = $conn->prepare("SELECT * FROM model_tags WHERE idModel = ?");
     $stmt->execute(array($id));
     return $stmt->fetchAll();
 }

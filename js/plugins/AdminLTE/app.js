@@ -17,12 +17,12 @@ Socializ3d.update_hash = function () {
     document.location.hash = str.slice(0, -1);
 };
 
-function hash_change() {    
+/*function hash_change() {
     if (Socializ3d._ignoreHashChange === true) {
         delete Socializ3d._ignoreHashChange;
         return;
     }
-    
+
     if (document.location.hash.length === 0)
         document.location.hash = "page_catalog"; // default page
     var hash_parts = document.location.hash.slice(1).split("-"); // first character is #
@@ -36,7 +36,7 @@ function hash_change() {
     });
 
     Socializ3d.hash = map;
-    
+
     var pageName = map["page"];
     if (pageName) {
         var tabName = map["tab"];
@@ -48,6 +48,48 @@ function hash_change() {
             });
         else
             load_ajax(pageName);
+    }
+}*/
+
+function hash_change() {
+    if (Socializ3d._ignoreHashChange === true) {
+        delete Socializ3d._ignoreHashChange;
+        return;
+    }
+
+    if (document.location.hash.length === 0)
+        return;
+
+    var hash_parts = document.location.hash.slice(1).split("-"); // first character is #
+
+    var map = {};
+
+    hash_parts.forEach(function (hash) {
+        var pattern = /([A-Za-z0-9]+)_([A-Za-z0-9]*)/; // name_value
+        var result = pattern.exec(hash);
+        if (result[1] == "tab") {
+            var tabName = result[2];
+            $("a[href=\"#tab_" + tabName + "\"]").trigger("click");
+            var top = $(".nav-tabs-custom:has(a[href=\"#tab_" + tabName + "\"])").offset().top - $(".my_navbar").height();
+            $('body').animate({ scrollTop: top });
+        }
+
+        map[result[1]] = result[2];
+    });
+
+    Socializ3d.hash = map;
+}
+
+function load_page(event) {
+    var href = $(this).attr('href');
+    var org = document.location.origin;
+    if (href.indexOf(org) == 0) {
+        console.log(href);
+        event.preventDefault();
+        var pg = href.slice(0, org.length) + "/pages" + href.slice(org.length);
+        $("#content-ajax").load(pg, function(response, status, XMLHttpRequest) {
+            window.history.pushState({html:response},"", href);
+        });
     }
 }
 
@@ -70,7 +112,9 @@ function load_ajax(name, func) {
 
 $(function() {
     "use strict";
-    
+
+    $("time.timeago").timeago();
+
     // window.addEventListener('hashchange', hash_change, false);
     window.onhashchange = hash_change;
 
@@ -101,11 +145,11 @@ $(function() {
     //Activate tooltips
     $("[data-toggle='tooltip']").tooltip();
 
-    /*     
+    /*
      * Add collapse and remove events to boxes
      */
     $("[data-widget='collapse']").click(function() {
-        //Find the box parent        
+        //Find the box parent
         var box = $(this).parents(".box").first();
         //Find the body and the footer
         var bf = box.find(".box-body, .box-footer");
@@ -143,7 +187,7 @@ $(function() {
     });
 
     $("[data-widget='remove']").click(function() {
-        //Find the box parent        
+        //Find the box parent
         var box = $(this).parents(".box").first();
         box.slideUp();
     });
@@ -151,7 +195,7 @@ $(function() {
     /* Sidebar tree view */
     $(".sidebar .treeview").tree();
 
-    /* 
+    /*
      * Make sure that the sidebar is streched full height
      * ---------------------------------------------
      * We are gonna assign a min-height value every time the
@@ -181,7 +225,7 @@ $(function() {
     });
 
     /*
-     * We are gonna initialize all checkbox and radio inputs to 
+     * We are gonna initialize all checkbox and radio inputs to
      * iCheck plugin in.
      * You can find the documentation at http://fronteed.com/iCheck/
      */
@@ -189,18 +233,29 @@ $(function() {
         checkboxClass: 'icheckbox_minimal',
         radioClass: 'iradio_minimal'
     });
+
+    hash_change();
+
+    $('body').on('click', 'a', load_page);
+    $(window).bind("popstate", function(event){
+        if (event.originalEvent.state) {
+            console.log(document.location.href);
+            document.getElementById("content-ajax").innerHTML = event.originalEvent.state.html;
+        }
+    });
+    window.history.replaceState({ html: $('#content-ajax').html() }, "", document.URL);
 });
 
 function change_layout() {
     $("body").toggleClass("fixed");
 }
 
-/* 
- * BOX REFRESH BUTTON 
+/*
+ * BOX REFRESH BUTTON
  * ------------------
  * This is a custom plugin to use with the compenet BOX. It allows you to add
  * a refresh button to the box. It converts the box's state to a loading state.
- * 
+ *
  * USAGE:
  *  $("#box-widget").boxRefresh( options );
  * */
@@ -277,13 +332,13 @@ function change_layout() {
  * SIDEBAR MENU
  * ------------
  * This is a custom plugin for the sidebar menu. It provides a tree view.
- * 
+ *
  * Usage:
  * $(".sidebar).tree();
- * 
+ *
  * Note: This plugin does not accept any options. Instead, it only requires a class
  *       added to the element that contains a sub-menu.
- *       
+ *
  * When used with the sidebar, for example, it would look something like this:
  * <ul class='sidebar-menu'>
  *      <li class="treeview active">
@@ -293,7 +348,7 @@ function change_layout() {
  *          </ul>
  *      </li>
  * </ul>
- * 
+ *
  * Add .active class to <li> elements if you want the menu to be open automatically
  * on page load. See above for an example.
  */
@@ -401,7 +456,7 @@ function change_layout() {
 /*
  * jQuery resize event - v1.1 - 3/14/2010
  * http://benalman.com/projects/jquery-resize-plugin/
- * 
+ *
  * Copyright (c) 2010 "Cowboy" Ben Alman
  * Dual licensed under the MIT and GPL licenses.
  * http://benalman.com/about/license/

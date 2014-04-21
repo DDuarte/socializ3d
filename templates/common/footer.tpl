@@ -1,5 +1,5 @@
 </aside>
-
+</div>
 <hr>
 <footer class="right-side">
     <p style="margin-left: 10px;">&copy; 2014 Vectorial Secret &middot;
@@ -9,6 +9,5 @@
         <a href="#">Contact</a>
     </p>
 </footer>
-</div>
 </body>
 </html>

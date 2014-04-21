@@ -1,18 +1,19 @@
 <aside class="left-side sidebar-offcanvas">
     <section class="sidebar">
-        <div class="user-panel">
-            <div class="pull-left image">
-                <a href="#page_profile">
-                    <img src="{$GRAVATAR_URL}{$userInfo.userHash}" class="img-circle" alt="User Image" />
-                </a>
-            </div>
-            <div class="pull-left info">
-                <p>Hello, {$userInfo.username}</p>
+        <a href="{$BASE_URL}member/{$userInfo.userId}">
+            <div class="user-panel">
 
-                <a href="{$BASE_URL}pages/users/user.php?id={$userInfo.userId}">
-                    <i class="fa fa-circle text-success"></i>Online</a>
+                <div class="pull-left image">
+
+                    <img src="{$GRAVATAR_URL}{$userInfo.userHash}?s=45" class="img-circle" alt="User Image"/>
+                </div>
+                <div class="pull-left info">
+                    <p>Hello, {$userInfo.username}</p>
+
+                    <i class="fa fa-circle text-success"></i>Online
+                </div>
             </div>
-        </div>
+        </a>
         <ul class="sidebar-menu options-panel">
             <li class="upload-model-panel">
                 <a href="#page_upload">
@@ -34,20 +35,21 @@
                 </a>
                 <ul class="treeview-menu">
                     {foreach $userInfo.groups as $group}
-                    <li>
-                        <a href="{$BASE_URL}pages/users/group.php?id={$group.groupId}" class="pull-left">
-                            <i class="fa fa-angle-double-right"></i>{$group.groupName}</a>
-                        <div class="btn-group pull-right" style="margin-right: 10px">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-sort-down"></i>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="#">Leave Group</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
+                        <li>
+                            <a href="{$BASE_URL}group/{$group.groupid}" class="pull-left">
+                                <i class="fa fa-angle-double-right"></i>{$group.groupname}</a>
+
+                            <div class="btn-group pull-right" style="margin-right: 10px">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-sort-down"></i>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="#">Leave Group</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                     {/foreach}
                 </ul>
             </li>
@@ -59,10 +61,10 @@
                 </a>
                 <ul class="treeview-menu">
                     {foreach $userInfo.friends as $friend}
-                    <li>
-                        <a href="{$BASE_URL}pages/users/user.php?id={$friend.memberId}">
-                            <i class="fa fa-angle-double-right"></i>{$friend.memberName}</a>
-                    </li>
+                        <li>
+                            <a href="{$BASE_URL}member/{$friend.memberid}">
+                                <i class="fa fa-angle-double-right"></i>{$friend.membername}</a>
+                        </li>
                     {/foreach}
                 </ul>
             </li>
