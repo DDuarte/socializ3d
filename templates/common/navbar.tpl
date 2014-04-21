@@ -114,14 +114,14 @@
                         <!-- Menu Body -->
                         <li class="user-body">
                             <div class="text-center">
-                                <a class="dynamic_load" href="{$BASE_URL}member/{$userInfo.userId}#tab_friends">Friends</a>|
-                                <a class="dynamic_load" href="{$BASE_URL}member/{$userInfo.userId}#tab_groups">Groups</a>
+                                <a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$userInfo.userId}#tab_friends">Friends</a>|
+                                <a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$userInfo.userId}#tab_groups">Groups</a>
                             </div>
                         </li>
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a class="dynamic_load" href="{$BASE_URL}member/{$userInfo.userId}" class="btn btn-default btn-flat">Profile</a>
+                                <a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$userInfo.userId}" class="btn btn-default btn-flat">Profile</a>
                             </div>
                             <div class="pull-right">
                                 <a href="#" class="btn btn-default btn-flat">Sign out</a>

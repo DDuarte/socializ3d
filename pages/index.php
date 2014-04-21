@@ -19,7 +19,6 @@ ToroHook::add("404_xhr", function() {
 });
 
 Toro::serve(array(
-    "/member/:number" => "MemberHandler",
-    "/model/:number" => "ModelHandler",
-
+    "/models/:number" => "ModelHandler",
+    "/members/:number" => "MemberHandler"
 ));

@@ -1,6 +1,6 @@
 <article class="search-result row group">
     <div class="col-xs-12 col-sm-12 col-md-3">
-        <a class="dynamic_load" href="{$BASE_URL}group/{$group.id}" title="Lorem ipsum" class="thumbnail">
+        <a class="dynamic_load" href="{$BASE_URL}{$GROUPS}/{$group.id}" title="Lorem ipsum" class="thumbnail">
             <img src="http://placehold.it/250x140" alt="Lorem ipsum"/> {* PUT {$group.coverimg} here *}
         </a>
     </div>
@@ -25,7 +25,7 @@
     </div>
     <div class="col-xs-12 col-sm-12 col-md-7">
         <h3>
-            <a class="dynamic_load" href="{$BASE_URL}group/{$group.id}" title="">{$group.name}</a>
+            <a class="dynamic_load" href="{$BASE_URL}{$GROUPS}/{$group.id}" title="">{$group.name}</a>
         </h3>
 
         <p class="about">{$group.about}</p>

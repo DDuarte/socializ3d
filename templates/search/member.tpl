@@ -1,6 +1,6 @@
 <article class="search-result row user">
     <div class="col-xs-12 col-sm-12 col-md-3">
-        <a class="dynamic_load" href="{$BASE_URL}member/{$member.id}" title="Lorem ipsum" class="thumbnail">
+        <a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$member.id}" title="Lorem ipsum" class="thumbnail">
             <img src="{$GRAVATAR_URL}{$member.hash}?s=140" alt="{$member.name}" />
         </a>
     </div>
@@ -23,7 +23,7 @@
     </div>
     <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
         <h3>
-            <a class="dynamic_load" href="{$BASE_URL}member/{$member.id}" title="">{$member.name}</a>
+            <a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$member.id}" title="">{$member.name}</a>
         </h3>
         <p class="about">{$member.about}</p>
     </div>

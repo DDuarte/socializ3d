@@ -1,6 +1,6 @@
 <aside class="left-side sidebar-offcanvas">
     <section class="sidebar">
-        <a class="dynamic_load" href="{$BASE_URL}member/{$userInfo.userId}">
+        <a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$userInfo.userId}">
             <div class="user-panel">
 
                 <div class="pull-left image">
@@ -36,7 +36,7 @@
                 <ul class="treeview-menu">
                     {foreach $userInfo.groups as $group}
                         <li>
-                            <a class="dynamic_load" href="{$BASE_URL}group/{$group.groupid}" class="pull-left">
+                            <a class="dynamic_load" href="{$BASE_URL}{$GROUPS}/{$group.groupid}" class="pull-left">
                                 <i class="fa fa-angle-double-right"></i>{$group.groupname}</a>
 
                             <div class="btn-group pull-right" style="margin-right: 10px">
@@ -62,7 +62,7 @@
                 <ul class="treeview-menu">
                     {foreach $userInfo.friends as $friend}
                         <li>
-                            <a class="dynamic_load" href="{$BASE_URL}member/{$friend.memberid}">
+                            <a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$friend.memberid}">
                                 <i class="fa fa-angle-double-right"></i>{$friend.membername}</a>
                         </li>
                     {/foreach}

@@ -21,7 +21,7 @@ ToroHook::add("404_xhr", function() {
 
 Toro::serve(array(
     "/" => "IndexHandler",
-    "/model/:number" => "CompleteModelHandler",
-    "/member/:number" => "CompleteMemberHandler"
+    "/models/:number" => "CompleteModelHandler",
+    "/members/:number" => "CompleteMemberHandler"
 
 ));

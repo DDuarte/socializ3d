@@ -57,8 +57,10 @@ function hash_change() {
         return;
     }
 
-    if (document.location.hash.length === 0)
+    if (document.location.hash.length === 0) {
+        $('body').animate({ scrollTop: 0 });
         return;
+    }
 
     var hash_parts = document.location.hash.slice(1).split("-"); // first character is #
 
@@ -90,6 +92,7 @@ function load_page(event) {
             } else {
                 window.history.pushState({html: response}, "", href);
                 hash_change();
+                console.log("Hash Change Called");
             }
         });
     }
