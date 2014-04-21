@@ -121,7 +121,7 @@
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$userInfo.userId}" class="btn btn-default btn-flat">Profile</a>
+                                <a href="{$BASE_URL}{$MEMBERS}/{$userInfo.userId}" class="btn btn-default btn-flat dynamic_load">Profile</a>
                             </div>
                             <div class="pull-right">
                                 <a href="#" class="btn btn-default btn-flat">Sign out</a>
