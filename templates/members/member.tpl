@@ -88,72 +88,14 @@
                     </div>
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="tab_groups">
-                        <article class="search-result row group">
-                            <div class="col-xs-12 col-sm-12 col-md-3">
-                                <a href="#" title="Lorem ipsum" class="thumbnail">
-                                    <img src="http://placehold.it/250x140" alt="Lorem ipsum"/>
-                                </a>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-2">
-                                <ul class="meta-search">
-                                    <li>
-                                        <i class="glyphicon glyphicon-calendar"></i>
-                                        <span>02/13/2014</span>
-                                    </li>
-                                    <li>
-                                        <i class="glyphicon glyphicon-tags"></i>
-                                        <span>Group</span>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="btn btn-primary" role="button">Leave Group</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-7">
-                                <h3>
-                                    <a href="#" title="">Oporto Anime Fans</a>
-                                </h3>
-
-                                <p class="about">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem,
-                                    exercitationem, suscipit, distinctio, qui sapiente aspernatur molestiae non corporis
-                                    magni sit sequi iusto debitis delectus doloremque.</p>
-                            </div>
-                            <span class="clearfix borda"></span>
-                        </article>
+                        {foreach $member.groups as $group}
+                            {include file="search/group.tpl" group=$group }
+                        {/foreach}
                     </div>
                     <div class="tab-pane" id="tab_friends">
-                        <article class="search-result row user">
-                            <div class="col-xs-12 col-sm-12 col-md-3">
-                                <a href="#" title="Lorem ipsum" class="thumbnail">
-                                    <img src="http://placehold.it/250x140" alt="Lorem ipsum"/>
-                                </a>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-2">
-                                <ul class="meta-search">
-                                    <li>
-                                        <i class="glyphicon glyphicon-time"></i>
-                                        <span>4:28 pm</span>
-                                    </li>
-                                    <li>
-                                        <i class="glyphicon glyphicon-tags"></i>
-                                        <span>User</span>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="btn btn-primary" role="button">Unfriend</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
-                                <h3>
-                                    <a href="#page_friendprofile" title="">Jane Doe</a>
-                                </h3>
-
-                                <p class="about">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem,
-                                    exercitationem, suscipit, distinctio, qui sapiente aspernatur molestiae non corporis
-                                    magni sit sequi iusto debitis delectus doloremque.</p>
-                            </div>
-                            <span class="clearfix borda"></span>
-                        </article>
+                        {foreach $member.friends as $friend}
+                            {include file="search/member.tpl" member=$friend }
+                        {/foreach}
                     </div>
                 </div>
                 <!-- /.tab-content -->

@@ -7,7 +7,9 @@ DROP FUNCTION IF EXISTS get_thumbnail_information(BIGINT);
 DROP FUNCTION IF EXISTS get_members_of_group(BIGINT);
 DROP FUNCTION IF EXISTS get_administrators_of_group(BIGINT);
 DROP FUNCTION IF EXISTS get_friends_of_member(BIGINT);
+DROP FUNCTION IF EXISTS get_complete_friends_of_member(BIGINT);
 DROP FUNCTION IF EXISTS get_groups_of_member(BIGINT);
+DROP FUNCTION IF EXISTS get_complete_groups_of_member(BIGINT);
 DROP FUNCTION IF EXISTS get_top_rated_models(INTEGER, INTEGER, BIGINT);
 DROP FUNCTION IF EXISTS get_whats_hot_models(INTEGER, INTEGER, BIGINT);
 DROP FUNCTION IF EXISTS get_new_models(INTEGER, INTEGER, BIGINT);
@@ -39,8 +41,8 @@ $$ LANGUAGE SQL;
 
 -- List the id and name of all the groups of a user --
 CREATE OR REPLACE FUNCTION get_complete_groups_of_member(memberId BIGINT)
-RETURNS TABLE(groupId BIGINT, groupName VARCHAR(70)) AS $$
-    SELECT TGroup.id, TGroup.name
+RETURNS TABLE(groupId BIGINT, groupName VARCHAR(70), about VARCHAR, coverimg VARCHAR) AS $$
+    SELECT TGroup.id, TGroup.name, TGroup.about, TGroup.coverImg
     FROM TGroup
     JOIN GroupUser ON GroupUser.idGroup = TGroup.id AND GroupUser.idMember = $1
 $$ LANGUAGE SQL;
@@ -118,8 +120,8 @@ $$ LANGUAGE SQL;
 
 -- List all the friend id's and name of a user --
 CREATE OR REPLACE FUNCTION get_complete_friends_of_member(memberId BIGINT)
-RETURNS TABLE(memberId BIGINT, memberName VARCHAR) AS $$
-    SELECT Member.id, Member.name
+RETURNS TABLE(memberId BIGINT, memberName VARCHAR, hash VARCHAR, about VARCHAR) AS $$
+    SELECT Member.id, Member.name, get_user_hash(Member.id) as hash, Member.about
     FROM get_friends_of_member($1)
     JOIN Member ON Member.id = friendId
 $$ LANGUAGE SQL;

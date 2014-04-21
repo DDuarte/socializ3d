@@ -6,22 +6,24 @@
     </div>
     <div class="col-xs-12 col-sm-12 col-md-2">
         <ul class="meta-search">
-            <li>
+            {*<li>
                 <i class="glyphicon glyphicon-time"></i>
                 <span>4:28 pm</span>
-            </li>
+            </li>*}
             <li>
                 <i class="glyphicon glyphicon-tags"></i>
                 <span>Member</span>
             </li>
+            {if !$member.isFriend}
             <li>
                 <a href="#" class="btn btn-primary" role="button">Add Friend</a>
             </li>
+            {/if}
         </ul>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
         <h3>
-            <a href="{$BASE_URL}users/user.php?id={$member.id}" title="">{$member.name}</a>
+            <a href="{$BASE_URL}member/{$member.id}" title="">{$member.name}</a>
         </h3>
         <p class="about">{$member.about}</p>
     </div>

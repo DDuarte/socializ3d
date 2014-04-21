@@ -12,6 +12,36 @@ function getMember($id)
     $stmt->execute(array(':id' => $id));
     $result = $stmt->fetch();
     $result['models'] = getMemberModels($id);
+    $result['friends'] = getFriendsOfMember($id);
+    $result['groups'] = getGroupsOfMember($id);
+    return $result;
+}
+
+function getFriendsOfMember($id)
+{
+    global $conn;
+    $stmt = $conn->prepare("SELECT memberid AS id, membername AS name, hash, about FROM get_complete_friends_of_member(:id)");
+    $stmt->execute(array(':id' => $id));
+    $result = $stmt->fetchAll();
+
+    foreach ($result as $key => $value) {
+        $result[$key]['isFriend'] = true;
+    }
+
+    return $result;
+}
+
+function getGroupsOfMember($id)
+{
+    global $conn;
+    $stmt  = $conn->prepare("SELECT groupid AS id, groupname AS name, about, coverimg FROM get_complete_groups_of_member(:id)");
+    $stmt->execute(array(':id' => $id));
+    $result = $stmt->fetchAll();
+
+    foreach ($result as $key => $value) {
+        $result[$key]['memberInGroup'] = true;
+    }
+
     return $result;
 }
 

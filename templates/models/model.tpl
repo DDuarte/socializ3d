@@ -142,10 +142,10 @@
 
         var donut = new Morris.Donut({
             element: 'votes-chart',
-            /*resize: true,*/
+            resize: true,
             colors: ["green", "red"],
-            data: data/*,
-            hideHover: 'auto'*/
+            data: data,
+            hideHover: 'auto'
         });
 
         var voted_up = false;
