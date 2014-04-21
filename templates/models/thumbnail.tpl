@@ -1,5 +1,5 @@
 <div class="thumbnail center-block" style="max-width:300px">
-    <a href="{$BASE_URL}{$MODELS}/{$model.id}">
+    <a class="dynamic_load" href="{$BASE_URL}{$MODELS}/{$model.id}">
         <img src="http://placehold.it/300x200" alt="...">
     </a>
     <div class="caption center-block" style="margin-top:-30px;position:relative;padding-bottom:0">
