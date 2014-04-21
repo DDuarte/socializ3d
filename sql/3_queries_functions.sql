@@ -66,7 +66,7 @@ BEGIN
     FROM Model
     WHERE idAuthor = userId OR -- my models
           visibility = 'public' OR -- public model
-         (visibility = 'friends' AND idAuthor IN (SELECT memberId FROM get_friends_of_member(userId))) -- my friends
+         (visibility = 'friends' AND idAuthor IN (SELECT friendId FROM get_friends_of_member(userId))) -- my friends
     UNION SELECT get_group_visibile_models(userId);
 END;
 $$ LANGUAGE plpgsql;

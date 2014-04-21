@@ -92,7 +92,7 @@ function load_page(event) {
             } else {
                 window.history.pushState({html: response}, "", href);
                 hash_change();
-                console.log("Hash Change Called");
+                $("time.timeago").timeago();
             }
         });
     }
@@ -252,7 +252,7 @@ $(function() {
     $(window).bind("popstate", function(event){
         if (event.originalEvent.state) {
             console.log(document.location.href);
-            document.getElementById("content-ajax").innerHTML = event.originalEvent.state.html;
+            $("#content-ajax").html(event.originalEvent.state.html);
             hash_change();
         }
     });

@@ -5,6 +5,7 @@ include_once('config/init.php');
 include_once($BASE_DIR . 'lib/Toro.php');
 
 include_once($BASE_DIR . 'actions/indexAction.php');
+include_once($BASE_DIR . 'actions/catalogActions.php');
 include_once($BASE_DIR . 'actions/models/model.php');
 include_once($BASE_DIR . 'actions/members/member.php');
 
@@ -21,7 +22,12 @@ ToroHook::add("404_xhr", function() {
 
 Toro::serve(array(
     "/" => "IndexHandler",
-    "/models/:number" => "CompleteModelHandler",
-    "/members/:number" => "CompleteMemberHandler"
+    "/catalog" => "IndexHandler",
+    "/hot" => "HotHandler",
+    "/top" => "TopHandler",
+    "/pop" => "PopHandler",
+    "/rand" => "RandHandler",
+    "/models/:number" => "ModelHandler",
+    "/members/:number" => "MemberHandler"
 
 ));

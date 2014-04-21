@@ -11,16 +11,14 @@ function getModelPage($modelId) {
 
 class ModelHandler {
     function get($modelId) {
-        getModelPage($modelId);
-    }
-}
-
-class CompleteModelHandler {
-    function get($modelId) {
         global $smarty;
         global $BASE_DIR;
         include($BASE_DIR . 'pages/common/header.php');
         getModelPage($modelId);
         include($BASE_DIR . 'pages/common/footer.php');
+    }
+
+    function get_xhr($modelId) {
+        getModelPage($modelId);
     }
 }

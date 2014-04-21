@@ -10,12 +10,10 @@ function getMemberPage($memberId) {
 }
 
 class MemberHandler {
-    function get($memberId) {
+    function get_xhr($memberId) {
         getMemberPage($memberId);
     }
-}
 
-class CompleteMemberHandler {
     function get($memberId) {
         global $smarty;
         global $BASE_DIR;

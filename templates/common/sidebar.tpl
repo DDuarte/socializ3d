@@ -21,8 +21,8 @@
                     <span>Upload Model</span>
                 </a>
             </li>
-            <li class="active catalog-panel">
-                <a class="dynamic_load" href="#page_catalog">
+            <li class="catalog-panel">
+                <a class="dynamic_load" href="{$BASE_URL}catalog">
                     <i class="fa fa-th"></i>
                     <span>Catalog</span>
                 </a>
