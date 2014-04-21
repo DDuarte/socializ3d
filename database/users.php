@@ -66,7 +66,8 @@ function getUserSidebarInfo($id) {
     global $conn;
     $stmt = $conn->prepare("SELECT Member.name FROM Member WHERE Member.id = ?");
     $stmt->execute(array($id));
-    $username = $stmt->fetch()['name'];
+    $username = $stmt->fetch();
+    $username = $username['name'];
 
     $stmt = $conn->prepare("SELECT * FROM get_complete_friends_of_member(?)");
     $stmt->execute(array($id));
@@ -91,7 +92,8 @@ function getUserNavbarInfo($id) {
     global $conn;
     $stmt = $conn->prepare("SELECT Member.name FROM Member WHERE Member.id = ?");
     $stmt->execute(array($id));
-    $username = $stmt->fetch()['name'];
+    $username = $stmt->fetch();
+    $username = $username['name'];
 
     $userHash = getMemberHash($id);
 
