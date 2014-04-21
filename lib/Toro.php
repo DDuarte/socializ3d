@@ -54,6 +54,10 @@ class Toro
             }
         }
 
+        $notFoundHook = '404';
+        if (self::is_xhr_request())
+            $notFoundHook .= '_xhr';
+
         if ($handler_instance) {
             unset($regex_matches[0]);
 
@@ -73,11 +77,11 @@ class Toro
                 ToroHook::fire('after_handler', compact('routes', 'discovered_handler', 'request_method', 'regex_matches', 'result'));
             }
             else {
-                ToroHook::fire('404', compact('routes', 'discovered_handler', 'request_method', 'regex_matches'));
+                ToroHook::fire($notFoundHook, compact('routes', 'discovered_handler', 'request_method', 'regex_matches'));
             }
         }
         else {
-            ToroHook::fire('404', compact('routes', 'discovered_handler', 'request_method', 'regex_matches'));
+            ToroHook::fire($notFoundHook, compact('routes', 'discovered_handler', 'request_method', 'regex_matches'));
         }
 
         ToroHook::fire('after_request', compact('routes', 'discovered_handler', 'request_method', 'regex_matches', 'result'));

@@ -33,7 +33,7 @@
                                     </div>
                                     <div class="pull-left info">
                                         <p>Author:
-                                            <a href="{$BASE_URL}member/{$model.idauthor}">{$model.nameauthor}</a> <!-- TODO: Author's name -->
+                                            <a class="dynamic_load" href="{$BASE_URL}member/{$model.idauthor}">{$model.nameauthor}</a> <!-- TODO: Author's name -->
                                         </p>
                                         <p>
                                             <time class="timeago" datetime="{$model.createdate}">{$model.createdate}</time> <!-- TODO: Creation Date -->

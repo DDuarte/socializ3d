@@ -81,16 +81,24 @@ function hash_change() {
 }
 
 function load_page(event) {
+    function load_ajax(page) {
+        var pageURL= document.location.origin + "/pages" + page;
+        console.log(pageURL);
+        $("#content-ajax").load(pageURL, function(response, status, xhr) {
+            if (status == "error" && page != "/404.html") {
+                load_ajax("/404.html");
+            } else {
+                window.history.pushState({html: response}, "", href);
+                hash_change();
+            }
+        });
+    }
+
     var href = $(this).attr('href');
     var org = document.location.origin;
-    if (href.indexOf(org) == 0) {
-        console.log(href);
+    if (href.indexOf(org) == 0 && href.slice(org.length) != "") {
         event.preventDefault();
-        var pg = href.slice(0, org.length) + "/pages" + href.slice(org.length);
-        $("#content-ajax").load(pg, function(response, status, XMLHttpRequest) {
-            window.history.pushState({html:response},"", href);
-            hash_change();
-        });
+        load_ajax(href.slice(org.length));
     }
 }
 
@@ -237,7 +245,7 @@ $(function() {
 
     hash_change();
 
-    $('body').on('click', 'a', load_page);
+    $('body').on('click', 'a.dynamic_load', load_page);
     $(window).bind("popstate", function(event){
         if (event.originalEvent.state) {
             console.log(document.location.href);

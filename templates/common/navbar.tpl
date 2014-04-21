@@ -1,5 +1,5 @@
 <header class="header">
-    <a href="#page_catalog" class="logo">
+    <a href="{$BASE_URL}" class="logo">
         <!-- Add the class icon to your logo image or logo icon to add the margining -->
         Socializ3D
     </a>
@@ -55,33 +55,33 @@
                             <!-- inner menu: contains the actual data -->
                             <ul class="menu">
                                 <li>
-                                    <a href="#">
+                                    <a class="dynamic_load" href="#">
                                         <i class="ion ion-ios7-people info"></i>
                                             <span class="text">The user '
                                                 <span class="notification-friendship-name">John Doe</span>' accepted your...</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#">
+                                    <a class="dynamic_load" href="#">
                                         <i class="ion ion-ios7-people info"></i>Very long description here that may not..
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#">
+                                    <a class="dynamic_load" href="#">
                                         <i class="ion ion-ios7-people info"></i>
                                             <span class="text">A new model was published in the '
                                                 <span class="notification-group-activity-name">Top Model Crew</span>'...</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#">
+                                    <a class="dynamic_load" href="#">
                                         <i class="ion ion-ios7-people info"></i>
                                             <span class="text">A new model was published in the '
                                                 <span class="notification-group-activity-name">Oporto Anime Fans</span>'...</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#">
+                                    <a class="dynamic_load" href="#">
                                         <i class="ion ion-ios7-people info"></i>
                                             <span class="text">A new model was published in the '
                                                 <span class="notification-group-activity-name">Top Notch Design</span>'...</span>
@@ -90,7 +90,7 @@
                             </ul>
                         </li>
                         <li class="footer">
-                            <a href="#page_notifications">View all</a>
+                            <a class="dynamic_load" href="#page_notifications">View all</a>
                         </li>
                     </ul>
                 </li>
@@ -114,14 +114,14 @@
                         <!-- Menu Body -->
                         <li class="user-body">
                             <div class="text-center">
-                                <a href="{$BASE_URL}member/{$userInfo.userId}#tab_friends">Friends</a>|
-                                <a href="{$BASE_URL}member/{$userInfo.userId}#tab_groups">Groups</a>
+                                <a class="dynamic_load" href="{$BASE_URL}member/{$userInfo.userId}#tab_friends">Friends</a>|
+                                <a class="dynamic_load" href="{$BASE_URL}member/{$userInfo.userId}#tab_groups">Groups</a>
                             </div>
                         </li>
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a href="{$BASE_URL}member/{$userInfo.userId}" class="btn btn-default btn-flat">Profile</a>
+                                <a class="dynamic_load" href="{$BASE_URL}member/{$userInfo.userId}" class="btn btn-default btn-flat">Profile</a>
                             </div>
                             <div class="pull-right">
                                 <a href="#" class="btn btn-default btn-flat">Sign out</a>
