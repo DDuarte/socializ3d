@@ -89,6 +89,7 @@ function load_page(event) {
         var pg = href.slice(0, org.length) + "/pages" + href.slice(org.length);
         $("#content-ajax").load(pg, function(response, status, XMLHttpRequest) {
             window.history.pushState({html:response},"", href);
+            hash_change();
         });
     }
 }
@@ -241,6 +242,7 @@ $(function() {
         if (event.originalEvent.state) {
             console.log(document.location.href);
             document.getElementById("content-ajax").innerHTML = event.originalEvent.state.html;
+            hash_change();
         }
     });
     window.history.replaceState({ html: $('#content-ajax').html() }, "", document.URL);
