@@ -8,7 +8,9 @@ class Toro
 
         $request_method = strtolower($_SERVER['REQUEST_METHOD']);
         $path_info = '/';
-        if (!empty($_SERVER['PATH_INFO'])) {
+        
+        if ($_SERVER['REQUEST_URI'] !== $_SERVER['SCRIPT_NAME']){
+        } else if (!empty($_SERVER['PATH_INFO'])) {
             $path_info = $_SERVER['PATH_INFO'];
         }
         else if (!empty($_SERVER['ORIG_PATH_INFO']) && $_SERVER['ORIG_PATH_INFO'] !== '/index.php') {
