@@ -4,3 +4,9 @@ location / {
         rewrite ^(.*)$ /~lbaw1313/proto/index.php/$1 break;
     }
 }
+
+location /pages {
+    if (!-e $request_filename){
+        rewrite ^(.*)$ /~lbaw1313/proto/index.php/$1 break;
+    }
+}
