@@ -13,7 +13,7 @@ $handle_404 = create_function('', 'global $BASE_DIR; global $smarty; include($BA
 
 ToroHook::add("404", $handle_404);
 
-$handle_404_xhr = create_function('', 'global $BASE_DIR; echo file_get_contents($BASE_DIR . "pages/404.html");');
+$handle_404_xhr = create_function('', 'global $smarty; $smarty->display("common/404.tpl");');
 
 ToroHook::add("404_xhr", $handle_404_xhr);
 

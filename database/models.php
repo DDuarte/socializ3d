@@ -9,6 +9,8 @@ function getModel($id)
     $stmt->execute(array($id));
     $result = $stmt->fetch();
 
+    if ($result == false) return false;
+
     $result['createdate'] = date(DATE_ISO8601, strtotime($result['createdate']));
     $result['hash'] = getMemberHash($result['idauthor']);
     $result['comments'] = getModelComments($id);

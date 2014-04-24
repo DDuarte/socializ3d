@@ -13,10 +13,11 @@ if (!$_POST['username'] || !$_POST['password']) {
 $username = strip_tags($_POST['username']);
 $password = $_POST['password'];
 
-$id = getIdIfLoginCorrect($username, $password);
+$usr = getIdIfLoginCorrect($username, $password);
 
-if ($id != false) {
-    $_SESSION['id'] = $id;
+if ($usr != false) {
+    $_SESSION['id'] = $usr['id'];
+    $_SESSION['isAdmin'] = $usr['isadmin'];
     $_SESSION['username'] = $username;
     $_SESSION['success_messages'][] = 'Login successful';
 } else {

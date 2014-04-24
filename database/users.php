@@ -11,6 +11,9 @@ function getMember($id)
                             WHERE Member.id = :id");
     $stmt->execute(array(':id' => $id));
     $result = $stmt->fetch();
+
+    if ($result == false) return false;
+
     $result['models'] = getMemberModels($id);
     $result['friends'] = getFriendsOfMember($id);
     $result['groups'] = getGroupsOfMember($id);
@@ -124,7 +127,7 @@ function getUserNavbarInfo($id) {
 function getIdIfLoginCorrect($username, $password)
 {
     global $conn;
-    $stmt = $conn->prepare("SELECT id
+    $stmt = $conn->prepare("SELECT id, isadmin
                             FROM RegisteredUser JOIN Member USING(id)
                             WHERE deleteDate IS NULL AND username = ? AND passwordHash = ?");
     $stmt->execute(array($username, hash('sha256', $password)));
@@ -133,7 +136,7 @@ function getIdIfLoginCorrect($username, $password)
     if ($result == false){
         return false;
     } else {
-        return $result['id'];
+        return $result;
     }
 }
 
