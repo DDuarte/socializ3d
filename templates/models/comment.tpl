@@ -1,5 +1,5 @@
 <div class="item">
-    <img src="{$GRAVATAR_URL}{$comment.hash}" alt="user image" class="offline" />
+    <img src="{$GRAVATAR_URL}{$comment.hash}?d=identicon" alt="user image" class="offline" />
     <p class="message">
         <a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$comment.idmember}" class="name">
             <small class="text-muted pull-right">

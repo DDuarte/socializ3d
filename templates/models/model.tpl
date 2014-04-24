@@ -29,7 +29,7 @@
                             <div class="col-md-8">
                                 <div class="user-panel">
                                     <div class="pull-left image">
-                                        <img src="{$GRAVATAR_URL}{$model.hash}" class="img-square" alt="User Image" /> <!-- TODO: Author's Avatar-->
+                                        <img src="{$GRAVATAR_URL}{$model.hash}?d=identicon" class="img-square" alt="User Image" /> <!-- TODO: Author's Avatar-->
                                     </div>
                                     <div class="pull-left info">
                                         <p>Author:

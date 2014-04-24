@@ -105,7 +105,7 @@
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header bg-light-blue">
-                            <img src="{$GRAVATAR_URL}{$userInfo.userHash}" class="img-circle" alt="User Image" />
+                            <img src="{$GRAVATAR_URL}{$userInfo.userHash}?d=identicon" class="img-circle" alt="User Image" />
                             <p>
                                 {$userInfo.username}
                                 <small>Member since Nov. 2012</small>

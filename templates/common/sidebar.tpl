@@ -5,7 +5,7 @@
 
                 <div class="pull-left image">
 
-                    <img src="{$GRAVATAR_URL}{$userInfo.userHash}?s=45" class="img-circle" alt="User Image"/>
+                    <img src="{$GRAVATAR_URL}{$userInfo.userHash}?s=45&d=identicon" class="img-circle" alt="User Image"/>
                 </div>
                 <div class="pull-left info">
                     <p>Hello, {$userInfo.username}</p>

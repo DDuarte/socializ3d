@@ -12,7 +12,7 @@
         <h4 style="margin:0">{$model.name}</h4>
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="{$GRAVATAR_URL}{$model.authorhash}" class="img-square" alt="User Image" />
+                <img src="{$GRAVATAR_URL}{$model.authorhash}?d=identicon" class="img-square" alt="User Image" />
             </div>
             <div class="pull-left info">
                 <p>{$model.authorname}</p>
