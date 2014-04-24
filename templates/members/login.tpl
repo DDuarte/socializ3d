@@ -22,6 +22,11 @@
 
 <div class="form-box" id="login-box">
     <div class="header" style="background-color:SteelBlue">Login</div>
+    <div id="error_messages">
+        {foreach $ERROR_MESSAGES as $error}
+            <div class="error">{$error}<a class="close" href="#">X</a></div>
+        {/foreach}
+    </div>
     <form action="{$BASE_URL}actions/members/login.php" method="post">
         <div class="body bg-gray">
             <div class="form-group">
