@@ -20,6 +20,7 @@ $smarty->compile_dir = $BASE_DIR . 'templates_c/';
 if(!isset($_SESSION['error_messages'])){ $_SESSION['error_messages'] = null; }
 if(!isset($_SESSION['form_values'])){ $_SESSION['form_values'] = null; }
 if(!isset($_SESSION['username'])){ $_SESSION['username'] = null; }
+if(!isset($_SESSION['id'])){ $_SESSION['id'] = null; }
 if(!isset($_SESSION['success_messages'])){ $_SESSION['success_messages'] = null; }
 if(!isset($_SESSION['field_errors'])){ $_SESSION['field_errors'] = null; }
 
@@ -29,7 +30,9 @@ $smarty->assign('ERROR_MESSAGES', $_SESSION['error_messages']);
 $smarty->assign('FIELD_ERRORS', $_SESSION['field_errors']);
 $smarty->assign('SUCCESS_MESSAGES', $_SESSION['success_messages']);
 $smarty->assign('FORM_VALUES', $_SESSION['form_values']);
+$smarty->assign('LOGGED_ID', $_SESSION['id']);
 $smarty->assign('USERNAME', $_SESSION['username']);
+$smarty->assign('IS_LOGGED_IN', getLoggedId() != null);
 
 $smarty->assign('MEMBERS', 'members');
 $smarty->assign('MODELS', 'models');
@@ -39,3 +42,22 @@ unset($_SESSION['success_messages']);
 unset($_SESSION['error_messages']);
 unset($_SESSION['field_errors']);
 unset($_SESSION['form_values']);
+
+function getLoggedId() {
+    if (isset($_SESSION['id']))
+        return $_SESSION['id'];
+    else
+        return null;
+}
+
+function get404Page() {
+    global $smarty;
+    global $BASE_DIR;
+    include($BASE_DIR . "pages/404.php");
+}
+
+function get404Page_xhr() {
+    global $smarty;
+    $smarty->display("common/404.tpl");
+}
+
