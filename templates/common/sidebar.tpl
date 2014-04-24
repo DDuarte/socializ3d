@@ -4,7 +4,7 @@
             <div class="user-panel">
 
                 <div class="pull-left image">
-                    <img src="{$GRAVATAR_URL}{if $IS_LOGGED_IN}{$userInfo.userHash}{/if}?s=45&d=mm" class="img-circle" alt="User Image"/>
+                    <img src="{$GRAVATAR_URL}{if $IS_LOGGED_IN}{$userInfo.userHash}{/if}?s=45&d={if $IS_LOGGED_IN}identicon{else}mm{/if}" class="img-circle" alt="User Image"/>
                 </div>
                 <div class="pull-left info">
                     <p>Hello, {if $IS_LOGGED_IN}{$userInfo.username}{else}Visitor{/if}</p>
