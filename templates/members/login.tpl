@@ -47,7 +47,7 @@
 
             <p><a href="#">I forgot my password</a></p>
 
-            <a href="register.html" class="text-center">Register a new account</a>
+            <a href="register.php" class="text-center">Register a new account</a>
         </div>
     </form>
 </div>
