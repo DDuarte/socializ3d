@@ -28,7 +28,7 @@ class ModelHandler {
         global $BASE_DIR;
         global $smarty;
 
-        $model = getMember($modelId);
+        $model = getModel($modelId);
         if ($model == false) {
             $smarty->display("common/404.tpl");
             exit;
