@@ -1,5 +1,3 @@
-<title>404</title>
-
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
@@ -16,7 +14,7 @@
             <h3><i class="fa fa-warning text-yellow"></i> Oops! Page not found.</h3>
             <p>
                 We could not find the page you were looking for.
-                Meanwhile, you may <a href="{$BASE_URL}">return to catalog</a>.
+                Meanwhile, you may <a class="dynamic_load" href="{$BASE_URL}catalog">return to catalog</a>.
             </p>
         </div><!-- /.error-content -->
     </div><!-- /.error-page -->
