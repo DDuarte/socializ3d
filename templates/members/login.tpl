@@ -33,7 +33,8 @@
                 <input type="password" id="password-field" name="password" class="form-control" placeholder="Password"/>
             </div>
             <div class="form-group">
-                <input type="checkbox" name="remember_me"/> Remember me
+                <input type="checkbox" id="remember_me-field" name="remember_me"/>
+                <label for="remember_me-field">Remember me</label>
             </div>
         </div>
         <div class="footer">
