@@ -34,7 +34,9 @@
                         {$member.birthdate}
                         <h4>Interests:</h4>
 
-                        <p>Football, programming, fishing, music, cinema</p>
+                        <p>
+                            {$member.interests}
+                        </p>
                     </div>
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="tab_settings">

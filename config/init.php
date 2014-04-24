@@ -39,5 +39,3 @@ unset($_SESSION['success_messages']);
 unset($_SESSION['error_messages']);
 unset($_SESSION['field_errors']);
 unset($_SESSION['form_values']);
-
-$_SESSION['id'] = 1;

@@ -124,7 +124,7 @@
                                 <a href="{$BASE_URL}{$MEMBERS}/{$userInfo.userId}" class="btn btn-default btn-flat dynamic_load">Profile</a>
                             </div>
                             <div class="pull-right">
-                                <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                <a href="{$BASE_URL}actions/members/logout.php" class="btn btn-default btn-flat">Sign out</a>
                             </div>
                         </li>
                     </ul>
