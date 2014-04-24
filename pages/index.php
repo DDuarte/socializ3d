@@ -24,5 +24,6 @@ Toro::serve(array(
     "/new" => "NewHandler",
     "/rand" => "RandHandler",
     "/models/:number" => "ModelHandler",
+    "/models/:number/comments" => "CommentsHandler",
     "/members/:number" => "MemberHandler"
 ));

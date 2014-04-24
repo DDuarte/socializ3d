@@ -93,13 +93,15 @@
                                 <div class="box-footer">
                                     {if $IS_LOGGED_IN}
                                         <div class="input-group">
-                                            <input class="form-control" placeholder="Comment this model..."/>
-
-                                            <div class="input-group-btn">
-                                                <button class="btn btn-success">
-                                                    <i class="fa fa-plus"></i>
-                                                </button>
-                                            </div>
+                                            <form action="{$BASE_URL}actions/models/comments.php" method="post">
+                                                <input class="form-control" name="content" placeholder="Comment this model..."/>
+                                                
+                                                <div class="input-group-btn">
+                                                    <button class="btn btn-success" type="submit">
+                                                        <i class="fa fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </form>
                                         </div>
                                     {/if}
                                 </div>

@@ -77,3 +77,9 @@ function getNewModels($memberId, $numModels, $numSkip) {
 function getRandomModels($memberId, $numModels, $numSkip) {
     return _getModels('get_random_models', $memberId, $numModels, $numSkip);
 }
+
+function insertComment($memberId, $modelId, $content) {
+    global $conn;
+    $stmt = $conn->prepare("INSERT INTO TComment(idMember, idModel, content) VALUES (?, ?, ?)");
+    $stmt->execute(array($memberId, $modelId, $content));
+}
