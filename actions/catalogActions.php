@@ -32,19 +32,19 @@ class TopHandler {
     }
 }
 
-class PopHandler {
+class NewHandler {
     function get() {
         global $smarty;
         global $BASE_DIR;
         include($BASE_DIR . 'pages/common/header.php');
-        include($BASE_DIR . 'pages/catalogs/popular.php');
+        include($BASE_DIR . 'pages/catalogs/new.php');
         include($BASE_DIR . 'pages/common/footer.php');
     }
 
     function get_xhr() {
         global $smarty;
         global $BASE_DIR;
-        include($BASE_DIR . 'pages/catalogs/popular.php');
+        include($BASE_DIR . 'pages/catalogs/new.php');
     }
 }
 

@@ -21,7 +21,7 @@ Toro::serve(array(
     "/catalog" => "IndexHandler",
     "/hot" => "HotHandler",
     "/top" => "TopHandler",
-    "/pop" => "PopHandler",
+    "/new" => "NewHandler",
     "/rand" => "RandHandler",
     "/models/:number" => "ModelHandler",
     "/members/:number" => "MemberHandler"

@@ -63,7 +63,7 @@ function getWhatsHotModels($memberId, $numModels, $numSkip) {
     return _getModels('get_whats_hot_models', $memberId, $numModels, $numSkip);
 }
 
-function getPopularModels($memberId, $numModels, $numSkip) {
+function getNewModels($memberId, $numModels, $numSkip) {
     return _getModels('get_new_models', $memberId, $numModels, $numSkip);
 }
 

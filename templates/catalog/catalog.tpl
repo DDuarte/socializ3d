@@ -5,8 +5,8 @@
     <li {if $active == "topRated"}class="active"{/if}>
         <a class="dynamic_load" href="{$BASE_URL}top">Top Rated</a>
     </li>
-    <li {if $active == "popular"}class="active"{/if}>
-        <a class="dynamic_load" href="{$BASE_URL}pop">Popular</a>
+    <li {if $active == "new"}class="active"{/if}>
+        <a class="dynamic_load" href="{$BASE_URL}new">New</a>
     </li>
     <li {if $active == "random"}class="active"{/if}>
         <a class="dynamic_load" href="{$BASE_URL}rand">Random</a>
