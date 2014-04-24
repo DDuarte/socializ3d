@@ -23,4 +23,10 @@ if ($usr != false) {
 } else {
     $_SESSION['error_messages'][] = 'Login failed';
 }
-header('Location: ' . $BASE_URL);
+
+if (isset($_SESSION['PREV_HTTP_REFERER']) && $_SESSION['PREV_HTTP_REFERER'] != null) {
+    header('Location: ' . $_SESSION['PREV_HTTP_REFERER']);
+    unset($_SESSION['PREV_HTTP_REFERER']);
+} else {
+    header('Location: ' . $BASE_URL);
+}
