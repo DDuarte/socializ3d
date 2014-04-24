@@ -9,7 +9,7 @@
             <span class="fa fa-thumbs-down pull-right text-red">{$model.numdownvotes}</span>
             <span class="fa fa-thumbs-up text-right pull-right text-green">{$model.numupvotes}</span>
         </p>
-        <h4 style="margin:0">{$model.name}</h4>
+        <a class="dynamic_load" href="{$BASE_URL}{$MODELS}/{$model.id}"><h4 style="margin:0">{$model.name}</h4></a>
         <div class="user-panel">
             <div class="pull-left image">
                 <img src="{$GRAVATAR_URL}{$model.authorhash}?d=identicon" class="img-square" alt="User Image" />
