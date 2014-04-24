@@ -2,21 +2,29 @@
 
 include_once($BASE_DIR . 'database/models.php');
 
-function getModelPage($model) {
+function getModelPage($model)
+{
     global $smarty;
     $smarty->assign("model", $model);
     $smarty->display('models/model.tpl');
 }
 
-class ModelHandler {
-    function get($modelId) {
+class ModelHandler
+{
+    function get($modelId)
+    {
         global $smarty;
         global $BASE_DIR;
 
+        if (!isModelVisibleToMember($modelId, getLoggedId())) {
+            get404Page();
+            return;
+        }
+
         $model = getModel($modelId);
         if ($model == false) {
-            include($BASE_DIR . "pages/404.php");
-            exit;
+            get404Page();
+            return;
         }
 
         include($BASE_DIR . 'pages/common/header.php');
@@ -24,14 +32,20 @@ class ModelHandler {
         include($BASE_DIR . 'pages/common/footer.php');
     }
 
-    function get_xhr($modelId) {
+    function get_xhr($modelId)
+    {
         global $BASE_DIR;
         global $smarty;
 
+        if (!isModelVisibleToMember($modelId, getLoggedId())) {
+            get404Page_xhr();
+            return;
+        }
+
         $model = getModel($modelId);
         if ($model == false) {
-            $smarty->display("common/404.tpl");
-            exit;
+            get404Page_xhr();
+            return;
         }
 
         getModelPage($model);

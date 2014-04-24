@@ -31,6 +31,13 @@ function getModelComments($id)
     return $comments;
 }
 
+function isModelVisibleToMember($modelId, $memberId) {
+    global $conn;
+    $stmt = $conn->prepare("SELECT 1 FROM get_all_visibile_models(:memberId) WHERE id = :modelId");
+    $stmt->execute(array(":memberId" => $memberId, ":modelId" => $modelId));
+    return $stmt->fetch() != false;
+}
+
 function getModelTags($id)
 {
     global $conn;
