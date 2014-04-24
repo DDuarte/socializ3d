@@ -1,18 +1,16 @@
 <aside class="left-side sidebar-offcanvas">
-    <section class="sidebar">
-        <a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$userInfo.userId}">
+    <section class="sidebar" style="border-bottom: none">
+        {if $IS_LOGGED_IN}<a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$userInfo.userId}">{/if}
             <div class="user-panel">
 
                 <div class="pull-left image">
-
-                    <img src="{$GRAVATAR_URL}{$userInfo.userHash}?s=45&d=identicon" class="img-circle" alt="User Image"/>
+                    <img src="{$GRAVATAR_URL}{if $IS_LOGGED_IN}{$userInfo.userHash}{/if}?s=45&d=mm" class="img-circle" alt="User Image"/>
                 </div>
                 <div class="pull-left info">
-                    <p>Hello, {$userInfo.username}</p>
-
-                    <i class="fa fa-circle text-success"></i>Online
+                    <p>Hello, {if $IS_LOGGED_IN}{$userInfo.username}{else}Visitor{/if}</p>
                 </div>
             </div>
+        {if $IS_LOGGED_IN}
         </a>
         <ul class="sidebar-menu options-panel">
             <li class="upload-model-panel">
@@ -81,5 +79,6 @@
                 </a>
             </li>
         </ul>
+        {/if}
     </section>
 </aside> <!-- /.sidebar -->

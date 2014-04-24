@@ -3,7 +3,8 @@
 function getMember($id)
 {
     global $conn;
-    $stmt = $conn->prepare("SELECT Member.name,
+    $stmt = $conn->prepare("SELECT Member.id,
+                                   Member.name,
                                    Member.about,
                                    Member.birthDate,
                                    get_user_hash(:id) AS hash
@@ -67,9 +68,11 @@ function getGroupsOfMember($id)
 
 function getMemberModels($id)
 {
+    $loggedId = getLoggedId();
+
     global $conn;
-    $stmt = $conn->prepare("SELECT *, (get_thumbnail_information(Model.id)).*, get_user_hash(Model.idAuthor) AS authorHash FROM Model WHERE idAuthor = :id");
-    $stmt->execute(array(':id' => $id));
+    $stmt = $conn->prepare("SELECT *, (get_thumbnail_information(Model.id)).*, get_user_hash(Model.idAuthor) AS authorHash FROM Model JOIN get_all_visibile_models(:logged_id) USING (id) WHERE idAuthor = :id");
+    $stmt->execute(array(':id' => $id, ':logged_id' => $loggedId));
     return $stmt->fetchAll();
 }
 
@@ -83,6 +86,8 @@ function getMemberHash($id)
 }
 
 function getUserSidebarInfo($id) {
+    if ($id == null) return null;
+
     global $conn;
     $stmt = $conn->prepare("SELECT Member.name FROM Member WHERE Member.id = ?");
     $stmt->execute(array($id));
@@ -109,6 +114,8 @@ function getUserSidebarInfo($id) {
 }
 
 function getUserNavbarInfo($id) {
+    if ($id == null) return null;
+
     global $conn;
     $stmt = $conn->prepare("SELECT Member.name FROM Member WHERE Member.id = ?");
     $stmt->execute(array($id));

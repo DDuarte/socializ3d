@@ -22,6 +22,7 @@
             </form>
         </div>
         <!-- /.search form -->
+        {if $IS_LOGGED_IN}
         <div class="navbar-right">
             <ul class="nav navbar-nav">
                 <li class="dropdown  notifications-menu visible-xs">
@@ -131,5 +132,17 @@
                 </li>
             </ul>
         </div>
+        {else}
+        <div class="navbar-right">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a class="bt btn-flat" href="{$BASE_URL}register.php" role="button">Register</a>
+                </li>
+                <li>
+                    <a class="bt btn-warning btn-flat" href="{$BASE_URL}login.php" role="button">Log in</a>
+                </li>
+            </ul>
+        </div>
+        {/if}
     </nav>
 </header> <!-- /.navbar -->

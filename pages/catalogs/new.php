@@ -5,7 +5,7 @@ if (!isset($BASE_DIR))
 
 include_once($BASE_DIR . 'database/models.php');
 
-$memberId = $_SESSION['id'];
+$memberId = getLoggedId();
 
 $models = getNewModels($memberId, 20, 0);
 $smarty->assign("active", "new");

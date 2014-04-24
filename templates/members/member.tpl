@@ -9,14 +9,18 @@
                     <li class="active">
                         <a href="#tab_about" data-toggle="tab">About me</a>
                     </li>
-                    <li>
-                        <a href="#tab_info" data-toggle="tab">Info</a>
-                    </li>
-                    <li class="pull-right">
-                        <a href="#tab_settings" data-toggle="tab">
-                            <i class="fa fa-gear"></i>
-                        </a>
-                    </li>
+                    {if $IS_LOGGED_IN}
+                        <li>
+                            <a href="#tab_info" data-toggle="tab">Info</a>
+                        </li>
+                    {/if}
+                    {if $LOGGED_ID == $member.id}
+                        <li class="pull-right">
+                            <a href="#tab_settings" data-toggle="tab">
+                                <i class="fa fa-gear"></i>
+                            </a>
+                        </li>
+                    {/if}
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_about">
@@ -26,34 +30,39 @@
                         <p>{$member.about}
                     </div>
                     <!-- /.tab-pane -->
-                    <div class="tab-pane" id="tab_info">
-                        <h4>Full Name:</h4>
+                    {if $IS_LOGGED_IN}
+                        <div class="tab-pane" id="tab_info">
+                            <h4>Full Name:</h4>
 
-                        <p>{$member.name}</p>
-                        <h4>Date of Birth:</h4>
-                        {$member.birthdate}
-                        <h4>Interests:</h4>
+                            <p>{$member.name}</p>
+                            <h4>Date of Birth:</h4>
+                            {$member.birthdate}
+                            <h4>Interests:</h4>
 
-                        <p>
-                            {$member.interests}
-                        </p>
-                    </div>
+                            <p>
+                                {$member.interests}
+                            </p>
+                        </div>
+                    {/if}
                     <!-- /.tab-pane -->
-                    <div class="tab-pane" id="tab_settings">
-                        <div class="form-group">
-                            <label for="description-field">About me:</label>
-                            <textarea class="form-control" id="about-me-field" placeHolder="Enter your text here">Hey,
-                                I've just met you, this is crazy, but here's my number, so call me maybe. (Really, call
-                                me)</textarea>
+                    {if $LOGGED_ID == $member.id}
+                        <div class="tab-pane" id="tab_settings">
+                            <div class="form-group">
+                                <label for="description-field">About me:</label>
+                                <textarea class="form-control" id="about-me-field" placeHolder="Enter your text here">Hey,
+                                    I've just met you, this is crazy, but here's my number, so call me maybe. (Really,
+                                    call
+                                    me)</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="tags-field">Interests:</label>
+                                <br/>
+                                <input type="text" class="form-control" id="interests-field"
+                                       value="Football, programming, fishing, music, cinema" data-role="tagsinput"
+                                       placeholder="Add interests"/>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="tags-field">Interests:</label>
-                            <br/>
-                            <input type="text" class="form-control" id="interests-field"
-                                   value="Football, programming, fishing, music, cinema" data-role="tagsinput"
-                                   placeholder="Add interests"/>
-                        </div>
-                    </div>
+                    {/if}
                     <!-- /.tab-settings -->
                 </div>
                 <!-- /.tab-content -->

@@ -9,9 +9,11 @@
         <div class="box col-sm-12 col-md-12">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs pull-right">
-                    <li class="pull-right">
-                        <a href="#tab_settings" data-toggle="tab"> <i class="fa fa-gear"></i> </a>
-                    </li>
+                    {if $LOGGED_ID == $model.idauthor}
+                        <li class="pull-right">
+                            <a href="#tab_settings" data-toggle="tab"> <i class="fa fa-gear"></i> </a>
+                        </li>
+                    {/if}
                     <li class="active">
                         <a href="#tab_info" data-toggle="tab">Information</a>
                     </li>
@@ -21,7 +23,8 @@
                         </a>
                     </li>
                     <li class="pull-left header">
-                        <i class="fa fa-info-circle"></i>{$model.name}</li> <!-- TODO: Model name -->
+                        <i class="fa fa-info-circle"></i>{$model.name}</li>
+                    <!-- TODO: Model name -->
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_info">
@@ -30,28 +33,39 @@
                                 <div class="user-panel">
                                     <div class="pull-left image">
                                         <img src="{$GRAVATAR_URL}{$model.hash}?d=identicon" class="img-square" alt="User Image" /> <!-- TODO: Author's Avatar-->
+                                        <!-- TODO: Author's Avatar-->
                                     </div>
                                     <div class="pull-left info">
                                         <p>Author:
-                                            <a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$model.idauthor}">{$model.nameauthor}</a> <!-- TODO: Author's name -->
+                                            <a class="dynamic_load"
+                                               href="{$BASE_URL}{$MEMBERS}/{$model.idauthor}">{$model.nameauthor}</a>
+                                            <!-- TODO: Author's name -->
                                         </p>
+
                                         <p>
-                                            <time class="timeago" datetime="{$model.createdate}">{$model.createdate}</time> <!-- TODO: Creation Date -->
+                                            <time class="timeago"
+                                                  datetime="{$model.createdate}">{$model.createdate}</time>
+                                            <!-- TODO: Creation Date -->
                                         </p>
                                     </div>
                                 </div>
                                 <h4>Description:</h4>
+
                                 <p>{$model.description}</p> <!-- TODO: Description -->
-                                <p>
-                                    <button id="download-btn" class="btn bg-blue btn-social">
-                                        <i class="fa fa-download"></i>
-                                        <span>Download</span>
-                                    </button>
-                                    <button id="delete-btn" class="btn bg-red btn-social">
-                                        <i class="fa fa-trash-o"></i>
-                                        <span>Delete</span>
-                                    </button>
-                                </p>
+                                {if $IS_LOGGED_IN}
+                                    <p>
+                                        <button id="download-btn" class="btn bg-blue btn-social">
+                                            <i class="fa fa-download"></i>
+                                            <span>Download</span>
+                                        </button>
+                                        {if $LOGGED_ID == $model.idauthor}
+                                            <button id="delete-btn" class="btn bg-red btn-social">
+                                                <i class="fa fa-trash-o"></i>
+                                                <span>Delete</span>
+                                            </button>
+                                        {/if}
+                                    </p>
+                                {/if}
                             </div>
                             <div class="col-md-4">
                                 <!-- Primary tile -->
@@ -61,7 +75,7 @@
                                     </div>
                                     <div class="box-body"> <!-- TODO: Tags -->
                                         {foreach $model.tags as $tag}
-                                        <span class="btn bg-white btn-flat margin text-black">{$tag.name}</span>
+                                            <span class="btn bg-white btn-flat margin text-black">{$tag.name}</span>
                                         {/foreach}
                                     </div>
                                 </div>
@@ -73,18 +87,21 @@
                             <div class="col-md-8">
                                 <div class="box-body chat" id="chat-box">
                                     {foreach $model.comments as $comment}
-                                    {include file="models/comment.tpl" comment=$comment}
+                                        {include file="models/comment.tpl" comment=$comment}
                                     {/foreach}
                                 </div>
                                 <div class="box-footer">
-                                    <div class="input-group">
-                                        <input class="form-control" placeholder="Comment this model..." />
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-success">
-                                                <i class="fa fa-plus"></i>
-                                            </button>
+                                    {if $IS_LOGGED_IN}
+                                        <div class="input-group">
+                                            <input class="form-control" placeholder="Comment this model..."/>
+
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-success">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
+                                    {/if}
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -93,33 +110,45 @@
                                         <h3 class="box-title">Votes</h3>
                                     </div>
                                     <div class="box-body chart-responsive center-block">
-                                        <div class="chart" id="votes-chart" style="height: 150px; position: relative;"></div>
-                                        <div class="text-center">
-                                            <button style="opacity:1.0" id="up_vote_button" class="btn bg-green btn-social">
-                                                <i class="fa fa-thumbs-up"></i>
-                                                <span>Up vote</span>
-                                            </button>
-                                            <button style="opacity:1.0" id="down_vote_button" class="btn bg-red btn-social">
-                                                <i class="fa fa-thumbs-down"></i>
-                                                <span>Down vote</span>
-                                            </button>
+                                        <div class="chart" id="votes-chart" style="height: 150px; position: relative;">
+
                                         </div>
+                                        {if $IS_LOGGED_IN}
+                                            <div class="text-center">
+                                                <button style="opacity:1.0" id="up_vote_button"
+                                                        class="btn bg-green btn-social">
+                                                    <i class="fa fa-thumbs-up"></i>
+                                                    <span>Up vote</span>
+                                                </button>
+                                                <button style="opacity:1.0" id="down_vote_button"
+                                                        class="btn bg-red btn-social">
+                                                    <i class="fa fa-thumbs-down"></i>
+                                                    <span>Down vote</span>
+                                                </button>
+                                            </div>
+                                        {/if}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane" id="tab_settings">
-                        <div class="form-group">
-                            <label for="about-me-field">Description:</label>
-                            <textarea class="form-control" id="about-me-field" placeHolder="Enter your text here">This is the most bland model known to man. Shame on you for hosting this content.</textarea>
+                    {if $LOGGED_ID == $model.idauthor}
+                        <div class="tab-pane" id="tab_settings">
+                            <div class="form-group">
+                                <label for="about-me-field">Description:</label>
+                                <textarea class="form-control" id="about-me-field" placeHolder="Enter your text here">This
+                                    is the most bland model known to man. Shame on you for hosting this
+                                    content.</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="interests-field">Tags:</label>
+                                <br/>
+                                <input type="text" class="form-control" id="interests-field"
+                                       value="3D, Model, Bland, CG"
+                                       data-role="tagsinput" placeholder="Add interests"/>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="interests-field">Tags:</label>
-                            <br />
-                            <input type="text" class="form-control" id="interests-field" value="3D, Model, Bland, CG" data-role="tagsinput" placeholder="Add interests" />
-                        </div>
-                    </div>
+                    {/if}
                 </div>
             </div>
         </div>
@@ -131,14 +160,17 @@
 <script src="{$BASE_URL}js/plugins/morris/morris.min.js" type="text/javascript"></script>
 
 <script type="text/javascript">
-    $(function() {
-        var data = [{
-            label: "Up votes",
-            value: {$model.numupvotes}
-        }, {
-            label: "Down votes",
-            value: {$model.numdownvotes}
-        }];
+    $(function () {
+        var data = [
+            {
+                label: "Up votes",
+                value: {$model.numupvotes}
+            },
+            {
+                label: "Down votes",
+                value: {$model.numdownvotes}
+            }
+        ];
 
         var donut = new Morris.Donut({
             element: 'votes-chart',
@@ -151,14 +183,14 @@
         var voted_up = false;
         var voted_down = false;
 
-        $("#up_vote_button").click(function() {
+        $("#up_vote_button").click(function () {
             if (voted_up)
                 reset_up();
             else
                 vote_up();
         });
 
-        $("#down_vote_button").click(function() {
+        $("#down_vote_button").click(function () {
             if (voted_down)
                 reset_down();
             else
