@@ -85,7 +85,7 @@ RETURNS TABLE(modelName VARCHAR, authorName VARCHAR, createDate TIMESTAMP, fileN
     SELECT model_info.name, Member.name, model_info.createDate, fileName, numUpVotes, numDownVotes, count(TComment.id)
         FROM model_info
         JOIN Member ON Member.id = model_info.idAuthor
-        LEFT JOIN TComment ON TComment.idModel = model_info.id
+        LEFT JOIN TComment ON TComment.idModel = model_info.id AND TComment.deleted = false
         WHERE model_info.id = $1
         GROUP BY model_info.name, Member.name, model_info.createDate, fileName, numUpVotes, numDownVotes
 $$ LANGUAGE SQL;
