@@ -15,7 +15,7 @@
                 <img src="{$GRAVATAR_URL}{$model.authorhash}?d=identicon" class="img-square" alt="User Image" />
             </div>
             <div class="pull-left info">
-                <p>{$model.authorname}</p>
+                <p><a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$model.idAuthor}">{$model.authorname}</a></p>
                 <p>
                     <time class="timeago" datetime="{$model.createdate}">{$model.createdate}</time>
                 </p>
