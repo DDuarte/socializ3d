@@ -21,7 +21,7 @@
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_about">
                         <div class="thumbnail">
-                            <img src="{$GRAVATAR_URL}{$member.hash}?s=250" alt="...">
+                            <img src="{$GRAVATAR_URL}{$member.hash}?s=250&d=identicon" alt="...">
                         </div>
                         <p>{$member.about}
                     </div>
