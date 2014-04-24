@@ -125,8 +125,8 @@ function getIdIfLoginCorrect($username, $password)
 {
     global $conn;
     $stmt = $conn->prepare("SELECT id
-                            FROM RegisteredUser
-                            WHERE username = ? AND passwordHash = ?");
+                            FROM RegisteredUser JOIN Member USING(id)
+                            WHERE deleteDate IS NULL AND username = ? AND passwordHash = ?");
     $stmt->execute(array($username, hash('sha256', $password)));
     $result = $stmt->fetch();
 
