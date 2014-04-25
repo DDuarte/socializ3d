@@ -12,7 +12,8 @@ class CommentsHandler {
     function post($modelId) { // TODO: xhr
         global $BASE_DIR;
         global $smarty;
-
+        echo $BASE_DIR . 'hi';
+        
         insertComment(getLoggedId(), $modelId, $_POST['content']);
 
         header('Location: ' . $_SERVER['HTTP_REFERER']);
