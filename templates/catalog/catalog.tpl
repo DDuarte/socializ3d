@@ -1,15 +1,15 @@
 <ul id="catalog-nav-bar" class="nav nav-tabs nav-justified pull-left">
     <li {if $active == "whatsHot"}class="active"{/if}>
-        <a class="dynamic_load" href="{$BASE_URL}hot">What's Hot</a>
+        <a class="dynamic_load" href="{$BASE_URL}hot/0">What's Hot</a>
     </li>
     <li {if $active == "topRated"}class="active"{/if}>
-        <a class="dynamic_load" href="{$BASE_URL}top">Top Rated</a>
+        <a class="dynamic_load" href="{$BASE_URL}top/0">Top Rated</a>
     </li>
     <li {if $active == "new"}class="active"{/if}>
-        <a class="dynamic_load" href="{$BASE_URL}new">New</a>
+        <a class="dynamic_load" href="{$BASE_URL}new/0">New</a>
     </li>
     <li {if $active == "random"}class="active"{/if}>
-        <a class="dynamic_load" href="{$BASE_URL}rand">Random</a>
+        <a class="dynamic_load" href="{$BASE_URL}rand/0">Random</a>
     </li>
 </ul>
 <section class="content">

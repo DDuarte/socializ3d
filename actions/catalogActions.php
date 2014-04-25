@@ -1,7 +1,7 @@
 <?php
 
 class HotHandler {
-    function get() {
+    function get($skip) {
         global $smarty;
         global $BASE_DIR;
         include($BASE_DIR . 'pages/common/header.php');
@@ -9,7 +9,7 @@ class HotHandler {
         include($BASE_DIR . 'pages/common/footer.php');
     }
 
-    function get_xhr() {
+    function get_xhr($skip) {
         global $smarty;
         global $BASE_DIR;
         include($BASE_DIR . 'pages/catalogs/whats-hot.php');
@@ -17,7 +17,7 @@ class HotHandler {
 }
 
 class TopHandler {
-    function get() {
+    function get($skip) {
         global $smarty;
         global $BASE_DIR;
         include($BASE_DIR . 'pages/common/header.php');
@@ -25,7 +25,7 @@ class TopHandler {
         include($BASE_DIR . 'pages/common/footer.php');
     }
 
-    function get_xhr() {
+    function get_xhr($skip) {
         global $smarty;
         global $BASE_DIR;
         include($BASE_DIR . 'pages/catalogs/top-rated.php');
@@ -33,7 +33,7 @@ class TopHandler {
 }
 
 class NewHandler {
-    function get() {
+    function get($skip) {
         global $smarty;
         global $BASE_DIR;
         include($BASE_DIR . 'pages/common/header.php');
@@ -41,7 +41,7 @@ class NewHandler {
         include($BASE_DIR . 'pages/common/footer.php');
     }
 
-    function get_xhr() {
+    function get_xhr($skip) {
         global $smarty;
         global $BASE_DIR;
         include($BASE_DIR . 'pages/catalogs/new.php');
@@ -49,7 +49,7 @@ class NewHandler {
 }
 
 class RandHandler {
-    function get() {
+    function get($skip) {
         global $smarty;
         global $BASE_DIR;
         include($BASE_DIR . 'pages/common/header.php');
@@ -57,7 +57,7 @@ class RandHandler {
         include($BASE_DIR . 'pages/common/footer.php');
     }
 
-    function get_xhr() {
+    function get_xhr($skip) {
         global $smarty;
         global $BASE_DIR;
         include($BASE_DIR . 'pages/catalogs/random.php');
