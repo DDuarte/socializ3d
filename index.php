@@ -7,6 +7,7 @@ include_once($BASE_DIR . 'lib/Toro.php');
 include_once($BASE_DIR . 'actions/indexAction.php');
 include_once($BASE_DIR . 'actions/catalogActions.php');
 include_once($BASE_DIR . 'actions/models/model.php');
+include_once($BASE_DIR . 'actions/models/comments.php');
 include_once($BASE_DIR . 'actions/members/member.php');
 
 $handle_404 = create_function('', 'global $BASE_DIR; global $smarty; include($BASE_DIR . "pages/404.php");');
