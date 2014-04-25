@@ -21,10 +21,10 @@ ToroHook::add("404_xhr", $handle_404_xhr);
 Toro::serve(array(
     "/" => "IndexHandler",
     "/catalog" => "IndexHandler",
-    "/hot/:skip" => "HotHandler",
-    "/top/:skip" => "TopHandler",
-    "/new/:skip" => "NewHandler",
-    "/rand/:skip" => "RandHandler",
+    "/hot/:number" => "HotHandler",
+    "/top/:number" => "TopHandler",
+    "/new/:number" => "NewHandler",
+    "/rand/:number" => "RandHandler",
     "/models/:number" => "ModelHandler",
     "/models/:number/comments" => "CommentsHandler",
     "/members/:number" => "MemberHandler"
