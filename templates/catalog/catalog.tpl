@@ -22,7 +22,18 @@
     </div>
 
     <ul id="model-pager" class="pager">
+        {if $active == "whatsHot"}
         <li><a href="{$BASE_URL}hot/{$prevSkip}">Previous</a></li>
         <li><a href="{$BASE_URL}hot/{$nextSkip}">Next</a></li>
+        {elseif $active == "topRated"}
+        <li><a href="{$BASE_URL}top/{$prevSkip}">Previous</a></li>
+        <li><a href="{$BASE_URL}top/{$nextSkip}">Next</a></li>
+        {elseif $active == "new"}
+        <li><a href="{$BASE_URL}new/{$prevSkip}">Previous</a></li>
+        <li><a href="{$BASE_URL}new/{$nextSkip}">Next</a></li>
+        {elseif $active == "random"}
+        <li><a href="{$BASE_URL}rand/{$prevSkip}">Previous</a></li>
+        <li><a href="{$BASE_URL}rand/{$nextSkip}">Next</a></li>
+        {/if}
     </ul>
 </section>
