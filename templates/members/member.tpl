@@ -49,16 +49,14 @@
                         <div class="tab-pane" id="tab_settings">
                             <div class="form-group">
                                 <label for="description-field">About me:</label>
-                                <textarea class="form-control" id="about-me-field" placeHolder="Enter your text here">Hey,
-                                    I've just met you, this is crazy, but here's my number, so call me maybe. (Really,
-                                    call
-                                    me)</textarea>
+                                <textarea class="form-control" id="about-me-field" placeHolder="Enter your text here">
+                                    {$member.about}</textarea>
                             </div>
                             <div class="form-group">
                                 <label for="tags-field">Interests:</label>
                                 <br/>
                                 <input type="text" class="form-control" id="interests-field"
-                                       value="Football, programming, fishing, music, cinema" data-role="tagsinput"
+                                       value="{$member.interests}" data-role="tagsinput"
                                        placeholder="Add interests"/>
                             </div>
                         </div>
