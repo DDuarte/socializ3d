@@ -23,6 +23,7 @@ if ($usr != false) {
 } else {
     $_SESSION['error_messages'][] = 'Login failed';
     header("Location: " . $BASE_URL . "login.php");
+    exit;
 }
 
 if (isset($_SESSION['PREV_HTTP_REFERER']) && $_SESSION['PREV_HTTP_REFERER'] != null) {
