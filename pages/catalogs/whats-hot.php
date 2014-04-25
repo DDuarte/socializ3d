@@ -7,7 +7,14 @@ include_once($BASE_DIR . 'database/models.php');
 
 $memberId = getLoggedId();
 
+if (!isset($skip))
+    $skip = 0;
+
 $prevSkip = $skip - 20;
+
+if ($prevSkip < 0)
+    $prevSkip = 0;
+
 $nextSkip = $skip + 20;
 
 $models = getWhatsHotModels($memberId, 20, $skip);
