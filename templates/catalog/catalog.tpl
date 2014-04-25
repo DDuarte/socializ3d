@@ -1,15 +1,15 @@
 <ul id="catalog-nav-bar" class="nav nav-tabs nav-justified pull-left">
     <li {if $active == "whatsHot"}class="active"{/if}>
-        <a class="dynamic_load" href="{$BASE_URL}hot/0">What's Hot</a>
+        <a class="dynamic_load" href="{$BASE_URL}hot/{$skip}">What's Hot</a>
     </li>
     <li {if $active == "topRated"}class="active"{/if}>
-        <a class="dynamic_load" href="{$BASE_URL}top/0">Top Rated</a>
+        <a class="dynamic_load" href="{$BASE_URL}top/{$skip}">Top Rated</a>
     </li>
     <li {if $active == "new"}class="active"{/if}>
-        <a class="dynamic_load" href="{$BASE_URL}new/0">New</a>
+        <a class="dynamic_load" href="{$BASE_URL}new/{$skip}">New</a>
     </li>
     <li {if $active == "random"}class="active"{/if}>
-        <a class="dynamic_load" href="{$BASE_URL}rand/0">Random</a>
+        <a class="dynamic_load" href="{$BASE_URL}rand/{$skip}">Random</a>
     </li>
 </ul>
 <section class="content">
@@ -22,7 +22,7 @@
     </div>
 
     <ul id="model-pager" class="pager">
-        <li><a href="#">Previous</a></li>
-        <li><a href="#">Next</a></li>
+        <li><a href="{$BASE_URL}hot/{$prevSkip}">Previous</a></li>
+        <li><a href="{$BASE_URL}hot/{$nextSkip}">Next</a></li>
     </ul>
 </section>

@@ -10,4 +10,5 @@ $memberId = getLoggedId();
 $models = getTopRatedModels($memberId, 20, $skip);
 $smarty->assign("active", "topRated");
 $smarty->assign("models", $models);
+$smarty->assign('skip', $skip);
 $smarty->display('catalog/catalog.tpl');

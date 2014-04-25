@@ -6,8 +6,8 @@ if (!isset($BASE_DIR))
 include_once($BASE_DIR . 'database/models.php');
 
 $memberId = getLoggedId();
-
 $models = getNewModels($memberId, 20, $skip);
 $smarty->assign("active", "new");
 $smarty->assign("models", $models);
+$smarty->assign('skip', $skip);
 $smarty->display('catalog/catalog.tpl');

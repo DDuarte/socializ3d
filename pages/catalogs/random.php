@@ -10,4 +10,5 @@ $memberId = getLoggedId();
 $models = getRandomModels($memberId, 20, $skip);
 $smarty->assign("active", "random");
 $smarty->assign("models", $models);
+$smarty->assign('skip', $skip);
 $smarty->display('catalog/catalog.tpl');
