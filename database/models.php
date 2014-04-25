@@ -11,11 +11,18 @@ function getModel($id)
 
     if ($result == false) return false;
 
+    $result['id'] = $id;
     $result['createdate'] = date(DATE_ISO8601, strtotime($result['createdate']));
     $result['hash'] = getMemberHash($result['idauthor']);
     $result['comments'] = getModelComments($id);
     $result['numComments'] = count($result['comments']);
-    $result['tags'] = getModelTags($id);
+    $result['tagsArray'] = getModelTags($id);
+
+    $tagsNames = array();
+    foreach($result['tagsArray'] as $tag)
+        array_push($tagsNames, $tag['name']);
+
+    $result['tags'] = implode(', ', $tagsNames);
     return $result;
 }
 

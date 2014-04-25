@@ -32,7 +32,8 @@
                             <div class="col-md-8">
                                 <div class="user-panel">
                                     <div class="pull-left image">
-                                        <img src="{$GRAVATAR_URL}{$model.hash}?d=identicon" class="img-square" alt="User Image" /> <!-- TODO: Author's Avatar-->
+                                        <img src="{$GRAVATAR_URL}{$model.hash}?d=identicon" class="img-square"
+                                             alt="User Image"/> <!-- TODO: Author's Avatar-->
                                         <!-- TODO: Author's Avatar-->
                                     </div>
                                     <div class="pull-left info">
@@ -74,7 +75,7 @@
                                         <h3 class="box-title">Tags</h3>
                                     </div>
                                     <div class="box-body"> <!-- TODO: Tags -->
-                                        {foreach $model.tags as $tag}
+                                        {foreach $model.tagsArray as $tag}
                                             <span class="btn bg-white btn-flat margin text-black">{$tag.name}</span>
                                         {/foreach}
                                     </div>
@@ -136,19 +137,21 @@
                     </div>
                     {if $LOGGED_ID == $model.idauthor}
                         <div class="tab-pane" id="tab_settings">
-                            <div class="form-group">
-                                <label for="about-me-field">Description:</label>
-                                <textarea class="form-control" id="about-me-field" placeHolder="Enter your text here">This
-                                    is the most bland model known to man. Shame on you for hosting this
-                                    content.</textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="interests-field">Tags:</label>
-                                <br/>
-                                <input type="text" class="form-control" id="interests-field"
-                                       value="3D, Model, Bland, CG"
-                                       data-role="tagsinput" placeholder="Add interests"/>
-                            </div>
+                            <form id="edit-form" action="{$BASE_URL}models/{$model.id}" method="post">
+                                <div class="form-group">
+                                    <label for="about-me-field">Description:</label>
+                                    <textarea class="form-control" id="about-me-field" name="about"
+                                              placeHolder="Enter your text here">{$model.description}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="interests-field">Tags:</label>
+                                    <br/>
+                                    <input type="text" class="form-control" id="interests-field"
+                                           value="{$model.tags}" name="tags"
+                                           data-role="tagsinput" placeholder="Add interests"/>
+                                </div>
+                                <input type="submit"/>
+                            </form>
                         </div>
                     {/if}
                 </div>
@@ -237,7 +240,8 @@
             data[1].value += num ? num : 1;
             donut.setData(data);
         }
-    });
+    })
+    ;
 </script>
 
 <script src="{$BASE_URL}js/bootstrap-tagsinput.min.js" type="text/javascript"></script>
