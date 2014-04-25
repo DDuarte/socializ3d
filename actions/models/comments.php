@@ -1,4 +1,4 @@
-<?
+<?php
 
 include_once($BASE_DIR . 'database/models.php');
 
