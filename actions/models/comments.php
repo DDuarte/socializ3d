@@ -1,6 +1,6 @@
 <?php
 
-include_once($BASE_DIR . 'database/models.php');
+include_once('/opt/lbaw/lbaw1313/public_html/proto/database/models.php');
 
 function getComments($comments) {
     global $smarty;
