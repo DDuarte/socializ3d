@@ -94,7 +94,7 @@
                                 <div class="box-footer">
                                     {if $IS_LOGGED_IN}
                                         <div class="input-group">
-                                            <form action="{$BASE_URL}actions/models/comments.php" method="post">
+                                            <form action="{$BASE_URL}models/{$model.id}/comments" method="post">
                                                 <input class="form-control" name="content" placeholder="Comment this model..."/>
                                                 
                                                 <div class="input-group-btn">
