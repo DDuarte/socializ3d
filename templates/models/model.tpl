@@ -150,7 +150,7 @@
                                            value="{$model.tags}" name="tags"
                                            data-role="tagsinput" placeholder="Add interests"/>
                                 </div>
-                                <div class="callout callout-info" id="tags-info" hidden>
+                                <div class="callout callout-info hidden" id="tags-info">
                                     <h4>To add a tag</h4>
                                     <p>After writing each tag you want to add, press enter.
                                     <br/>Once finished you can click the submit button.</p>
@@ -193,12 +193,12 @@
         var voted_up = false;
         var voted_down = false;
         
-        $("#tags-info").focusin(function (event) {
+        $("#interests-field").focusin(function (event) {
             event.preventDefault();
             $(this).removeClass("hidden");
         });
         
-        $("#tags-info").focusout(function (event) {
+        $("#interests-field").focusout(function (event) {
             event.preventDefault();
             $(this).addClass("hidden");
         });
