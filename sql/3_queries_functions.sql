@@ -343,6 +343,7 @@ CREATE OR REPLACE FUNCTION get_model_comments(modelId BIGINT) RETURNS TABLE(idMe
                   JOIN Member ON Member.id = TComment.idMember
                   JOIN RegisteredUser ON Member.id = RegisteredUser.id
     WHERE TComment.idmodel = $1 AND TComment.deleted = false
+    ORDER BY TComment.createDate DESC
 $$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION get_model_comments(userId BIGINT, modelId BIGINT) RETURNS TABLE(idMember BIGINT, name VARCHAR(70), email VARCHAR(254), content VARCHAR(255), createDate TIMESTAMP) as $$
