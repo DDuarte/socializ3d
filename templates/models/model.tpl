@@ -168,6 +168,7 @@
 
 <script src="{$BASE_URL}js/plugins/morris/raphael-min.js"></script>
 <script src="{$BASE_URL}js/plugins/morris/morris.min.js" type="text/javascript"></script>
+<script src="{$BASE_URL}js/bootstrap-tagsinput.min.js" type="text/javascript"></script>
 
 <script type="text/javascript">
     $(function () {
@@ -192,7 +193,6 @@
 
         var voted_up = false;
         var voted_down = false;
-        
         $("#interests-field + .bootstrap-tagsinput").focusin(function (event) {
             event.preventDefault();
             $("#tags-info").removeClass("hidden");
@@ -258,5 +258,3 @@
     })
     ;
 </script>
-
-<script src="{$BASE_URL}js/bootstrap-tagsinput.min.js" type="text/javascript"></script>
