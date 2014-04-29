@@ -193,12 +193,12 @@
         var voted_up = false;
         var voted_down = false;
         
-        $("#interests-field").focusin(function (event) {
+        $("#interests-field + .bootstrap-tagsinput").focusin(function (event) {
             event.preventDefault();
             $("#tags-info").removeClass("hidden");
         });
         
-        $("#interests-field").focusout(function (event) {
+        $("#interests-field + .bootstrap-tagsinput").focusout(function (event) {
             event.preventDefault();
             $("#tags-info").addClass("hidden");
         });
