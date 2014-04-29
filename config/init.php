@@ -6,6 +6,9 @@ $BASE_DIR = '/opt/lbaw/lbaw1313/public_html/proto/';
 $BASE_URL = '/~lbaw1313/proto/';
 $GRAVATAR_BASE_URL = 'http://www.gravatar.com/avatar/';
 
+
+date_default_timezone_set('GMT');
+
 $conn = new PDO('pgsql:host=vdbm.fe.up.pt;dbname=lbaw1313', 'lbaw1313', 'sM553sn4');
 $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
