@@ -195,12 +195,12 @@
         
         $("#interests-field").focusin(function (event) {
             event.preventDefault();
-            $(this).removeClass("hidden");
+            $("#tags-info").removeClass("hidden");
         });
         
         $("#interests-field").focusout(function (event) {
             event.preventDefault();
-            $(this).addClass("hidden");
+            $("#tags-info").addClass("hidden");
         });
 
         $("#up_vote_button").click(function () {
