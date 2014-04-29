@@ -150,6 +150,11 @@
                                            value="{$model.tags}" name="tags"
                                            data-role="tagsinput" placeholder="Add interests"/>
                                 </div>
+                                <div class="callout callout-info" id="tags-info">
+                                    <h4>To add a tag</h4>
+                                    <p>After writing each tag you want to add, press enter.
+                                    <br/>Once finished you can click the submit button.</p>
+                                </div>
                                 <input type="submit"/>
                             </form>
                         </div>
@@ -187,6 +192,16 @@
 
         var voted_up = false;
         var voted_down = false;
+        
+        $("#tags-info").focus(function (event) {
+            event.preventDefault();
+            $(this).addClass("hidden");
+        });
+        
+        $("#tags-info").blur(function (event) {
+            event.preventDefault();
+            $(this).removeClass("hidden");
+        });
 
         $("#up_vote_button").click(function () {
             if (voted_up)
