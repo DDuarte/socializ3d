@@ -148,7 +148,7 @@
                                     <br/>
                                     <input type="text" class="form-control" id="interests-field"
                                            value="{$model.tags}" name="tags"
-                                           data-role="tagsinput" placeholder="Add interests"/>
+                                           data-role="tagsinput" placeholder="Add tags"/>
                                 </div>
                                 <div class="callout callout-info hidden" id="tags-info">
                                     <h4>To add a tag</h4>
