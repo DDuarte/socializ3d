@@ -15,6 +15,6 @@ class CommentsHandler {
 
         insertComment(getLoggedId(), $modelId, $_POST['content']);
 
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        header('Location: ' . $_SERVER['HTTP_REFERER'] . '#tab_comments');
     }
 }
