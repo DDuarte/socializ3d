@@ -43,7 +43,7 @@ ALTER TABLE RegisteredUser ADD CONSTRAINT RegisteredUser_passwordHash_check CHEC
 CREATE TABLE IF NOT EXISTS Member (
     id bigint NOT NULL,
     name varchar(70) NOT NULL,
-    about varchar(255) NOT NULL DEFAULT '',
+    about varchar(1024) NOT NULL DEFAULT '',
     birthDate date NOT NULL,
     registerDate timestamp NOT NULL DEFAULT now(),
     deleteDate timestamp DEFAULT NULL
@@ -59,7 +59,7 @@ CREATE TYPE visibility_group AS ENUM ('private', 'public');
 CREATE TABLE IF NOT EXISTS TGroup (
     id bigserial NOT NULL,
     name varchar(70) NOT NULL,
-    about varchar(255) NOT NULL DEFAULT '',
+    about varchar(1024) NOT NULL DEFAULT '',
     avatarImg varchar(255) DEFAULT NULL,
     coverImg varchar(255) DEFAULT NULL,
     createDate timestamp NOT NULL DEFAULT now(),
@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS Model (
     id bigserial NOT NULL,
     idAuthor bigint NOT NULL,
     name varchar(70) NOT NULL,
-    description varchar(255) NOT NULL DEFAULT '',
+    description varchar(1024) NOT NULL DEFAULT '',
     userFileName varchar(255) NOT NULL,
     fileName varchar(255) NOT NULL,
     createDate timestamp NOT NULL DEFAULT now(),
@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS TComment (
     id bigserial NOT NULL,
     idMember bigint NOT NULL,
     idModel bigint NOT NULL,
-    content varchar(255) NOT NULL,
+    content varchar(1024) NOT NULL,
     createDate timestamp NOT NULL DEFAULT now(),
     deleted boolean NOT NULL DEFAULT false
 );
