@@ -224,18 +224,31 @@ $(function() {
         //If the wrapper height is greater than the window
         if (content > height)
             //then set sidebar height to the wrapper
-            $(".left-side, html, body").css("min-height", content + "px");
+            $("html, body").css("min-height", content + "px");
+
         else {
             //Otherwise, set the sidebar to the height of the window
-            $(".left-side, html, body").css("min-height", height + "px");
+            $("html, body").css("min-height", height + "px");
         }
+
+        ////CUSTOM////
+        $(".left-side").css("min-height", height + "px");
+        $(".left-side").css("max-height", height + "px");
+        ////\CUSTOM////
+
     }
     //Fire upon load
     _fix();
     //Fire when wrapper is resized
-    $(".wrapper").resize(function() {
+    /*$(".wrapper").resize(function() { ////EDITED////
         _fix();
-    });
+    });*/
+
+    ////CUSTOM////
+    $(window).resize(function() {
+        _fix();
+    })
+    ////\CUSTOM////
 
     /*
      * We are gonna initialize all checkbox and radio inputs to

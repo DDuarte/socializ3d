@@ -2816,6 +2816,10 @@ Component: timeline
   }
 }
 
+.left-side.sidebar-offcanvas {
+    overflow: auto;
+}
+
 .comment-body {
     font-weight: normal;
     width: 100%;
