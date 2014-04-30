@@ -2815,3 +2815,10 @@ Component: timeline
     display: none!important;
   }
 }
+
+.comment-body {
+    font-weight: normal;
+    width: 100%;
+    overflow: auto;
+    margin-bottom: 0px;
+}
