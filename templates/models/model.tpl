@@ -205,6 +205,16 @@
             $("#tags-info").addClass("hidden");
         });
 
+        $(".item").mouseover(function (event) {
+            event.preventDefault();
+            $(this).find(".removeicon").removeClass("hidden");
+        });
+
+        $(".item").mouseout(function (event) {
+            event.preventDefault();
+            $(this).find(".removeicon").addClass("hidden");
+        });
+
         $("#up_vote_button").click(function () {
             if (voted_up)
                 reset_up();

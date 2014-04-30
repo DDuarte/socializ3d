@@ -5,10 +5,10 @@
 
     <p class="message">
 
-        <small class="text-muted pull-right" style="overflow: hidden;">
-            <i class="fa fa-clock-o"></i>
+        <small class="text-muted pull-right">
+            <i class="removeicon glyphicon {if $LOGGED_ID == $comment.idmember}glyphicon-trash{/if} hidden"></i>
             <time class="timeago" datetime="{$comment.createdate}">{$comment.createdate}</time>
-            <i class="glyphicon {if $LOGGED_ID == $comment.idmember}glyphicon-trash{/if}"></i>
+            <i class="fa fa-clock-o"></i>
         </small>
         <label class="name">
         <a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$comment.idmember}">
