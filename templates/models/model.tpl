@@ -86,25 +86,26 @@
                     <div class="tab-pane" id="tab_comments">
                         <div class="row">
                             <div class="col-md-8">
-                                <div class="box-body chat" id="chat-box">
-                                    {foreach $model.comments as $comment}
-                                        {include file="models/comment.tpl" comment=$comment}
-                                    {/foreach}
-                                </div>
                                 <div class="box-footer">
                                     {if $IS_LOGGED_IN}
-                                        <div class="input-group">
-                                            <form action="{$BASE_URL}models/{$model.id}/comments" method="post">
-                                                <input class="form-control" name="content" placeholder="Comment this model..."/>
-                                                
+                                        <form action="{$BASE_URL}models/{$model.id}/comments" method="post">
+                                            <div class="input-group">
+                                                <input class="form-control" name="content"
+                                                       placeholder="Comment this model..."/>
+
                                                 <div class="input-group-btn">
                                                     <button class="btn btn-success" type="submit">
                                                         <i class="fa fa-plus"></i>
                                                     </button>
                                                 </div>
-                                            </form>
-                                        </div>
+                                            </div>
+                                        </form>
                                     {/if}
+                                </div>
+                                <div class="box-body chat" id="chat-box">
+                                    {foreach $model.comments as $comment}
+                                        {include file="models/comment.tpl" comment=$comment}
+                                    {/foreach}
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -152,8 +153,9 @@
                                 </div>
                                 <div class="callout callout-info hidden" id="tags-info">
                                     <h4>To add a tag</h4>
+
                                     <p>After writing each tag you want to add, press enter.
-                                    <br/>Once finished you can click the submit button.</p>
+                                        <br/>Once finished you can click the submit button.</p>
                                 </div>
                                 <input type="submit"/>
                             </form>
@@ -197,7 +199,7 @@
             event.preventDefault();
             $("#tags-info").removeClass("hidden");
         });
-        
+
         $("#interests-field + .bootstrap-tagsinput").focusout(function (event) {
             event.preventDefault();
             $("#tags-info").addClass("hidden");
