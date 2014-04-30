@@ -85,6 +85,15 @@ function getMemberHash($id)
     return $result['get_user_hash'];
 }
 
+function isAdmin($id)
+{
+    global $conn;
+    $stmt = $conn->prepare("SELECT 1 FROM RegisteredUser WHERE id = ? AND isadmin = TRUE");
+    $stmt->execute(array($id));
+    $result = $stmt->fetch();
+    return $result;
+}
+
 function getUserSidebarInfo($id) {
     if ($id == null) return null;
 
@@ -104,11 +113,14 @@ function getUserSidebarInfo($id) {
 
     $userHash = getMemberHash($id);
 
+    $isAdmin = isAdmin($id);
+
     $result['userId'] = $id;
     $result['username'] = $username;
     $result['userHash'] = $userHash;
     $result['friends'] = $friends;
     $result['groups'] = $groups;
+    $result['isAdmin'] = $isAdmin;
 
     return $result;
 }

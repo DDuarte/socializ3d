@@ -1,5 +1,5 @@
 <aside class="left-side sidebar-offcanvas">
-    <section class="sidebar" style="border-bottom: none">
+    <section class="sidebar" style="border-bottom: none;">
         {if $IS_LOGGED_IN}<a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$userInfo.userId}">{/if}
             <div class="user-panel">
 
@@ -72,12 +72,14 @@
                     <span>Create Group</span>
                 </a>
             </li>
+            {if $userInfo.isAdmin}
             <li class="page-admin-panel">
                 <a class="dynamic_load" href="#page_admin">
                     <i class="fa  fa-wrench"></i>
                     <span>Administration</span>
                 </a>
             </li>
+            {/if}
         </ul>
         {/if}
     </section>
