@@ -240,14 +240,14 @@ $(function() {
     //Fire upon load
     _fix();
     //Fire when wrapper is resized
-    /*$(".wrapper").resize(function() { ////EDITED////
+    $(".wrapper").resize(function() {
         _fix();
-    });*/
+    });
 
     ////CUSTOM////
     $(window).resize(function() {
         _fix();
-    })
+    });
     ////\CUSTOM////
 
     /*

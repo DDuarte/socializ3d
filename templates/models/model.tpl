@@ -85,30 +85,7 @@
                     </div>
                     <div class="tab-pane" id="tab_comments">
                         <div class="row">
-                            <div class="col-md-8">
-                                <div class="box-footer">
-                                    {if $IS_LOGGED_IN}
-                                        <form action="{$BASE_URL}models/{$model.id}/comments" method="post">
-                                            <div class="input-group">
-                                                <input class="form-control" name="content"
-                                                       placeholder="Comment this model..."/>
-
-                                                <div class="input-group-btn">
-                                                    <button class="btn btn-success" type="submit">
-                                                        <i class="fa fa-plus"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    {/if}
-                                </div>
-                                <div class="box-body chat" id="chat-box">
-                                    {foreach $model.comments as $comment}
-                                        {include file="models/comment.tpl" comment=$comment}
-                                    {/foreach}
-                                </div>
-                            </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4 col-md-push-8">
                                 <div class="box">
                                     <div class="box-header">
                                         <h3 class="box-title">Votes</h3>
@@ -132,6 +109,29 @@
                                             </div>
                                         {/if}
                                     </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8 col-md-pull-4">
+                                <div class="box-footer">
+                                    {if $IS_LOGGED_IN}
+                                        <form action="{$BASE_URL}models/{$model.id}/comments" method="post">
+                                            <div class="input-group">
+                                                <input class="form-control" name="content"
+                                                       placeholder="Comment this model..."/>
+
+                                                <div class="input-group-btn">
+                                                    <button class="btn btn-success" type="submit">
+                                                        <i class="fa fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    {/if}
+                                </div>
+                                <div class="box-body chat" id="chat-box">
+                                    {foreach $model.comments as $comment}
+                                        {include file="models/comment.tpl" comment=$comment}
+                                    {/foreach}
                                 </div>
                             </div>
                         </div>
