@@ -36,17 +36,6 @@
                         <li>
                             <a class="dynamic_load" href="{$BASE_URL}{$GROUPS}/{$group.groupid}" class="pull-left">
                                 <i class="fa fa-angle-double-right"></i>{$group.groupname}</a>
-
-                            <div class="btn-group pull-right" style="margin-right: 10px">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="fa fa-sort-down"></i>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="#">Leave Group</a>
-                                    </li>
-                                </ul>
-                            </div>
                         </li>
                     {/foreach}
                 </ul>
