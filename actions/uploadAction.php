@@ -1,13 +1,13 @@
 <?php
 
-class IndexHandler
+class UploadHandler
 {
     function get()
     {
         global $smarty;
         global $BASE_DIR;
         include($BASE_DIR . 'pages/common/header.php');
-        include($BASE_DIR . 'pages/catalogs/whats-hot.php');
+        include($BASE_DIR . 'pages/upload.php');
         include($BASE_DIR . 'pages/common/footer.php');
     }
 
@@ -15,6 +15,6 @@ class IndexHandler
     {
         global $smarty;
         global $BASE_DIR;
-        include($BASE_DIR . 'pages/catalogs/whats-hot.php');
+        include($BASE_DIR . 'pages/upload.php');
     }
 }
