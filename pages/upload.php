@@ -9,4 +9,7 @@ if ($memberId == null) {
     exit("Not authenticated.");
 }
 
+$userInfo = getUserSidebarInfo($memberId);
+
+$smarty->assign('userInfo', $userInfo);
 $smarty->display('upload.tpl');

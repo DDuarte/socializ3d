@@ -7,7 +7,6 @@
 </section>
 
 <style>
-
     .inner-content {
         width: 95%;
         margin: 0 auto;
@@ -62,58 +61,51 @@
 <section class="content">
     <div class="row">
         <div class="col-md-8 col-centered" id="upload-form">
-            <form action="#" method="put">
+            <form action="{$BASE_URL}upload" method="post">
 
                 <div class="box-body">
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <div id="drop-files" class="box box-drop col-centered">
                             <h2>Drag &amp; drop your file here or</h2>
                             <div id="upload-button" class="btn btn-primary btn-lg btn-drop">Choose a file to upload</div>
                         </div>
-                    </div>
+                    </div> -->
 
                     <hr>
 
                     <div class="form-group">
                         <label for="name-filed">Model name: </label>
-                        <input type="text" class="form-control" id="name-filed" placeHolder="Enter model's name" />
+                        <input type="text" class="form-control" id="name-filed" name="name" placeHolder="Enter model's name" />
                     </div>
 
                     <div class="form-group">
                         <label for="description-field">Description: </label>
-                        <textarea class="form-control" id="description-field" placeHolder="Enter model's description" ></textarea>
+                        <textarea class="form-control" id="description-field" name="description" placeHolder="Enter model's description" ></textarea>
                     </div>
 
                     <div class="form-group">
                         <label for="to-field">To:</label>
-                        <select class="form-control" id="to-field">
+                        <select class="form-control" id="to-field" name="to">
                             <option>Public</option>
                             <option>Friends</option>
-                            <option>Group 1</option>
-                            <option>Group 2</option>
-                            <option>Group 3</option>
+                            {foreach $userInfo.groups as $group}
+                                <option>{$group.groupname}</option>
+                            {/foreach}
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="tags-field">Tags: </label> <br />
-                        <input type="text" class="form-control" id="tags-field" value="3D, Model, Bland, CG" data-role="tagsinput" placeholder="Add tags" />
+                        <input type="text" class="form-control" id="tags-field" name="tags" value="" data-role="tagsinput" placeholder="Add tags" />
                     </div>
 
                     <hr>
 
                     <div class="form-group">
                         <div id="submit" class="btn btn-primary btn-sm" style="margin-top: 10px">Submit all files</button>
-                        </div>
-
-
-
                     </div>
 
-
-
-
-
+                </div>
             </form>
         </div>
     </div>

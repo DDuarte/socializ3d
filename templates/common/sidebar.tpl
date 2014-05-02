@@ -14,7 +14,7 @@
         </a>
         <ul class="sidebar-menu options-panel">
             <li class="upload-model-panel">
-                <a class="dynamic_load" href="#page_upload">
+                <a class="dynamic_load" href="{$BASE_URL}upload">
                     <i class="fa fa-cloud-upload"></i>
                     <span>Upload Model</span>
                 </a>

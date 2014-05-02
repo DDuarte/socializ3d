@@ -2,17 +2,14 @@
 
 include_once($BASE_DIR . 'database/models.php');
 
-function getModelPage($model)
-{
+function getModelPage($model) {
     global $smarty;
-    $smarty->assign("model", $model);
+    $smarty->assign('model', $model);
     $smarty->display('models/model.tpl');
 }
 
-class ModelHandler
-{
-    function get($modelId)
-    {
+class ModelHandler {
+    function get($modelId) {
         global $smarty;
         global $BASE_DIR;
 
@@ -32,8 +29,7 @@ class ModelHandler
         include($BASE_DIR . 'pages/common/footer.php');
     }
 
-    function get_xhr($modelId)
-    {
+    function get_xhr($modelId) {
         global $BASE_DIR;
         global $smarty;
 
@@ -66,8 +62,8 @@ class ModelHandler
         }
 
         global $conn;
-        $stmt = $conn->prepare("UPDATE Model SET description = :about WHERE id = :id");
-        $stmt->execute(array(":id" => $modelId, ":about" => $about));
+        $stmt = $conn->prepare('UPDATE Model SET description = :about WHERE id = :id');
+        $stmt->execute(array(':id' => $modelId, ":about" => $about));
 
         $prevTags = getModelTags($modelId);
         $prevTagsNames = array();
@@ -75,13 +71,13 @@ class ModelHandler
 
         $toDelete = array_diff($prevTagsNames, $tagsArray);
         if (count($toDelete) > 0) {
-            $stmt = $conn->prepare("DELETE FROM model_tags WHERE idModel = ? AND name IN (" . implode(',', array_fill(0, count($toDelete), '?')) . ")");
+            $stmt = $conn->prepare('DELETE FROM model_tags WHERE idModel = ? AND name IN (' . implode(',', array_fill(0, count($toDelete), '?')) . ")");
             $stmt->execute(array_merge(array($modelId), $toDelete));
         }
 
         $toInsert = array_diff($tagsArray, $prevTagsNames);
         if (count($toInsert) > 0) {
-            $stmt = $conn->prepare("INSERT INTO model_tags VALUES (?, ?)");
+            $stmt = $conn->prepare('INSERT INTO model_tags VALUES (?, ?)');
             foreach ($toInsert as $newTag) {
                 $stmt->execute(array($modelId, $newTag));
             }

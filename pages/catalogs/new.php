@@ -20,8 +20,8 @@ if ($prevSkip < 0)
 $nextSkip = $skip + $MODELS_PER_PAGE;
 
 $models = getNewModels($memberId, $MODELS_PER_PAGE, $skip);
-$smarty->assign("active", "new");
-$smarty->assign("models", $models);
+$smarty->assign('active', 'new');
+$smarty->assign('models', $models);
 $smarty->assign('skip', $skip);
 $smarty->assign('prevSkip', $prevSkip);
 $smarty->assign('nextSkip', $nextSkip);

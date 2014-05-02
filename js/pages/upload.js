@@ -1,4 +1,8 @@
-/* $("div#drop-files").dropzone({ 
+$('#submit').click(function () {
+    $('form').submit();
+});
+
+/*$("div#drop-files").dropzone({
     autoProcessQueue: false,
     uploadMultiple: false,
     parallelUploads: 1,
@@ -11,7 +15,7 @@
         Dropzone.options.dropFiles = false;
         
         this.on("addedfile", function(file) { 
-            $('#upload-preview>.dz-file-preview>:not(.dz-details)').remove();
+            $('#upload-preview').find('>.dz-file-preview>:not(.dz-details)').remove();
             $("#submit").removeAttr("disabled");
         });
         
@@ -29,13 +33,13 @@
             event.preventDefault();
             self.processQueue();
         });
-        
-        $("#submit").attr("disabled", "disabled");
+
+        submitButton.attr("disabled", "disabled");
     },
     
-    url: "http://localhost:80/pages/index.php",
+    url: "/upload",
     method: "put",
     clickable: $("div#drop-files #upload-button").get(0),
-    previewsContainer: $('#upload-preview').get(0),
-    
-}); */
+    previewsContainer: $('#upload-preview').get(0)
+});
+*/
