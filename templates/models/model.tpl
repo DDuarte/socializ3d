@@ -114,9 +114,9 @@
                             <div class="col-md-8 col-md-pull-4">
                                 <div class="box-footer">
                                     {if $IS_LOGGED_IN}
-                                        <form action="{$BASE_URL}models/{$model.id}/comments" method="post">
+                                        <form action="{$BASE_URL}models/{$model.id}/comments" method="post" onsubmit="return checkComment();">
                                             <div class="input-group">
-                                                <input class="form-control" name="content"
+                                                <input id="comment-input" class="form-control" name="content"
                                                        placeholder="Comment this model..." autocomplete="off"/>
 
                                                 <div class="input-group-btn">
@@ -173,6 +173,10 @@
 <script src="{$BASE_URL}js/bootstrap-tagsinput.min.js" type="text/javascript"></script>
 
 <script type="text/javascript">
+    function checkComment(){
+        return $('#comment-input').val().length > 0;
+    }
+
     $(function () {
         var data = [
             {
@@ -195,6 +199,8 @@
 
         var voted_up = false;
         var voted_down = false;
+
+
         $("#interests-field + .bootstrap-tagsinput").focusin(function (event) {
             event.preventDefault();
             $("#tags-info").removeClass("hidden");
