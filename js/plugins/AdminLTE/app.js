@@ -85,7 +85,7 @@ function hash_change() {
 
 function load_page(event) {
     function load_ajax(page) {
-        var pageURL= Socializ3d.BASE_URL + "pages/" + page;
+        var pageURL= Socializ3d.BASE_URL + page;
         console.log(pageURL);
         $("#content-ajax").load(pageURL, function(response, status, xhr) {
             if (status == "error" && page != "404.html") {
