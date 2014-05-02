@@ -3,4 +3,4 @@
 
     $userInfo = getUserSidebarInfo(getLoggedId());
     $smarty->assign('userInfo', $userInfo);
-    $smarty->display("common/sidebar.tpl");
+    $smarty->display('common/sidebar.tpl');

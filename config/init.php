@@ -6,7 +6,6 @@ $BASE_DIR = '/opt/lbaw/lbaw1313/public_html/proto/';
 $BASE_URL = '/~lbaw1313/proto/';
 $GRAVATAR_BASE_URL = 'http://www.gravatar.com/avatar/';
 
-
 $MODELS_PER_PAGE = 20;
 date_default_timezone_set('GMT');
 
@@ -58,21 +57,21 @@ function getLoggedId() {
 function get404Page() {
     global $smarty;
     global $BASE_DIR;
-    include($BASE_DIR . "pages/404.php");
+    include($BASE_DIR . 'pages/404.php');
 }
 
 function get404Page_xhr() {
     global $smarty;
-    $smarty->display("common/404.tpl");
+    $smarty->display('common/404.tpl');
 }
 
 function get500Page() {
     global $smarty;
     global $BASE_DIR;
-    include($BASE_DIR . "pages/500.php");
+    include($BASE_DIR . 'pages/500.php');
 }
 
 function get500Page_xhr() {
     global $smarty;
-    $smarty->display("common/500.tpl");
+    $smarty->display('common/500.tpl');
 }
