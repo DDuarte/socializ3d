@@ -117,7 +117,7 @@
                                         <form action="{$BASE_URL}models/{$model.id}/comments" method="post">
                                             <div class="input-group">
                                                 <input class="form-control" name="content"
-                                                       placeholder="Comment this model..."/>
+                                                       placeholder="Comment this model..." autocomplete="off"/>
 
                                                 <div class="input-group-btn">
                                                     <button class="btn btn-success" type="submit">
