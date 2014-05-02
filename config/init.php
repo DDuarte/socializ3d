@@ -64,3 +64,13 @@ function get404Page_xhr() {
     $smarty->display("common/404.tpl");
 }
 
+function get500Page() {
+    global $smarty;
+    global $BASE_DIR;
+    include($BASE_DIR . "pages/500.php");
+}
+
+function get500Page_xhr() {
+    global $smarty;
+    $smarty->display("common/500.tpl");
+}
