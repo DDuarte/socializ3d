@@ -115,7 +115,7 @@
                         <!-- Menu Body -->
                         <li class="user-body">
                             <div class="text-center">
-                                <a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$userInfo.userId}#tab_friends">Friends</a>|
+                                <a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$userInfo.userId}#tab_friends">Friends</a> |
                                 <a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$userInfo.userId}#tab_groups">Groups</a>
                             </div>
                         </li>
