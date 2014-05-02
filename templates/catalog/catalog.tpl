@@ -39,22 +39,34 @@
 
     <ul id="model-pager" class="pager">
         {if $active == "whatsHot"}
-            <li><a href="{$BASE_URL}hot/{$prevSkip}">Previous</a></li>
-            {if !empty($models)}
+            {if $nextSkip != $MODELS_PER_PAGE}
+                <li><a href="{$BASE_URL}hot/{$prevSkip}">Previous</a></li>
+            {else}
+                <li class="disabled"><a href="#">Previous</a></li>
+            {/if}
+            {if !empty($models) && count($models) == $MODELS_PER_PAGE}
                 <li><a href="{$BASE_URL}hot/{$nextSkip}">Next</a></li>
             {else}
                 <li class="disabled"><a href="#">Next</a></li>
             {/if}
         {elseif $active == "topRated"}
-            <li><a href="{$BASE_URL}top/{$prevSkip}">Previous</a></li>
-            {if !empty($models)}
+            {if $nextSkip != $MODELS_PER_PAGE}
+                <li><a href="{$BASE_URL}top/{$prevSkip}">Previous</a></li>
+            {else}
+                <li class="disabled"><a href="#">Previous</a></li>
+            {/if}
+            {if !empty($models) && count($models) == $MODELS_PER_PAGE}
                 <li><a href="{$BASE_URL}top/{$nextSkip}">Next</a></li>
             {else}
                 <li class="disabled"><a href="#">Next</a></li>
             {/if}
         {elseif $active == "new"}
-            <li><a href="{$BASE_URL}new/{$prevSkip}">Previous</a></li>
-            {if !empty($models)}
+            {if $nextSkip != $MODELS_PER_PAGE}
+                <li><a href="{$BASE_URL}new/{$prevSkip}">Previous</a></li>
+            {else}
+                <li class="disabled"><a href="#">Previous</a></li>
+            {/if}
+            {if !empty($models) && count($models) == $MODELS_PER_PAGE}
                 <li><a href="{$BASE_URL}new/{$nextSkip}">Next</a></li>
             {else}
                 <li class="disabled"><a href="#">Next</a></li>

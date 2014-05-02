@@ -7,6 +7,7 @@ $BASE_URL = '/~lbaw1313/proto/';
 $GRAVATAR_BASE_URL = 'http://www.gravatar.com/avatar/';
 
 
+$MODELS_PER_PAGE = 20;
 date_default_timezone_set('GMT');
 
 $conn = new PDO('pgsql:host=vdbm.fe.up.pt;dbname=lbaw1313', 'lbaw1313', 'sM553sn4');
@@ -37,6 +38,7 @@ $smarty->assign('LOGGED_ID', $_SESSION['id']);
 $smarty->assign('USERNAME', $_SESSION['username']);
 $smarty->assign('IS_LOGGED_IN', getLoggedId() != null);
 
+$smarty->assign('MODELS_PER_PAGE', $MODELS_PER_PAGE);
 $smarty->assign('MEMBERS', 'members');
 $smarty->assign('MODELS', 'models');
 $smarty->assign('GROUPS', 'groups');
