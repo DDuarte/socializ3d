@@ -38,9 +38,6 @@ SELECT name, about, birthDate, get_user_hash($1) AS hash FROM Member WHERE id = 
 
 SELECT name FROM user_tags WHERE user_tags.idMember = :userId;
 
--- Group Profile --
-SELECT TGroup.name, TGroup.about, TGroup.avatarImg, TGroup.coverImg FROM TGroup WHERE TGroup.id = :groupId;
-
 -----------------------
 -- Insert Statements --
 -----------------------

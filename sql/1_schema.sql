@@ -1,6 +1,6 @@
--- DROP SCHEMA proto CASCADE;
--- CREATE SCHEMA proto;
-SET search_path TO proto;
+-- DROP SCHEMA final CASCADE;
+-- CREATE SCHEMA final;
+SET search_path TO final;
 
 DROP TYPE IF EXISTS visibility_group CASCADE;
 DROP TYPE IF EXISTS visibility_model CASCADE;

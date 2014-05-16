@@ -1,4 +1,4 @@
-SET search_path TO proto;
+SET search_path TO final;
 
 DROP TRIGGER IF EXISTS generate_publication_notification_trigger ON Model;
 DROP TRIGGER IF EXISTS generate_publication_notification_trigger_on_change ON Model;

@@ -1,4 +1,4 @@
-SET search_path TO proto;
+SET search_path TO final;
 
 DROP FUNCTION IF EXISTS get_group_visibile_models(BIGINT);
 DROP FUNCTION IF EXISTS get_all_visibile_models(BIGINT);
@@ -362,7 +362,7 @@ BEGIN
         $1 NOT IN (SELECT GroupUser.idMember FROM GroupUser WHERE GroupUser.idGroup = $2)) THEN
         RAISE EXCEPTION 'User % does not have permission to access group % profile.', $1, $2;
     ELSE
-        RETURN QUERY SELECT * FROM get_group_profile($2);
+        RETURN QUERY SELECT TGroup.name, TGroup.about, TGroup.avatarImg, TGroup.coverImg FROM TGroup WHERE TGroup.id = $2;
     END IF;
 END;
 $$ LANGUAGE PLPGSQL;

@@ -1,4 +1,4 @@
-SET search_path TO proto;
+SET search_path TO final;
 
 INSERT INTO registereduser (userName, passwordHash, email, isAdmin) VALUES ('Oscar', '9941d231bb8060c3ece285e40ba46c5ab37bbed5d5cacfeb3a465b1edc1e8da5', 'JHendrix1@telfort.co.uk', false);
 INSERT INTO registereduser (userName, passwordHash, email, isAdmin) VALUES ('Jim18', '74008a8dcb07e7fe3aa831bb6f464e3fa2c6875b7c86d933401477cecc367d89', 'NadineDavis1@aol.nl', false);
