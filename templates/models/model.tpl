@@ -86,7 +86,7 @@
                     <div class="tab-pane" id="tab_comments">
                         <div class="row">
                             <div class="col-md-4 col-md-push-8">
-                                <div class="box">
+                                <div class="box ">
                                     <div class="box-header">
                                         <h3 class="box-title">Votes</h3>
                                     </div>
@@ -95,14 +95,31 @@
 
                                         </div>
                                         {if $IS_LOGGED_IN}
-                                            <div class="text-center">
-                                                <button style="opacity:1.0" id="up_vote_button"
-                                                        class="btn bg-green btn-social">
+                                            <div id="processing_vote_section" class="box box-solid box-primary hidden">
+                                                <div class="box-header">
+                                                    <h3 class="box-title">Processing your vote...</h3>
+                                                </div>
+                                                <div class="box-body">
+                                                    <div class="progress progress-striped active">
+                                                        <div class="progress-bar" style="width: 100%;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="vote_section" class="text-center hidden">
+
+                                                {if $model.userVote}
+                                                    <button style="opacity:0.5" id="up_vote_button" class="btn bg-green btn-social disabled">
+                                                {else}
+                                                    <button style="opacity:1.0" id="up_vote_button" class="btn bg-green btn-social">
+                                                {/if}
                                                     <i class="fa fa-thumbs-up"></i>
                                                     <span>Up vote</span>
                                                 </button>
-                                                <button style="opacity:1.0" id="down_vote_button"
-                                                        class="btn bg-red btn-social">
+                                                {if $model.userVote === null || $model.userVote}
+                                                    <button style="opacity:1.0" id="down_vote_button" class="btn bg-red btn-social">
+                                                {else}
+                                                    <button style="opacity:0.5" id="down_vote_button" class="btn bg-red btn-social disabled">
+                                                {/if}
                                                     <i class="fa fa-thumbs-down"></i>
                                                     <span>Down vote</span>
                                                 </button>
@@ -198,8 +215,9 @@
             hideHover: 'auto'
         });
 
-        var voted_up = false;
-        var voted_down = false;
+        var voted_up = $("#up_vote_button").hasClass("disabled");
+        var voted_down = $("#down_vote_button").hasClass("disabled");
+
 
 
         $("#interests-field + .bootstrap-tagsinput").focusin(function (event) {
@@ -230,15 +248,14 @@
                 if(result) {
                     $.ajax({
                         url: url,
-                        type: "DELETE",
+                        type: 'DELETE',
                         success: function(a) {
-                            alert(a);
                             self.parents(".item").remove();
                         },
                         error: function(a, b, c) {
                             BootstrapDialog.alert({
-                                title: "Oops!",
-                                message: "Could not remove your comment at this time. :(\nError: "+c});
+                                title: 'Oops!',
+                                message: 'Could not remove your comment at this time. :(\nError: '+c});
                         }
                     });
                 }
@@ -246,45 +263,78 @@
         });
 
         $("#up_vote_button").click(function () {
-            if (voted_up)
-                reset_up();
-            else
-                vote_up();
+            if (!voted_up) {
+                $("#vote_section").addClass("hidden");
+                $("#processing_vote_section").removeClass("hidden");
+                $.ajax({
+                    url: '{$BASE_URL}/models/{$model.id}/votes',
+                    type: 'POST',
+                    data: {literal}{ vote: true}{/literal},
+                    success: function(a) {
+                        if (voted_down)
+                            reset_down();
+                        vote_up();
+                        $("#processing_vote_section").addClass("hidden");
+                        $("#vote_section").removeClass("hidden");
+                    },
+                    error: function(a, b, c) {
+                        BootstrapDialog.alert({
+                            title: 'Oops!',
+                            message: 'Could not register your vote at this time. :(\nError: '+c});
+                        $("#processing_vote_section").addClass("hidden");
+                        $("#vote_section").removeClass("hidden");
+                    }
+                });
+            }
         });
 
         $("#down_vote_button").click(function () {
-            if (voted_down)
-                reset_down();
-            else
-                vote_down();
+            if (!voted_down) {
+                $("#vote_section").addClass("hidden");
+                $("#processing_vote_section").removeClass("hidden");
+                $.ajax({
+                    url: '{$BASE_URL}/models/{$model.id}/votes',
+                    type: 'POST',
+                    data: {literal}{ vote: false}{/literal},
+                    success: function(a) {
+                        if (voted_up)
+                            reset_up();
+                        vote_down();
+                        $("#processing_vote_section").addClass("hidden");
+                        $("#vote_section").removeClass("hidden");
+                    },
+                    error: function(a, b, c) {
+                        BootstrapDialog.alert({
+                            title: 'Oops!',
+                            message: 'Could not register your vote at this time. :(\nError: '+c});
+                        $("#processing_vote_section").addClass("hidden");
+                        $("#vote_section").removeClass("hidden");
+                    }
+                });
+            }
         });
 
         function vote_up() {
             up_vote();
-            $("#down_vote_button").fadeTo("fast", 0.5).addClass("disabled");
+            $("#up_vote_button").fadeTo("fast", 0.5).addClass("disabled");
             voted_up = true;
         }
 
         function vote_down() {
             down_vote();
-            $("#up_vote_button").fadeTo("fast", 0.5).addClass("disabled");
+            $("#down_vote_button").fadeTo("fast", 0.5).addClass("disabled");
             voted_down = true;
         }
 
         function reset_up() {
             voted_up = false;
             up_vote(-1);
-            enable_buttons();
+            $("#up_vote_button").fadeTo("fast", 1).removeClass("disabled");
         }
 
         function reset_down() {
             voted_down = false;
             down_vote(-1);
-            enable_buttons();
-        }
-
-        function enable_buttons() {
-            $("#up_vote_button").fadeTo("fast", 1).removeClass("disabled");
             $("#down_vote_button").fadeTo("fast", 1).removeClass("disabled");
         }
 
@@ -297,6 +347,8 @@
             data[1].value += num ? num : 1;
             donut.setData(data);
         }
+
+        $("#vote_section").removeClass("hidden");
     })
     ;
 </script>

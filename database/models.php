@@ -18,6 +18,13 @@ function getModel($id)
     $result['numComments'] = count($result['comments']);
     $result['tagsArray'] = getModelTags($id);
 
+    $loggedUserId = getLoggedId();
+    if ($loggedUserId != null) {
+        $result['userVote'] = getUserVote($loggedUserId, $id);
+    }
+    else
+        $result['userVote'] = null;
+
     $tagsNames = array();
     foreach($result['tagsArray'] as $tag)
         array_push($tagsNames, $tag['name']);
@@ -52,6 +59,31 @@ function getModelTags($id)
     $stmt = $conn->prepare("SELECT * FROM model_tags WHERE idModel = ?");
     $stmt->execute(array($id));
     return $stmt->fetchAll();
+}
+
+function insertUserVote($userId, $modelId, $newVote)
+{
+    global $conn;
+    $stmt = $conn->prepare("INSERT INTO Vote(idMember, idModel, upVote) VALUES (?, ?, ?);");
+    $stmt->execute(array($userId, $modelId, $newVote ? "true" : "false"));
+}
+
+function getUserVote($loggedUserId, $modelId)
+{
+    global $conn;
+    $stmt = $conn->prepare("SELECT * FROM Vote WHERE idModel = ? AND idMember = ?");
+    $stmt->execute(array($modelId, $loggedUserId));
+    $result = $stmt->fetchAll();
+    if (count($result) > 0)
+        return $result[0]['upvote'] ? 1 : 0; //or else it would return null when false
+    return null;
+}
+
+function changeUserVote($userId, $modelId, $newVote)
+{
+    global $conn;
+    $stmt = $conn->prepare("UPDATE Vote SET upVote = ? WHERE idModel = ? AND idMember = ?");
+    $stmt->execute(array($newVote ? "true" : "false", $modelId, $userId));
 }
 
 function getComment($id)
