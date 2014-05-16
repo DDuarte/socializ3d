@@ -33,6 +33,7 @@ Toro::serve(array(
     '/rand/:number' => 'RandHandler',
     '/models/:number' => 'ModelHandler',
     '/models/:number/comments' => 'CommentsHandler',
+    '/models/:number/comments/:number' => 'CommentsHandler',
     '/members/:number' => 'MemberHandler',
     '/upload' => 'UploadHandler',
     '/groups/:number' => 'GroupHandler'

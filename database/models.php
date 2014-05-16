@@ -34,6 +34,7 @@ function getModelComments($id)
     $comments = $stmt->fetchAll();
     foreach ($comments as $key => $comment) {
         $comments[$key]['createdate'] = date(DATE_ISO8601, strtotime($comment['createdate']));
+        $comments[$key]['idmodel'] = $id;
     }
     return $comments;
 }
@@ -51,6 +52,24 @@ function getModelTags($id)
     $stmt = $conn->prepare("SELECT * FROM model_tags WHERE idModel = ?");
     $stmt->execute(array($id));
     return $stmt->fetchAll();
+}
+
+function getComment($id)
+{
+    global $conn;
+    $stmt = $conn->prepare("SELECT * FROM TComment WHERE id = ?");
+    $stmt->execute(array($id));
+    $result = $stmt->fetchAll();
+    if (count($result) > 0)
+        return $result[0];
+    return null;
+}
+
+function deleteComment($idModel, $idComment)
+{
+    global $conn;
+    $stmt = $conn->prepare("UPDATE TComment SET deleted = true WHERE idModel = ? AND id = ?");
+    $stmt->execute(array($idModel, $idComment));
 }
 
 function _getModels($func, $memberId, $numModels, $numSkip) {

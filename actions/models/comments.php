@@ -18,4 +18,22 @@ class CommentsHandler {
 
         header('Location: ' . $_SERVER['HTTP_REFERER'] . '#tab_comments');
     }
+
+    function delete($modelId, $commentId) {
+        global $BASE_DIR;
+        global $smarty;
+
+
+        $comment = getComment($commentId);
+        if($comment == null) {
+            header('HTTP/1.1 404 Not Found');
+            exit;
+        }
+        if (getLoggedId() != $comment['idmember']) {
+            header('HTTP/1.1 403 Forbidden');
+            exit;
+        }
+
+        deleteComment($modelId, $commentId);
+    }
 }

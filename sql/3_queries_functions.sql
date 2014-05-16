@@ -333,8 +333,9 @@ END;
 $$ LANGUAGE PLPGSQL;
 
 -- Get Model Comments --
-CREATE OR REPLACE FUNCTION get_model_comments(modelId BIGINT) RETURNS TABLE(idMember BIGINT, name VARCHAR(70), hash TEXT, content VARCHAR(255), createDate TIMESTAMP) as $$
-    SELECT TComment.idMember,
+CREATE OR REPLACE FUNCTION get_model_comments(modelId BIGINT) RETURNS TABLE(id BIGINT, idMember BIGINT, name VARCHAR(70), hash TEXT, content VARCHAR(255), createDate TIMESTAMP) as $$
+    SELECT TComment.id,
+           TComment.idMember,
            Member.name,
            get_user_hash(Member.id) AS hash,
            TComment.content,

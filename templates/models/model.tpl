@@ -171,6 +171,7 @@
 <script src="{$BASE_URL}js/plugins/morris/raphael-min.js"></script>
 <script src="{$BASE_URL}js/plugins/morris/morris.min.js" type="text/javascript"></script>
 <script src="{$BASE_URL}js/bootstrap-tagsinput.min.js" type="text/javascript"></script>
+<script src="{$BASE_URL}js/plugins/bootstrap3-dialog/bootstrap-dialog.min.js" type="text/javascript"></script>
 
 <script type="text/javascript">
     function checkComment(){
@@ -219,6 +220,29 @@
         $(".item").mouseout(function (event) {
             event.preventDefault();
             $(this).find(".removeicon").addClass("hidden");
+        });
+
+        $(".deletablecomment").parent().click(function (event) {
+            event.preventDefault();
+            var self = $(this);
+            var url = self.attr("href");
+            BootstrapDialog.confirm('Do you really want to delete this comment?', function(result){
+                if(result) {
+                    $.ajax({
+                        url: url,
+                        type: "DELETE",
+                        success: function(a) {
+                            alert(a);
+                            self.parents(".item").remove();
+                        },
+                        error: function(a, b, c) {
+                            BootstrapDialog.alert({
+                                title: "Oops!",
+                                message: "Could not remove your comment at this time. :(\nError: "+c});
+                        }
+                    });
+                }
+            });
         });
 
         $("#up_vote_button").click(function () {

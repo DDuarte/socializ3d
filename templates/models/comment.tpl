@@ -6,7 +6,11 @@
     <p class="message">
 
         <small class="text-muted pull-right">
-            <i class="removeicon glyphicon {if $LOGGED_ID == $comment.idmember}glyphicon-trash{/if} hidden"></i>
+            {if $LOGGED_ID == $comment.idmember}
+                <a href="{$BASE_URL}{$MODELS}/{$comment.idmodel}/comments/{$comment.id}"><i class="removeicon glyphicon glyphicon-trash deletablecomment hidden"></i></a>
+            {else}
+                <i class="removeicon glyphicon hidden"></i>
+            {/if}
             <time class="timeago" datetime="{$comment.createdate}">{$comment.createdate}</time>
             <i class="fa fa-clock-o"></i>
         </small>
