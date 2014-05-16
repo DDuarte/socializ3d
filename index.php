@@ -10,6 +10,7 @@ include_once($BASE_DIR . 'actions/models/model.php');
 include_once($BASE_DIR . 'actions/models/comments.php');
 include_once($BASE_DIR . 'actions/members/member.php');
 include_once($BASE_DIR . 'actions/uploadAction.php');
+include_once($BASE_DIR . 'actions/groups/group.php');
 
 $handle_404 = create_function('', 'global $BASE_DIR; global $smarty; include($BASE_DIR . "pages/404.php");');
 ToroHook::add("404", $handle_404);
@@ -33,5 +34,6 @@ Toro::serve(array(
     '/models/:number' => 'ModelHandler',
     '/models/:number/comments' => 'CommentsHandler',
     '/members/:number' => 'MemberHandler',
-    '/upload' => 'UploadHandler'
+    '/upload' => 'UploadHandler',
+    '/groups/:number' => 'GroupHandler'
 ));

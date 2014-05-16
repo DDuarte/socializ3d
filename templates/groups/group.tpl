@@ -1,12 +1,8 @@
-<title>Oporto Anime Fans</title>
-
-<!-- Content Header (Page header) -->
-<!-- Main content -->
 <section class="content">
     <div class="row" style="padding-top:10px">
         <div class="col-md-12">
             <div class="thumbnail">
-                <img src="http://placehold.it/1150x200" alt="...">
+                <img src="{$group.coverimg}" alt="...">
             </div>
         </div>
     </div>
@@ -24,9 +20,9 @@
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_about">
                         <div class="thumbnail">
-                            <img src="http://placehold.it/250x250" alt="...">
+                            <img src="{$group.avatarimg}" alt="...">
                         </div>
-                        <p>This group is dedicated to all anime fans</p>
+                        <p>{$group.about}</p>
                     </div>
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="tab_activity">
@@ -79,7 +75,7 @@
                         <a href="#tab_members" data-toggle="tab">Members</a>
                     </li>
                     <li class="pull-left header">
-                        <i class="fa fa-group"></i>Oporto Anime Fans</li>
+                        <i class="fa fa-group"></i>{$group.name}</li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_gallery">
@@ -341,4 +337,3 @@
         </div>
     </div>
 </section>
-<!-- /.content -->
