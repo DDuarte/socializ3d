@@ -63,9 +63,9 @@
             </li>
             {if $userInfo.isAdmin}
             <li class="page-admin-panel">
-                <a class="dynamic_load" href="#page_admin">
-                    <i class="fa  fa-wrench"></i>
-                    <span>Administration</span>
+                <a class="dynamic_load" href="{$BASE_URL}admin/stats">
+                    <i class="glyphicon glyphicon-stats"></i>
+                    <span>Statistics</span>
                 </a>
             </li>
             {/if}

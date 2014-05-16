@@ -2,7 +2,8 @@
 
 class UploadHandler
 {
-    function get() {
+    function get()
+    {
         global $smarty;
         global $BASE_DIR;
         include($BASE_DIR . 'pages/common/header.php');
@@ -10,13 +11,15 @@ class UploadHandler
         include($BASE_DIR . 'pages/common/footer.php');
     }
 
-    function get_xhr() {
+    function get_xhr()
+    {
         global $smarty;
         global $BASE_DIR;
         include($BASE_DIR . 'pages/upload.php');
     }
 
-    function post() {
+    function post()
+    {
         global $smarty;
         global $BASE_DIR;
         global $BASE_URL;
