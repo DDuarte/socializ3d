@@ -33,7 +33,7 @@ class StatisticsHandler
 
             global $conn;
             $stmt = $conn->prepare("SELECT * FROM get_counts_per_month_year(:startDate, :endDate)");
-            $stmt->execute([':startDate' => $start, ':endDate' => $end]);
+            $stmt->execute(array(':startDate' => $start, ':endDate' => $end));
             $result = $stmt->fetchAll();
 
             echo json_encode($result);
