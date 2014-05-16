@@ -12,7 +12,7 @@ date_default_timezone_set('GMT');
 $conn = new PDO('pgsql:host=vdbm.fe.up.pt;dbname=lbaw1313', 'lbaw1313', 'sM553sn4');
 $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$conn->exec("SET SCHEMA 'proto'");
+$conn->exec("SET SCHEMA 'final'");
 
 include_once($BASE_DIR . 'lib/smarty/Smarty.class.php');
 
