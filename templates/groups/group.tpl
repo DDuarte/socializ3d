@@ -94,7 +94,7 @@
                                 <h3 class="box-title">Members</h3>
                                 <div class="box-tools">
                                     <div class="input-group">
-                                        <input type="text" name="table_search" class="form-control input-sm pull-right" style="width: 150px;" placeholder="Filter members" />
+                                        <input type="text" name="table_search" id="table_search" class="form-control input-sm pull-right" style="width: 150px;" placeholder="Filter members" />
                                         <div class="input-group-btn">
                                             <button class="btn btn-sm btn-default">
                                                 <i class="fa fa-search"></i>
@@ -105,14 +105,14 @@
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body table-responsive">
-                                <table class="table table-hover">
+                                <table class="table table-hover" id="member_table">
                                     <tr>
                                         <th>User</th>
                                         <th>Last Activity</th>
                                         <th>Role</th>
                                     </tr>
                                     {foreach $group.members as $member}
-                                    <tr>
+                                    <tr class="member_row">
                                         <td>
                                             <a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$member.memberid}">{$member.membername}</a>
                                         </td>
@@ -142,3 +142,17 @@
         </div>
     </div>
 </section>
+
+<script>
+    $('#table_search').keyup(function(){
+        var valThis = $(this).val().toLowerCase();
+        if (valThis == ""){
+            $('#member_table > tbody > .member_row').show();
+        } else {
+            $('#member_table > tbody > .member_row').each(function(){
+                var text = $(this).text().toLowerCase();
+                (text.indexOf(valThis) >= 0) ? $(this).show() : $(this).hide();
+            });
+        };
+    });
+</script>
