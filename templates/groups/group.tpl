@@ -108,37 +108,22 @@
                                 <table class="table table-hover">
                                     <tr>
                                         <th>User</th>
-                                        <th>Date</th>
+                                        <th>Last Activity</th>
                                         <th>Role</th>
                                     </tr>
+                                    {foreach $group.members as $member}
                                     <tr>
-                                        <td>John Doe</td>
-                                        <td>11-7-2014</td>
+                                        <td>{$member.membername}</td>
+                                        <td><time class="timeago" datetime="{{$member.lastaccess}}">{{$member.lastaccess}}</time></td>
                                         <td>
+                                            {if $member.isadmin}
                                             <span class="label label-success">Admin</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Jane Doe</td>
-                                        <td>11-7-2014</td>
-                                        <td>
+                                            {else}
                                             <span class="label label-primary">Member</span>
+                                            {/if}
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>Bob Doe</td>
-                                        <td>11-7-2014</td>
-                                        <td>
-                                            <span class="label label-primary">Member</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Mike Doe</td>
-                                        <td>11-7-2014</td>
-                                        <td>
-                                            <span class="label label-primary">Member</span>
-                                        </td>
-                                    </tr>
+                                    {/foreach}
                                 </table>
                             </div>
                             <!-- /.box-body -->

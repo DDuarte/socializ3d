@@ -92,10 +92,11 @@ $$ LANGUAGE SQL;
 
 -- List all the members of a group --
 CREATE OR REPLACE FUNCTION get_members_of_group(groupId BIGINT)
-RETURNS TABLE(memberId BIGINT, memberName VARCHAR) AS $$
-    SELECT Member.id, Member.name FROM GroupUser
-        JOIN TGroup ON GroupUser.idGroup = $1
+RETURNS TABLE(memberId BIGINT, memberName VARCHAR, isAdmin BOOLEAN, lastAccess TIMESTAMP) AS $$
+    SELECT Member.id, Member.name, GroupUser.isAdmin, GroupUser.lastAccess FROM GroupUser
+        JOIN TGroup ON GroupUser.idGroup = TGroup.id
         JOIN Member ON Member.id = GroupUser.idMember
+        WHERE TGroup.id = $1
         ORDER BY Member.name ASC
 $$ LANGUAGE SQL;
 
