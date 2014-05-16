@@ -113,8 +113,12 @@
                                     </tr>
                                     {foreach $group.members as $member}
                                     <tr>
-                                        <td>{$member.membername}</td>
-                                        <td><time class="timeago" datetime="{{$member.lastaccess}}">{{$member.lastaccess}}</time></td>
+                                        <td>
+                                            <a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$member.memberid}">{$member.membername}</a>
+                                        </td>
+                                        <td>
+                                            <time class="timeago" datetime="{{$member.lastaccess}}">{{$member.lastaccess}}</time>
+                                        </td>
                                         <td>
                                             {if $member.isadmin}
                                             <span class="label label-success">Admin</span>
