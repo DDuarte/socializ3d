@@ -1,4 +1,4 @@
-SET search_path TO proto;
+SET search_path TO final;
 
 -------------
 -- Helpers --
