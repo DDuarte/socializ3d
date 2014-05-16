@@ -1,11 +1,13 @@
 <?php
 
-// include_once('users.php');
+include_once('users.php');
 
 function getGroup($id) {
+    $loggedId = getLoggedId();
+
     global $conn;
     $stmt = $conn->prepare("SELECT * FROM get_group_profile(?, ?)");
-    $stmt->execute(array(getLoggedId(), $id));
+    $stmt->execute(array($loggedId, $id));
     $result = $stmt->fetch();
 
     if ($result == false) return false;
@@ -13,6 +15,7 @@ function getGroup($id) {
     $result['id'] = $id;
     $result['models'] = getGroupModels($id);
     $result['members'] = getMembersOfGroup($id);
+    $result['isGroupAdmin'] = isGroupAdmin($id, $loggedId) || isAdmin($loggedId);
 
     return $result;
 }
@@ -49,4 +52,12 @@ function isGroupVisibleToMember($groupId, $memberId) {
     } catch (PDOException $e) {
         return false;
     }
+}
+
+function isGroupAdmin($idGroup, $idMember) {
+    global $conn;
+    $stmt = $conn->prepare("SELECT 1 FROM GroupUser WHERE idGroup = ? AND idMember = ? AND isadmin = TRUE");
+    $stmt->execute(array($idGroup, $idMember));
+    $result = $stmt->fetch();
+    return $result;
 }

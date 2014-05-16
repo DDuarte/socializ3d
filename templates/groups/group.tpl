@@ -16,6 +16,13 @@
                     <li>
                         <a href="#tab_activity" data-toggle="tab">Recent Activity</a>
                     </li>
+                    {if $group.isGroupAdmin}
+                    <li class="pull-right">
+                        <a href="#tab_settings" data-toggle="tab">
+                            <i class="fa fa-gear"></i>
+                        </a>
+                    </li>
+                    {/if}
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_about">
@@ -53,12 +60,18 @@
                             </li>
                         </ul>
                     </div>
+                    {if $group.isGroupAdmin}
                     <div class="tab-pane" id="tab_settings">
                         <div class="form-group">
                             <label for="description-field">About:</label>
                             <textarea class="form-control" id="about-me-field" placeHolder="Enter your text here">{$group.about}</textarea>
                         </div>
+                        <button id="delete-group-btn" class="btn bg-blue btn-primary" data-toggle="modal" data-target="#delete-group-modal">
+                            <i class="fa fa-times"></i>
+                            <span>Delete Group</span>
+                        </button>
                     </div>
+                    {/if}
                     <!-- /.tab-settings -->
                     <!-- /.tab-pane -->
                 </div>
@@ -126,6 +139,16 @@
                                             <span class="label label-primary">Member</span>
                                             {/if}
                                         </td>
+                                        {if $group.isGroupAdmin}
+                                        <td>
+                                            <button class="btn btn-sm btn-flat btn-default pull-right" data-toggle="modal" data-target="#delete-modal">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-flat btn-default pull-right" data-toggle="modal" data-target="#change-role-modal">
+                                                <i class="fa fa-sort-down"></i>
+                                            </button>
+                                        </td>
+                                        {/if}
                                     </tr>
                                     {/foreach}
                                 </table>
@@ -142,6 +165,99 @@
         </div>
     </div>
 </section>
+
+{if $group.isGroupAdmin}
+<div id="delete-modal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="content-header" style="text-align: center">
+                <h2>Remove member</h2>
+            </div>
+            <div class="box box-primary">
+                <div class="row">
+                    <div class="col-md-12" style="text-align: center">
+                        <h3>Are you sure?</h3>
+                    </div>
+                </div>
+                <div class="box-body notifications-box row">
+
+                    <div class="col-md-6" style="text-align: center">
+                        <button class="btn bg-blue btn-primary">
+                            <span>Yes</span>
+                        </button>
+                    </div>
+                    <div class="col-md-6" style="text-align: center">
+                        <button class="btn bg-blue btn-primary">
+                            <span>No</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="delete-group-modal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="content-header" style="text-align: center">
+                <h2>Delete Group</h2>
+            </div>
+            <div class="box box-primary">
+                <div class="row">
+                    <div class="col-md-12" style="text-align: center">
+                        <h3>Are you sure?</h3>
+                    </div>
+                </div>
+                <div class="box-body notifications-box row">
+
+                    <div class="col-md-6" style="text-align: center">
+                        <button class="btn bg-blue btn-primary">
+                            <span>Yes</span>
+                        </button>
+                    </div>
+                    <div class="col-md-6" style="text-align: center">
+                        <button class="btn bg-blue btn-primary">
+                            <span>No</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="change-role-modal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="content-header" style="text-align: center">
+                <h2>Change role</h2>
+            </div>
+            <div class="box box-primary">
+                <div class="box-body notifications-box">
+                    <ul class="todo-list notifications-list">
+                        <li class="notification-item notification-group-item">
+                            <input type="radio" name="role">
+                            <span class="text">
+                                <span class="notification-group-name">Admin</span>
+                            </span>
+                        </li>
+                        <li class="notifiation-item notification-friendship-item">
+                            <input type="radio" name="role">
+                            <span class="text">
+                                <span class="notification-friendship-name">Member</span>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="box-footer">
+                    <button class="btn btn-primary">Commit changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/if}
 
 <script>
     $('#table_search').keyup(function(){
