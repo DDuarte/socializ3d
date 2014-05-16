@@ -119,16 +119,16 @@
 
         $("#slider").bind("valuesChanged", function(e, data){
             // date format in JavaScript? No thanks.
-            var minDay = data.values.min.getDay();
+            var minDay = data.values.min.getDay() + 1;
             var minMonth = data.values.min.getMonth() + 1;
             var minYear = data.values.min.getFullYear();
-            var maxDay = data.values.max.getDay();
+            var maxDay = data.values.max.getDay() + 1;
             var maxMonth = data.values.max.getMonth() + 1;
             var maxYear = data.values.max.getFullYear();
 
             var dates = {
-                startDate: minDay + "-" + minMonth + "-" + minYear,
-                endDate: maxDay + "-" + maxMonth + "-" + maxYear
+                startDate: minYear + "-" + minMonth + "-" + minDay,
+                endDate: maxYear + "-" + maxMonth + "-" + maxDay
             };
 
             $.get("{$BASE_URL}admin/stats", dates, function (data) {
