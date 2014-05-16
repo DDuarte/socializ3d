@@ -17,7 +17,7 @@ if (!isAdmin($memberId)) {
 
 global $conn;
 $stmt = $conn->prepare("SELECT * FROM get_counts_per_month_year(:startDate, :endDate)");
-$stmt->execute([':startDate' => '2014/01/01', ':endDate' => '2015/01/01']);
+$stmt->execute(array(':startDate' => '2014/01/01', ':endDate' => '2015/01/01'));
 $result = $stmt->fetchAll();
 
 if ($result == false) return false;
