@@ -66,6 +66,16 @@
                                     press enter.
                                     <br/>Once finished you can click the confirm button.</p>
                             </div>
+                            <div id="processing_submit_section" class="box box-solid box-success hidden">
+                                <div class="box-header">
+                                    <h3 class="box-title">Processing your request...</h3>
+                                </div>
+                                <div class="box-body">
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-green" style="width: 100%;"></div>
+                                    </div>
+                                </div>
+                            </div>
                             <button type="submit" class="btn bg-olive btn-block" id="confirm-button">Confirm</button>
                         </div>
                     {/if}
@@ -177,7 +187,8 @@
 
         $("#confirm-button").click(function (event) {
             event.preventDefault();
-            $("#confirm-button").addClass("hidden");
+            $('#confirm-button').addClass('hidden');
+            $('#processing_submit_section').removeClass('hidden');
             $.ajax({
                 url: '{$BASE_URL}/members/{$member.id}',
                 type: 'POST',
@@ -188,6 +199,7 @@
                     BootstrapDialog.alert({
                         title: 'Success!',
                         message: 'Updated your information successfully'});
+                    $('#processing_submit_section').addClass('hidden');
                     $("#confirm-button").removeClass("hidden");
                     document.location.href='#tab_about';
 
@@ -196,6 +208,7 @@
                     BootstrapDialog.alert({
                         title: 'Oops!',
                         message: 'Could not process your request at this time. :(\nError: ' + c});
+                    $('#processing_submit_section').addClass('hidden');
                     $("#confirm-button").removeClass("hidden");
                 }
             });
