@@ -171,7 +171,7 @@
                                 <div class="callout callout-info hidden" id="tags-info">
                                     <h4>To add a tag</h4>
 
-                                    <p>After writing each tag you want to add, press enter.
+                                    <p>After writing each tag you want to add (or several comma-separated tags), press enter.
                                         <br/>Once finished you can click the submit button.</p>
                                 </div>
                                 <input type="submit"/>

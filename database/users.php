@@ -169,3 +169,30 @@ function createUser($username, $password, $email, $realName, $birthDate)
                          ':realName' => $realName,
                          ':birthDate' => $birthDate));
 }
+
+function updateUserAbout($memberId, $aboutInfo)
+{
+    global $conn;
+    $stmt = $conn->prepare('UPDATE Member SET about = :about WHERE id = :id');
+    $stmt->execute(array(':id' => $memberId, ":about" => $aboutInfo));
+}
+
+function deleteUserInterests($memberId, $toDelete)
+{
+    global $conn;
+    if (count($toDelete) > 0) {
+        $stmt = $conn->prepare('DELETE FROM user_tags WHERE idMember = ? AND name IN (' . implode(',', array_fill(0, count($toDelete), '?')) . ")");
+        $stmt->execute(array_merge(array($memberId), $toDelete));
+    }
+}
+
+function insertUserInterests($memberId, $toInsert)
+{
+    global $conn;
+    if (count($toInsert) > 0) {
+        $stmt = $conn->prepare('INSERT INTO user_tags VALUES (?, ?)');
+        foreach ($toInsert as $newTag) {
+            $stmt->execute(array($memberId, $newTag));
+        }
+    }
+}

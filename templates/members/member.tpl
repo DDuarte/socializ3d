@@ -27,7 +27,7 @@
                         <div class="thumbnail">
                             <img src="{$GRAVATAR_URL}{$member.hash}?s=250&d=identicon" alt="...">
                         </div>
-                        <p>{$member.about}
+                        <p id="member-about-content">{$member.about}</p>
                     </div>
                     <!-- /.tab-pane -->
                     {if $IS_LOGGED_IN}
@@ -39,7 +39,7 @@
                             {$member.birthdate}
                             <h4>Interests:</h4>
 
-                            <p>
+                            <p id="member-interests-content">
                                 {$member.interests}
                             </p>
                         </div>
@@ -49,15 +49,24 @@
                         <div class="tab-pane" id="tab_settings">
                             <div class="form-group">
                                 <label for="description-field">About me:</label>
-                                <textarea class="form-control" id="about-me-field" placeHolder="Enter your text here">{$member.about}</textarea>
+                                <textarea class="form-control" id="about-me-field" placeHolder="Enter your text here"
+                                          name="about">{$member.about}</textarea>
                             </div>
                             <div class="form-group">
                                 <label for="tags-field">Interests:</label>
                                 <br/>
                                 <input type="text" class="form-control" id="interests-field"
                                        value="{$member.interests}" data-role="tagsinput"
-                                       placeholder="Add interests"/>
+                                       name="interests" placeholder="Add interests"/>
                             </div>
+                            <div class="callout callout-info hidden" id="tags-info">
+                                <h4>To add an interest</h4>
+
+                                <p>After writing each interest you want to add (or several comma-separated interests),
+                                    press enter.
+                                    <br/>Once finished you can click the confirm button.</p>
+                            </div>
+                            <button type="submit" class="btn bg-olive btn-block" id="confirm-button">Confirm</button>
                         </div>
                     {/if}
                     <!-- /.tab-settings -->
@@ -153,3 +162,43 @@
 </div>
 
 <script src="{$BASE_URL}js/bootstrap-tagsinput.min.js" type="text/javascript"></script>
+<script src="{$BASE_URL}js/plugins/bootstrap3-dialog/bootstrap-dialog.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#interests-field + .bootstrap-tagsinput").mouseover(function (event) {
+            event.preventDefault();
+            $("#tags-info").removeClass("hidden");
+        });
+
+        $("#interests-field + .bootstrap-tagsinput").mouseout(function (event) {
+            event.preventDefault();
+            $("#tags-info").addClass("hidden");
+        });
+
+        $("#confirm-button").click(function (event) {
+            event.preventDefault();
+            $("#confirm-button").addClass("hidden");
+            $.ajax({
+                url: '{$BASE_URL}/members/{$member.id}',
+                type: 'POST',
+                data: {literal}{ about: $("#about-me-field").val(), interests: $("#interests-field").val()}{/literal},
+                success: function (a) {
+                    $("#member-about-content").text($("#about-me-field").val());
+                    $("#member-interests-content").text($("#interests-field").val().replace(/, */g, ', '));
+                    BootstrapDialog.alert({
+                        title: 'Success!',
+                        message: 'Updated your information successfully'});
+                    $("#confirm-button").removeClass("hidden");
+                    document.location.href='#tab_about';
+
+                },
+                error: function (a, b, c) {
+                    BootstrapDialog.alert({
+                        title: 'Oops!',
+                        message: 'Could not process your request at this time. :(\nError: ' + c});
+                    $("#confirm-button").removeClass("hidden");
+                }
+            });
+        });
+    });
+</script>
