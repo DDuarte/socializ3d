@@ -65,12 +65,12 @@
 
                     <div class="form-group">
                         <label for="name-filed">Group name:</label>
-                        <input type="text" class="form-control" id="name-filed" placeHolder="Enter the group name" />
+                        <input required type="text" class="form-control" id="name-filed" placeHolder="Enter the group name" />
                     </div>
 
                     <div class="form-group">
                         <label for="description-field">About:</label>
-                        <textarea class="form-control" id="description-field" placeHolder="What's the group about?"></textarea>
+                        <textarea required class="form-control" id="description-field" placeHolder="What's the group about?"></textarea>
                     </div>
 
                     <div class="form-group">
@@ -81,14 +81,8 @@
                         </select>
                     </div>
 
-                    <!--<div class="form-group">
-                        <label for="tags-field">Tags:</label>
-                        <br />
-                        <input type="text" class="form-control" id="tags-field" value="3D, Model, Bland, CG" data-role="tagsinput" placeholder="Add tags" />
-                    </div> -->
-
                     <div class="form-group">
-                        <div id="submit" class="btn btn-primary btn-sm" style="margin-top: 10px">Submit</div>
+                        <div id="submit" class="btn btn-primary btn-sm">Submit</div>
                     </div>
                 </div>
             </form>
@@ -96,6 +90,6 @@
     </div>
 </section>
 
-<script src="js/dropzone.min.js" type="text/javascript"></script>
-<script src="js/pages/upload.js" type="text/javascript"></script>
-<script src="js/bootstrap-tagsinput.min.js" type="text/javascript"></script>
+<script src="{$BASE_URL}js/dropzone.min.js" type="text/javascript"></script>
+<script src="{$BASE_URL}js/pages/upload.js" type="text/javascript"></script>
+<script src="{$BASE_URL}js/bootstrap-tagsinput.min.js" type="text/javascript"></script>
