@@ -6,7 +6,8 @@ if (!isset($BASE_DIR))
 $memberId = getLoggedId();
 
 if ($memberId == null) {
-    exit("Not authenticated.");
+    header('HTTP/1.0 403 Forbidden');
+    exit('Not authenticated.');
 }
 
 $userInfo = getUserSidebarInfo($memberId);

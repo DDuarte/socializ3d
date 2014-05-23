@@ -14,6 +14,7 @@ include_once($BASE_DIR . 'actions/uploadAction.php');
 include_once($BASE_DIR . 'actions/groups/group.php');
 include_once($BASE_DIR . 'actions/groups/create.php');
 include_once($BASE_DIR . 'actions/admin/stats.php');
+include_once($BASE_DIR . 'actions/notifications.php');
 
 
 $handle_404 = create_function('', 'global $BASE_DIR; global $smarty; include($BASE_DIR . "pages/404.php");');
@@ -43,5 +44,6 @@ Toro::serve(array(
     '/upload' => 'UploadHandler',
     '/groups/:number' => 'GroupHandler',
     '/groups/create' => 'GroupCreateHandler',
-    '/admin/stats' => 'StatisticsHandler'
+    '/admin/stats' => 'StatisticsHandler',
+    '/notifications' => 'NotificationsHandler'
 ));
