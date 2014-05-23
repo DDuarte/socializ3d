@@ -4,7 +4,9 @@ include_once($BASE_DIR . 'database/users.php');
 
 function getMemberPage($member) {
     global $smarty;
-    $smarty->assign("member", $member);
+    $userInfo = getUserSidebarInfo(getLoggedId());
+    $smarty->assign('userInfo', $userInfo);
+    $smarty->assign('member', $member);
     $smarty->display('members/member.tpl');
 }
 
@@ -12,7 +14,7 @@ class MemberHandler {
     function get_xhr($memberId) {
         global $smarty;
 
-        $member = getMember($memberId);
+        $member = getMember($memberId, getLoggedId());
         if ($member == false) {
             $smarty->display("common/404.tpl");
             exit;
@@ -24,7 +26,7 @@ class MemberHandler {
         global $BASE_DIR;
         global $smarty;
 
-        $member = getMember($memberId);
+        $member = getMember($memberId, getLoggedId());
         if ($member == false) {
             include($BASE_DIR . "pages/404.php");
             exit;

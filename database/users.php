@@ -1,6 +1,6 @@
 <?php
 
-function getMember($id)
+function getMember($id, $id2)
 {
     global $conn;
     $stmt = $conn->prepare("SELECT Member.id,
@@ -17,6 +17,14 @@ function getMember($id)
 
     $result['models'] = getMemberModels($id);
     $result['friends'] = getFriendsOfMember($id);
+    $result['myFriend'] = false;
+    foreach ($result['friends'] as $key => $value) {
+        if ($result['friends'][$key]['id'] == $id2) {
+            $result['myFriend'] = true;
+            break;
+        }
+    }
+
     $result['groups'] = getGroupsOfMember($id);
     $result['interests_array'] = getMemberInterests($id);
     $result['interests'] = implode(', ', $result['interests_array']);

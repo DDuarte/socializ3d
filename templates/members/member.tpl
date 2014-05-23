@@ -100,6 +100,25 @@
                     <li class="pull-left header">
                         {$member.name}'s Profile
                     </li>
+                    {if $IS_LOGGED_IN}
+                    <li class="pull-left">
+                        <button id="add-to-group-btn" class="btn bg-blue btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">
+                            <i class="fa fa-plus-square-o"></i>
+                            <span>Invite to group</span>
+                        </button>
+                        {if $member.myFriend}
+                        <button id="unfriend-btn" class="btn bg-blue btn-primary">
+                            <i class="fa fa-times"></i>
+                            <span>Unfriend</span>
+                        </button>
+                        {else}
+                        <button class="btn btn-primary">
+                            <i class="fa fa-user"></i>
+                            <span>Add friend<span>
+                        </button>
+                        {/if}
+                    </li>
+                    {/if}
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_gallery">
@@ -133,6 +152,7 @@
 </section>
 <!-- /.content -->
 
+{if $IS_LOGGED_IN}
 <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
      aria-hidden="true">
     <div class="modal-dialog modal-sm">
@@ -143,24 +163,14 @@
             <div class="box box-primary">
                 <div class="box-body notifications-box">
                     <ul class="todo-list notifications-list">
+                        {foreach $userInfo.groups as $group}
                         <li class="notification-item notification-group-item">
                             <input type="checkbox">
-                            <span class="text">
-                                <span class="notification-group-name">Top Model Crew</span>
-                            </span>
+                        <span class="text">
+                            <span class="notification-group-name">{$group.groupname}</span>
+                        </span>
                         </li>
-                        <li class="notifiation-item notification-friendship-item">
-                            <input type="checkbox">
-                            <span class="text">
-                                <span class="notification-friendship-name">Oporto Anime Fans</span>
-                            </span>
-                        </li>
-                        <li class="notification-item notification-group-activity-item">
-                            <input type="checkbox">
-                            <span class="text">
-                                <span class="notification-group-activity-name">Top Notch Design</span>
-                            </span>
-                        </li>
+                        {/foreach}
                     </ul>
                 </div>
                 <div class="box-footer">
@@ -170,6 +180,7 @@
         </div>
     </div>
 </div>
+{/if}
 
 <script src="{$BASE_URL}js/bootstrap-tagsinput.min.js" type="text/javascript"></script>
 <script src="{$BASE_URL}js/plugins/bootstrap3-dialog/bootstrap-dialog.min.js" type="text/javascript"></script>
