@@ -56,8 +56,8 @@
                 </ul>
             </li>
             <li class="create-group-panel">
-                <a class="dynamic_load" href="#page_createGroup">
-                    <i class="fa  fa-plus-square-o"></i>
+                <a class="dynamic_load" href="{$BASE_URL}groups/create">
+                    <i class="fa fa-plus-square-o"></i>
                     <span>Create Group</span>
                 </a>
             </li>

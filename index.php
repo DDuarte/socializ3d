@@ -12,6 +12,7 @@ include_once($BASE_DIR . 'actions/models/votes.php');
 include_once($BASE_DIR . 'actions/members/member.php');
 include_once($BASE_DIR . 'actions/uploadAction.php');
 include_once($BASE_DIR . 'actions/groups/group.php');
+include_once($BASE_DIR . 'actions/groups/create.php');
 include_once($BASE_DIR . 'actions/admin/stats.php');
 
 
@@ -41,5 +42,6 @@ Toro::serve(array(
     '/members/:number' => 'MemberHandler',
     '/upload' => 'UploadHandler',
     '/groups/:number' => 'GroupHandler',
+    '/groups/create' => 'GroupCreateHandler',
     '/admin/stats' => 'StatisticsHandler'
 ));

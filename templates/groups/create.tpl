@@ -1,5 +1,3 @@
-<title>Create Group</title>
-
 <section class="content-header">
     <h1 id="myh122">
         Create Group
