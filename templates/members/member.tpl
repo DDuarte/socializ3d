@@ -105,10 +105,12 @@
                     </li>
                     {if $IS_LOGGED_IN && $LOGGED_ID != $member.id}
                     <li class="pull-left">
+                        {if $userInfo.groups|@count > 0}
                         <button id="add-to-group-btn" class="btn bg-blue btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">
                             <i class="fa fa-plus-square-o"></i>
                             <span>Invite to group</span>
                         </button>
+                        {/if}
                         {if $member.myFriend}
                         <button id="unfriend-btn" class="btn bg-blue btn-primary">
                             <i class="fa fa-times"></i>
