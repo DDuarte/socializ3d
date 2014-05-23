@@ -204,3 +204,26 @@ function insertUserInterests($memberId, $toInsert)
         }
     }
 }
+
+function checkPassword($memberId, $password)
+{
+    global $conn;
+    $stmt = $conn->prepare("SELECT id
+                            FROM RegisteredUser JOIN Member USING(id)
+                            WHERE deleteDate IS NULL AND id = ? AND passwordHash = ?");
+    $stmt->execute(array($memberId, hash('sha256', $password)));
+    $result = $stmt->fetch();
+
+    if ($result == false){
+        return false;
+    } else {
+        return $result;
+    }
+}
+
+function updateMemberPassword($memberId, $newPassword)
+{
+    global $conn;
+    $stmt = $conn->prepare("UPDATE RegisteredUser SET passwordHash = ? WHERE id = ?");
+    $stmt->execute(array(hash('sha256', $newPassword), $memberId));
+}

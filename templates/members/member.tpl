@@ -76,6 +76,9 @@
                                     </div>
                                 </div>
                             </div>
+                            <p style="text-align: right;">
+                                <a id="open-password-menu" href="#">Change password.</a>
+                            </p>
                             <button type="submit" class="btn bg-olive btn-block" id="confirm-button">Confirm</button>
                         </div>
                     {/if}
@@ -185,7 +188,72 @@
 <script src="{$BASE_URL}js/bootstrap-tagsinput.min.js" type="text/javascript"></script>
 <script src="{$BASE_URL}js/plugins/bootstrap3-dialog/bootstrap-dialog.min.js" type="text/javascript"></script>
 <script type="text/javascript">
+    var accountSettings =
+            '<div class="form-group" ><p><input type="password" class="form-control" id="old-pass" placeholder="Old password"/></p></div>' +
+            '<div class="form-group" ><p><input type="password" id="new-pass" class="form-control" placeholder="New password"/></p>' +
+            '<p><input type="password" class="form-control" id="confirm-new" placeholder="Confirm"/></p></div>';
     $(function () {
+        $("#open-password-menu").click(function (event) {
+           event.preventDefault();
+            BootstrapDialog.show({
+                type: BootstrapDialog.TYPE_PRIMARY,
+                size: BootstrapDialog.SIZE_NORMAL,
+                title: 'Account Settings',
+                message: accountSettings,
+                buttons: [{
+                    label: 'Confirm',
+                    cssClass: 'btn-success',
+                    action: function(dialogRef){
+                        if ($('#new-pass').val() != $('#confirm-new').val()) {
+                            BootstrapDialog.alert({
+                                type: BootstrapDialog.TYPE_DANGER,
+                                title: 'Oops!',
+                                message: 'Passwords don\'t match.'});
+                            return;
+                        }
+                        else if ($('#new-pass').val() == $('#old-pass').val()) {
+                            BootstrapDialog.alert({
+                                type: BootstrapDialog.TYPE_DANGER,
+                                title: 'Oops!',
+                                message: 'Changing your password to the same thing is not productive.'});
+                            return;
+                        }
+                        var $button = this; // 'this' here is a jQuery object that wrapping the <button> DOM element.
+                        $button.disable();
+                        $button.spin();
+                        $.ajax({
+                            url: '{$BASE_URL}/actions/members/changepass.php',
+                            type: 'POST',
+                            data: {literal}{ old_pass: $("#old-pass").val(), new_pass: $("#new-pass").val()}{/literal},
+                            success: function (a) {
+                                BootstrapDialog.alert({
+                                    type: BootstrapDialog.TYPE_SUCCESS,
+                                    title: 'Success!',
+                                    message: 'Password changed successfully.\nDon\'t Forget it!'});
+                                $button.enable();
+                                $button.stopSpin();
+                                dialogRef.close();
+                            },
+                            error: function (a, b, c) {
+                                BootstrapDialog.alert({
+                                    type: BootstrapDialog.TYPE_DANGER,
+                                    title: 'Oops!',
+                                    message: 'Failed to update your password. :(\nError: ' + c});
+                                $button.enable();
+                                $button.stopSpin();
+                            }
+                        });
+                    }
+                }, {
+                    label: 'Cancel',
+                    cssClass: 'btn-error',
+                    action: function(dialogRef){
+                        dialogRef.close();
+                    }
+                }]
+            });
+        });
+
         $("#interests-field + .bootstrap-tagsinput").mouseover(function (event) {
             event.preventDefault();
             $("#tags-info").removeClass("hidden");
@@ -213,7 +281,6 @@
                     $('#processing_submit_section').addClass('hidden');
                     $("#confirm-button").removeClass("hidden");
                     document.location.href='#tab_about';
-
                 },
                 error: function (a, b, c) {
                     BootstrapDialog.alert({
