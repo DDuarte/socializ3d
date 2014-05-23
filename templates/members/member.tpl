@@ -103,7 +103,7 @@
                     <li class="pull-left header">
                         {$member.name}'s Profile
                     </li>
-                    {if $IS_LOGGED_IN}
+                    {if $IS_LOGGED_IN && $LOGGED_ID != $member.id}
                     <li class="pull-left">
                         <button id="add-to-group-btn" class="btn bg-blue btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">
                             <i class="fa fa-plus-square-o"></i>
