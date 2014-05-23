@@ -9,13 +9,11 @@ class Toro
         $request_method = strtolower($_SERVER['REQUEST_METHOD']);
         $path_info = '/';
 	
-	        $pos = strpos($_SERVER['REQUEST_URI'], "?");
+	    $pos = strpos($_SERVER['REQUEST_URI'], "?");
         if ($pos == false)
             $result = $_SERVER['REQUEST_URI'];
         else
             $result = substr($_SERVER['REQUEST_URI'], 0, $pos);
-
-        error_log($result);
 
         if ($result !== $_SERVER['SCRIPT_NAME']){
         } else if (!empty($_SERVER['PATH_INFO'])) {
