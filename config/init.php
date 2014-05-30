@@ -7,6 +7,7 @@ $BASE_URL = '/~lbaw1313/final/';
 $GRAVATAR_BASE_URL = 'http://www.gravatar.com/avatar/';
 
 $MODELS_PER_PAGE = 20;
+$MODELS_FOLDER = "archive";
 date_default_timezone_set('GMT');
 
 $conn = new PDO('pgsql:host=vdbm.fe.up.pt;dbname=lbaw1313', 'lbaw1313', 'sM553sn4');
