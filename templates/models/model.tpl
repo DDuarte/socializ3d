@@ -1,7 +1,7 @@
 <section class="content">
     <div class="row">
         <div id="model-display" class="col-md-8 col-md-offset-2">
-            <img class="center-block box" src="http://placehold.it/800x600" alt="..."> <!-- TODO: Model Display -->
+            <img class="center-block box" src="http://placehold.it/800x600" alt="...">
         </div>
     </div>
 
@@ -19,7 +19,7 @@
                     </li>
                     <li>
                         <a href="#tab_comments" data-toggle="tab">Comments
-                            <span class="badge">{$model.numComments}</span> <!-- TODO: Number of comments -->
+                            <span class="badge">{$model.numComments}</span>
                         </a>
                     </li>
                     <li class="pull-left header">
@@ -33,26 +33,23 @@
                                 <div class="user-panel">
                                     <div class="pull-left image">
                                         <img src="{$GRAVATAR_URL}{$model.hash}?d=identicon" class="img-square"
-                                             alt="User Image"/> <!-- TODO: Author's Avatar-->
-                                        <!-- TODO: Author's Avatar-->
+                                             alt="User Image"/>
                                     </div>
                                     <div class="pull-left info">
                                         <p>Author:
                                             <a class="dynamic_load"
                                                href="{$BASE_URL}{$MEMBERS}/{$model.idauthor}">{$model.nameauthor}</a>
-                                            <!-- TODO: Author's name -->
                                         </p>
 
                                         <p>
                                             <time class="timeago"
                                                   datetime="{$model.createdate}">{$model.createdate}</time>
-                                            <!-- TODO: Creation Date -->
                                         </p>
                                     </div>
                                 </div>
                                 <h4>Description:</h4>
 
-                                <p>{$model.description}</p> <!-- TODO: Description -->
+                                <p>{$model.description}</p>
                                 {if $IS_LOGGED_IN}
                                     <p>
                                         <button id="download-btn" class="btn bg-blue btn-social">
@@ -74,7 +71,7 @@
                                     <div class="box-header">
                                         <h3 class="box-title">Tags</h3>
                                     </div>
-                                    <div class="box-body"> <!-- TODO: Tags -->
+                                    <div class="box-body">
                                         {foreach $model.tagsArray as $tag}
                                             <span class="btn bg-white btn-flat margin text-black">{$tag.name}</span>
                                         {/foreach}

@@ -61,15 +61,17 @@
 <section class="content">
     <div class="row">
         <div class="col-md-8 col-centered" id="upload-form">
-            <form action="{$BASE_URL}upload" method="post">
+            <form action="{$BASE_URL}upload" method="post"  enctype="multipart/form-data">
 
                 <div class="box-body">
-                    <!-- <div class="form-group">
+                    {*<div class="form-group">
                         <div id="drop-files" class="box box-drop col-centered">
                             <h2>Drag &amp; drop your file here or</h2>
                             <div id="upload-button" class="btn btn-primary btn-lg btn-drop">Choose a file to upload</div>
                         </div>
-                    </div> -->
+                    </div>*}
+
+                    <input type="file" name="file" />
 
                     <hr>
 
@@ -86,12 +88,19 @@
                     <div class="form-group">
                         <label for="to-field">To:</label>
                         <select class="form-control" id="to-field" name="to">
+                            <option>Private</option>
                             <option>Public</option>
                             <option>Friends</option>
-                            {foreach $userInfo.groups as $group}
-                                <option>{$group.groupname}</option>
-                            {/foreach}
                         </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Groups: </label>
+                        <div class="form-control" style="overflow-y:auto; overflow-x:hidden; max-height:100px; height: inherit;">
+                            {foreach $userInfo.groups as $group}
+                                <span style="float: left; clear: both"> <input type="checkbox" name="groups[]" value="{$group.groupid}" /><span style="margin-left: 10px">{$group.groupname}</span></span>
+                            {/foreach}
+                        </div>
                     </div>
 
                     <div class="form-group">
