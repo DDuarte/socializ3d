@@ -37,8 +37,8 @@ class UploadHandler
             exit;
         }
 
-        $name = $_POST['name'];
-        $description = $_POST['description'];
+        $name = strip_tags($_POST['name']);
+        $description = strip_tags($_POST['description']);
         $visibility = strtolower($_POST['to']);
         $tags = $_POST['tags'];
 
