@@ -52,7 +52,7 @@ class UploadHandler
         $archive_dir = $BASE_DIR . $MODELS_FOLDER ."/";
 
         $date = new DateTime();
-        $time_stamp = $date->getTimestamp();
+        $time_stamp = $date->format('U');
 
         // TODO validate model file
 
