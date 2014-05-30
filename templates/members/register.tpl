@@ -34,7 +34,8 @@
                 </div>
                 <div class="form-group">
                     <label for="dateOfBirth-field">Date of Birth</label>
-                    <input id="birthDataField" type="text" class="form-control" data-mask="" name="birthDate" placeholder="Date of Birth"/>
+                    <input type="date" id="dateOfBirth-field" name="birthDate" class="form-control"
+                           placeholder="Date of Birth"/>
                 </div>
                 <div class="form-group">
                     <label for="userid-field">User ID</label>
@@ -76,12 +77,7 @@
 
 <!-- jQuery 2.0.2 -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-<!-- InputMask -->
-<script src="{$BASE_URL}js/plugins/input-mask/jquery.inputmask.js" type="text/javascript"></script>
-<script src="{$BASE_URL}js/plugins/input-mask/jquery.inputmask.date.extensions.js" type="text/javascript"></script>
-<script src="{$BASE_URL}js/plugins/input-mask/jquery.inputmask.extensions.js" type="text/javascript"></script>
 <!-- Bootstrap -->
-<script src="{$BASE_URL}js/bootstrap.min.js" type="text/javascript"></script>
-<script src="{$BASE_URL}js/pages/register.js" type="text/javascript"></script>
+<script src="js/bootstrap.min.js" type="text/javascript"></script>
 </body>
 </html>

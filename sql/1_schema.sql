@@ -1,6 +1,5 @@
 -- DROP SCHEMA final CASCADE;
 -- CREATE SCHEMA final;
-
 SET search_path TO final;
 
 DROP TYPE IF EXISTS visibility_group CASCADE;
