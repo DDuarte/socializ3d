@@ -246,7 +246,9 @@ CREATE OR REPLACE FUNCTION check_not_existent_friendship() RETURNS TRIGGER AS $$
 
         IF EXISTS(SELECT 1 FROM Friendship WHERE idMember1 = minId AND idMember2 = maxId) THEN
             RAISE EXCEPTION 'Cannot re-invite friends (friendship). (%, %)', NEW.idReceiver, NEW.idSender;
-        ELSIF EXISTS(SELECT 1 FROM FriendshipInvite WHERE idReceiver = NEW.idSender AND idSender = NEW.idReceiver) THEN
+        ELSIF EXISTS(SELECT 1 FROM FriendshipInvite WHERE
+          ((idReceiver = NEW.idSender AND idSender = NEW.idReceiver) OR (idReceiver = NEW.idReceiver AND idSender = NEW.idSender))
+          AND accepted IS NULL) THEN
             RAISE EXCEPTION 'Cannot re-invite friends (FriendshipInvite). (%, %)', NEW.idReceiver, NEW.idSender;
         END IF;
         RETURN NEW;
@@ -293,7 +295,7 @@ EXECUTE PROCEDURE add_to_group_on_application_acceptance();
 CREATE OR REPLACE FUNCTION friendship_symmetry() RETURNS TRIGGER AS $$
     BEGIN
         INSERT INTO Friendship (idMember1, idMember2, createDate) VALUES (NEW.idMember2, NEW.idMember1, NEW.createDate);
-        RETURN NEW;
+        RETURN NULL;
     END;
 $$ LANGUAGE plpgsql;
 
@@ -306,11 +308,7 @@ FOR EACH ROW WHEN (NEW.idMember1 > NEW.idMember2) EXECUTE PROCEDURE friendship_s
 
 CREATE OR REPLACE FUNCTION create_friendship_on_invite_acceptance() RETURNS TRIGGER AS $$
     BEGIN
-        IF (NEW.idReceiver < NEW.idSender) THEN
-            INSERT INTO Friendship (idMember1, idMember2) VALUES (NEW.idReceiver, NEW.idSender);
-        ELSE
-            INSERT INTO Friendship (idMember2, idMember1) VALUES (NEW.idReceiver, NEW.idSender);
-        END IF;
+        INSERT INTO Friendship (idMember1, idMember2) VALUES (NEW.idReceiver, NEW.idSender);
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;

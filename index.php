@@ -10,6 +10,7 @@ include_once($BASE_DIR . 'actions/models/model.php');
 include_once($BASE_DIR . 'actions/models/comments.php');
 include_once($BASE_DIR . 'actions/models/votes.php');
 include_once($BASE_DIR . 'actions/members/member.php');
+include_once($BASE_DIR . 'actions/members/friend.php');
 include_once($BASE_DIR . 'actions/uploadAction.php');
 include_once($BASE_DIR . 'actions/groups/group.php');
 include_once($BASE_DIR . 'actions/groups/create.php');
@@ -41,6 +42,7 @@ Toro::serve(array(
     '/models/:number/comments/:number' => 'CommentsHandler',
     '/models/:number/votes' => 'VotesHandler',
     '/members/:number' => 'MemberHandler',
+    '/members/friend/:number' => 'FriendsHandler',
     '/upload' => 'UploadHandler',
     '/groups/:number' => 'GroupHandler',
     '/groups/create' => 'GroupCreateHandler',

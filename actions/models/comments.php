@@ -13,8 +13,14 @@ class CommentsHandler {
         global $BASE_DIR;
         global $smarty;
 
+        $memberId = getLoggedId();
+        if (!$memberId) {
+            header('HTTP/1.1 403 Forbidden');
+            exit;
+        }
+
         if (isset($_POST['content']) && strlen($_POST['content']) > 0)
-            insertComment(getLoggedId(), $modelId, htmlspecialchars($_POST['content']));
+            insertComment($memberId, $modelId, htmlspecialchars($_POST['content']));
 
         header('Location: ' . $_SERVER['HTTP_REFERER'] . '#tab_comments');
     }
