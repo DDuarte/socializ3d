@@ -14,13 +14,13 @@ class GroupHandler {
         global $BASE_DIR;
 
         if (!isGroupVisibleToMember($groupId, getLoggedId())) {
-            get404Page();
+            http_response_code(404);
             return;
         }
 
         $group = getGroup($groupId);
         if ($group == false) {
-            get404Page();
+            http_response_code(404);
             return;
         }
 
@@ -34,13 +34,13 @@ class GroupHandler {
         global $smarty;
 
         if (!isGroupVisibleToMember($groupId, getLoggedId())) {
-            get404Page_xhr();
+            http_response_code(404);
             return;
         }
 
         $group = getGroup($groupId);
         if ($group == false) {
-            get404Page_xhr();
+            http_response_code(404);
             return;
         }
 

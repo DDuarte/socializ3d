@@ -14,13 +14,13 @@ class ModelHandler {
         global $BASE_DIR;
 
         if (!isModelVisibleToMember($modelId, getLoggedId())) {
-            get404Page();
+            http_response_code(404);
             return;
         }
 
         $model = getModel($modelId);
         if ($model == false) {
-            get404Page();
+            http_response_code(404);
             return;
         }
 
@@ -34,13 +34,13 @@ class ModelHandler {
         global $smarty;
 
         if (!isModelVisibleToMember($modelId, getLoggedId())) {
-            get404Page_xhr();
+            http_response_code(404);
             return;
         }
 
         $model = getModel($modelId);
         if ($model == false) {
-            get404Page_xhr();
+            http_response_code(404);
             return;
         }
 
