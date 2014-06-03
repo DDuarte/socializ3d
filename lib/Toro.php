@@ -82,6 +82,12 @@ class Toro
             if (method_exists($handler_instance, $request_method)) {
                 ToroHook::fire('before_handler', compact('routes', 'discovered_handler', 'request_method', 'regex_matches'));
                 $result = call_user_func_array(array($handler_instance, $request_method), $regex_matches);
+                $ret_code = http_response_code();
+                if ($ret_code != 200) {
+                    if (self::is_xhr_request())
+                        $ret_code .= '_xhr';
+                    ToroHook::fire($ret_code . "", compact('routes', 'discovered_handler', 'request_method', 'regex_matches'));
+                }
                 ToroHook::fire('after_handler', compact('routes', 'discovered_handler', 'request_method', 'regex_matches', 'result'));
             }
             else {
