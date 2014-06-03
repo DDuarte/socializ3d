@@ -273,10 +273,19 @@
                 url: '{$BASE_URL}/members/friend/{$member.id}',
                 type: 'DELETE',
                 success: function (a) {
-                    BootstrapDialog.alert({
+                    var diagInstance = new BootstrapDialog({
                         title: 'Success!',
-                        message: 'Removed this user from your friend list.'});
-                    window.location.reload(true);
+                        message: 'Removed this user from your friend list.',
+                        buttons: [{
+                            label: 'Close',
+                            action: function(dialogItself){
+                                dialogItself.close();
+                                window.location.reload(true);
+                            }
+                        }]
+                    });
+                    diagInstance.setClosable(false);
+                    diagInstance.open();
                 },
                 error: function (a, b, c) {
                     BootstrapDialog.alert({
@@ -294,10 +303,19 @@
                 url: '{$BASE_URL}/members/friend/{$member.id}',
                 type: 'POST',
                 success: function (a) {
-                    BootstrapDialog.alert({
+                    var diagInstance = new BootstrapDialog({
                         title: 'Success!',
-                        message: 'Sent this member a friend request!'});
-                    window.location.reload(true);
+                        message: 'Sent this member a friend request!',
+                        buttons: [{
+                            label: 'Close',
+                            action: function(dialogItself){
+                                dialogItself.close();
+                                window.location.reload(true);
+                            }
+                        }]
+                    });
+                    diagInstance.setClosable(false);
+                    diagInstance.open();
                 },
                 error: function (a, b, c) {
                     BootstrapDialog.alert({
