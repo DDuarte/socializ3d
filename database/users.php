@@ -25,6 +25,15 @@ function getMember($id, $id2)
         }
     }
 
+    $result['friendRequests'] = getUnansweredFriendRequestsOfMember($id);
+    $result['sentRequest'] = false;
+    foreach ($result['friendRequests'] as $value) {
+        if ($value['idsender'] == $id2) {
+            $result['sentRequest'] = true;
+            break;
+        }
+    }
+
     $result['groups'] = getGroupsOfMember($id);
     $result['interests_array'] = getMemberInterests($id);
     $result['interests'] = implode(', ', $result['interests_array']);
@@ -226,4 +235,35 @@ function updateMemberPassword($memberId, $newPassword)
     global $conn;
     $stmt = $conn->prepare("UPDATE RegisteredUser SET passwordHash = ? WHERE id = ?");
     $stmt->execute(array(hash('sha256', $newPassword), $memberId));
+}
+
+function createFriendRequest($senderId, $receiverId)
+{
+    global $conn;
+    $stmt = $conn->prepare("INSERT INTO FriendshipInvite(idReceiver, idSender) VALUES (?, ?)");
+    $stmt->execute(array($receiverId, $senderId));
+}
+
+function deleteFriendship($member1, $member2)
+{
+    global $conn;
+    $stmt = $conn->prepare("DELETE FROM Friendship WHERE idMember1 = :idMember1 AND idMember2 = :idMember2;");
+    $stmt->execute(array($member1, $member2));
+}
+
+function getUnansweredFriendRequestsOfMember($id)
+{
+    global $conn;
+    $stmt = $conn->prepare("SELECT id, idReceiver, idSender FROM FriendshipInvite WHERE idReceiver = :id AND accepted IS NULL");
+    $stmt->execute(array(':id' => $id));
+    $result = $stmt->fetchAll();
+
+    return $result;
+}
+
+function answerFriendshipInvite($friendshipInviteId, $answer)
+{
+    global $conn;
+    $stmt = $conn->prepare("UPDATE FriendshipInvite SET accepted = :accepted WHERE FriendshipInvite.id = :id;");
+    $stmt->execute(array($answer, $friendshipInviteId));
 }

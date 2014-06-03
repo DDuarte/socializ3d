@@ -116,8 +116,8 @@
                             <i class="fa fa-times"></i>
                             <span>Unfriend</span>
                         </button>
-                        {else}
-                        <button class="btn btn-primary">
+                        {elseif !$member.sentRequest}
+                        <button class="btn btn-primary" id="friend-add-button">
                             <i class="fa fa-user"></i>
                             <span>Add friend<span>
                         </button>
@@ -264,6 +264,26 @@
         $("#interests-field + .bootstrap-tagsinput").mouseout(function (event) {
             event.preventDefault();
             $("#tags-info").addClass("hidden");
+        });
+
+        $("#friend-add-button").click(function (event) {
+            event.preventDefault();
+            $('#friend-add-button').addClass('hidden');
+            $.ajax({
+                url: '{$BASE_URL}/members/friend/{$member.id}',
+                type: 'POST',
+                success: function (a) {
+                    BootstrapDialog.alert({
+                        title: 'Success!',
+                        message: 'Sent this member a friend request!'});
+                },
+                error: function (a, b, c) {
+                    BootstrapDialog.alert({
+                        title: 'Oops!',
+                        message: 'Could not process your request at this time. :(\nError: ' + c});
+                    $('#friend-add-button').removeClass("hidden");
+                }
+            });
         });
 
         $("#confirm-button").click(function (event) {

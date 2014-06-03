@@ -246,7 +246,9 @@ CREATE OR REPLACE FUNCTION check_not_existent_friendship() RETURNS TRIGGER AS $$
 
         IF EXISTS(SELECT 1 FROM Friendship WHERE idMember1 = minId AND idMember2 = maxId) THEN
             RAISE EXCEPTION 'Cannot re-invite friends (friendship). (%, %)', NEW.idReceiver, NEW.idSender;
-        ELSIF EXISTS(SELECT 1 FROM FriendshipInvite WHERE idReceiver = NEW.idSender AND idSender = NEW.idReceiver) THEN
+        ELSIF EXISTS(SELECT 1 FROM FriendshipInvite WHERE
+          ((idReceiver = NEW.idSender AND idSender = NEW.idReceiver) OR (idReceiver = NEW.idReceiver AND idSender = NEW.idSender))
+          AND accepted IS NULL) THEN
             RAISE EXCEPTION 'Cannot re-invite friends (FriendshipInvite). (%, %)', NEW.idReceiver, NEW.idSender;
         END IF;
         RETURN NEW;
