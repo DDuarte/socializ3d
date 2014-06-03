@@ -2,20 +2,38 @@
 
 class UploadHandler
 {
-    function get()
+    function page($is_xhr)
     {
         global $smarty;
         global $BASE_DIR;
-        include($BASE_DIR . 'pages/common/header.php');
-        include($BASE_DIR . 'pages/upload.php');
-        include($BASE_DIR . 'pages/common/footer.php');
+
+        $memberId = getLoggedId();
+
+        if ($memberId == null) {
+            http_response_code(403);
+            return;
+        }
+
+        $userInfo = getUserSidebarInfo($memberId);
+
+        if (! $is_xhr)
+            include($BASE_DIR . 'pages/common/header.php');
+
+        $smarty->assign('userInfo', $userInfo);
+        $smarty->display('upload.tpl');
+
+        if (! $is_xhr)
+            include($BASE_DIR . 'pages/common/footer.php');
+    }
+
+    function get()
+    {
+        $this->page(false);
     }
 
     function get_xhr()
     {
-        global $smarty;
-        global $BASE_DIR;
-        include($BASE_DIR . 'pages/upload.php');
+        $this->page(true);
     }
 
     function post()
