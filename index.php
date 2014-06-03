@@ -3,6 +3,7 @@
 include_once('config/init.php');
 
 include_once($BASE_DIR . 'lib/Toro.php');
+include_once($BASE_DIR . 'lib/CompatUtils.php');
 
 include_once($BASE_DIR . 'actions/indexAction.php');
 include_once($BASE_DIR . 'actions/catalogActions.php');
@@ -17,24 +18,68 @@ include_once($BASE_DIR . 'actions/groups/create.php');
 include_once($BASE_DIR . 'actions/admin/stats.php');
 include_once($BASE_DIR . 'actions/notifications.php');
 
+function getErrorPage($code, $is_xhr) {
+    switch ($code) {
+        case (400):
+            $title = "Bad Request";
+            $message = "You have specified wrong parameters for the script.";
+            break;
+        case (403):
+            $title = "Forbidden";
+            $message = "You have to be logged in in order to access this page.";
+            break;
+        case (404):
+            $title = "Oops! Page not found.";
+            $message = "We could not find the page you were looking for.";
+            break;
+        case (500):
+            $title = "Oops! Something went wrong.";
+            $message = "We will work on fixing that right away. ";
+            break;
+        default:
+            $title = "Oops! An error occured.";
+            $message = "An error occured. ";
+    }
 
-$handle_404 = create_function('', 'global $BASE_DIR; global $smarty; error_log("404"); include($BASE_DIR . "pages/404.php");');
-ToroHook::add("404", $handle_404);
+    global $smarty;
+    global $BASE_DIR;
 
-$handle_404_xhr = create_function('', 'global $BASE_DIR; error_log("404_xhr"); echo file_get_contents($BASE_DIR . "pages/404.html");');
-ToroHook::add("404_xhr", $handle_404_xhr);
+    if (!$is_xhr)
+        include($BASE_DIR . 'pages/common/header.php');
 
-$handle_500 = create_function('', 'global $BASE_DIR; global $smarty; error_log("500"); include($BASE_DIR . "pages/500.php");');
-ToroHook::add("500", $handle_500);
+    $smarty->assign('code', $code);
+    $smarty->assign('title', $title);
+    $smarty->assign('message', $message);
 
-$handle_500_xhr = create_function('', 'global $BASE_DIR; error_log("500_xhr"); echo file_get_contents($BASE_DIR . "pages/500.html");');
-ToroHook::add("500_xhr", $handle_500_xhr);
+    $smarty->display("common/error.tpl");
 
-$handle_403 = create_function('', 'global $BASE_DIR; global $smarty; error_log("403"); include($BASE_DIR . "pages/403.php");');
+    if (!$is_xhr)
+        include($BASE_DIR . 'pages/common/footer.php');
+}
+
+$handle_400 = create_function('', 'getErrorPage(400, false);');
+ToroHook::add("400", $handle_400);
+
+$handle_400_xhr = create_function('', 'getErrorPage(400, true);');
+ToroHook::add("400_xhr", $handle_400_xhr);
+
+$handle_403 = create_function('', 'getErrorPage(403, false);');
 ToroHook::add("403", $handle_403);
 
-$handle_403_xhr = create_function('', 'global $BASE_DIR; error_log("403_xhr"); echo(file_get_contents($BASE_DIR . "pages/403.html"));');
+$handle_403_xhr = create_function('', 'getErrorPage(403, true);');
 ToroHook::add("403_xhr", $handle_403_xhr);
+
+$handle_404 = create_function('', 'getErrorPage(404, false);');
+ToroHook::add("404", $handle_404);
+
+$handle_404_xhr = create_function('', 'getErrorPage(404, true);');
+ToroHook::add("404_xhr", $handle_404_xhr);
+
+$handle_500 = create_function('', 'getErrorPage(500, false);');
+ToroHook::add("500", $handle_500);
+
+$handle_500_xhr = create_function('', 'getErrorPage(500, true);');
+ToroHook::add("500_xhr", $handle_500_xhr);
 
 Toro::serve(array(
     '/' => 'IndexHandler',
