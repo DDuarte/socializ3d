@@ -59,10 +59,10 @@ class FriendsHandler {
             exit;
         }
 
-        $otherRequests = getUnansweredFriendRequestsOfMember($otherMemberId);
+        $otherRequests = getUnansweredFriendRequestsOfMember($memberId);
         $requestId = null;
         foreach ($otherRequests as $key => $value) {
-            if ($otherRequests[$key]['idreceiver'] == $memberId) {
+            if ($otherRequests[$key]['idsender'] == $otherMemberId) {
                 $requestId = $otherRequests[$key]['id'];
                 break;
             }

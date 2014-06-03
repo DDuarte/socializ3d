@@ -248,7 +248,10 @@ function deleteFriendship($member1, $member2)
 {
     global $conn;
     $stmt = $conn->prepare("DELETE FROM Friendship WHERE idMember1 = :idMember1 AND idMember2 = :idMember2;");
-    $stmt->execute(array($member1, $member2));
+    if ($member1 < $member2)
+        $stmt->execute(array($member1, $member2));
+    else
+        $stmt->execute(array($member2, $member1));
 }
 
 function getUnansweredFriendRequestsOfMember($id)

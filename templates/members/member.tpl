@@ -266,6 +266,27 @@
             $("#tags-info").addClass("hidden");
         });
 
+        $("#unfriend-btn").click(function (event) {
+            event.preventDefault();
+            $('#unfriend-btn').addClass('hidden');
+            $.ajax({
+                url: '{$BASE_URL}/members/friend/{$member.id}',
+                type: 'DELETE',
+                success: function (a) {
+                    BootstrapDialog.alert({
+                        title: 'Success!',
+                        message: 'Removed this user from your friend list.'});
+                    window.location.reload(true);
+                },
+                error: function (a, b, c) {
+                    BootstrapDialog.alert({
+                        title: 'Oops!',
+                        message: 'Could not process your request at this time. :(\nError: ' + c});
+                    $('#unfriend-btn').removeClass("hidden");
+                }
+            });
+        });
+
         $("#friend-add-button").click(function (event) {
             event.preventDefault();
             $('#friend-add-button').addClass('hidden');
@@ -276,6 +297,7 @@
                     BootstrapDialog.alert({
                         title: 'Success!',
                         message: 'Sent this member a friend request!'});
+                    window.location.reload(true);
                 },
                 error: function (a, b, c) {
                     BootstrapDialog.alert({
