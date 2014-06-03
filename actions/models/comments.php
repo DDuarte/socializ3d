@@ -15,8 +15,8 @@ class CommentsHandler {
 
         $memberId = getLoggedId();
         if (!$memberId) {
-            header('HTTP/1.1 403 Forbidden');
-            exit;
+            http_response_code(403);
+            return;
         }
 
         if (isset($_POST['content']) && strlen($_POST['content']) > 0)
@@ -32,12 +32,12 @@ class CommentsHandler {
 
         $comment = getComment($commentId);
         if($comment == null) {
-            header('HTTP/1.1 404 Not Found');
-            exit;
+            http_response_code(404);
+            return;
         }
         if (getLoggedId() != $comment['idmember']) {
-            header('HTTP/1.1 403 Forbidden');
-            exit;
+            http_response_code(403);
+            return;
         }
 
         deleteComment($modelId, $commentId);

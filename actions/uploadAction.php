@@ -46,13 +46,13 @@ class UploadHandler
         $memberId = getLoggedId();
 
         if ($memberId == null) {
-            header('HTTP/1.1 403 Forbidden');
-            exit;
+            http_response_code(403);
+            return;
         }
 
         if (!isset($_POST['name']) || !isset($_POST['description']) || !isset($_POST['to']) || !isset($_POST['tags'])) {
-            header('HTTP/1.1 400 Bad Request');
-            exit;
+            http_response_code(400);
+            return;
         }
 
         $name = strip_tags($_POST['name']);
@@ -72,7 +72,43 @@ class UploadHandler
         $date = new DateTime();
         $time_stamp = $date->format('U');
 
-        // TODO validate model file
+        if (!isset($_FILES["file"]["error"]) || is_array($_FILES["file"]["error"])) {
+            http_response_code(400);
+            return;
+        }
+
+        switch ($_FILES["file"]["error"]) {
+            case UPLOAD_ERR_OK:
+                break;
+            case UPLOAD_ERR_NO_FILE:
+                http_response_code(400);
+                return;
+            case UPLOAD_ERR_INI_SIZE:
+            case UPLOAD_ERR_FORM_SIZE:
+                http_reponse_code(400);
+                return;
+            default:
+                http_reponse_code(400);
+                return;
+        }
+
+        if ($_FILES["file"]["size"] > (100 * 1024 * 1024)) { // MAX File Size 100 MB
+            http_reponse_code(400);
+            return;
+        }
+
+        $file_info = new finfo(FILEINFO_MIME_TYPE);
+        if (false === $ext = array_search(
+                $file_info->file($_FILES["file"]['tmp_name']),
+                array(
+                    'obj' => 'text/plain',
+                    'stl' => 'text/plain',
+                ),
+                true
+            )) {
+            http_response_code(400);
+            return;
+        }
 
         global $conn;
         $conn->beginTransaction();
@@ -97,8 +133,8 @@ class UploadHandler
 
         if (!move_uploaded_file($_FILES["file"]["tmp_name"], $fileName)) {
             $conn->rollBack();
-            header('HTTP/1.1 500 Internal Server Error');
-            exit;
+            http_response_code(500);
+            return;
         }
 
         if (count($tagsArray) > 0) {
@@ -115,8 +151,8 @@ class UploadHandler
                 $stmt->execute(array($memberId, $groupId));
                 if (count($stmt->fetchAll()) < 1) {
                     $conn->rollBack();
-                    header('HTTP/1.1 403 Forbidden');
-                    exit;
+                    http_response_code(403);
+                    return;
                 }
 
                 $stmt->execute(array($groupId, $modelId));

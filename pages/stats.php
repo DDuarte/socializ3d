@@ -6,12 +6,12 @@ if (!isset($BASE_DIR))
 $memberId = getLoggedId();
 
 if ($memberId == null) {
-    header('HTTP/1.0 403 Forbidden');
+    http_response_code(403);
     exit('Not authenticated.');
 }
 
 if (!isAdmin($memberId)) {
-    header('HTTP/1.0 403 Forbidden');
+    http_response_code(403);
     exit('Not an admin.');
 }
 

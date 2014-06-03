@@ -10,14 +10,14 @@ class FriendsHandler {
 
         $memberId = getLoggedId();
         if ($memberId == null) {
-            header('HTTP/1.1 403 Forbidden');
-            exit;
+            http_response_code(403);
+            return;
         }
 
         $otherMember = getMember($otherMemberId, $memberId);
         if ($otherMember['myFriend']) {
-            header('HTTP/1.1 409 Already a friend');
-            exit;
+            http_response_code(409); // Already a friend
+            return;
         }
 
         $myRequests = getUnansweredFriendRequestsOfMember($memberId);
@@ -42,8 +42,8 @@ class FriendsHandler {
             }
         }
         if ($alreadySent) {
-            header('HTTP/1.1 409 Already sent a request');
-            exit;
+            http_response_code(409); // Already sent request
+            return;
         }
 
         createFriendRequest($memberId, $otherMemberId);
@@ -55,8 +55,8 @@ class FriendsHandler {
 
         $memberId = getLoggedId();
         if ($memberId == null) {
-            header('HTTP/1.1 403 Forbidden');
-            exit;
+            http_response_code(403);
+            return;
         }
 
         $otherRequests = getUnansweredFriendRequestsOfMember($memberId);
@@ -74,8 +74,8 @@ class FriendsHandler {
 
         $otherMember = getMember($otherMemberId, $memberId);
         if (!$otherMember['myFriend']) {
-            header('HTTP/1.1 409 This member is not your friend');
-            exit;
+            http_response_code(409); // This member is not your friend
+            return;
         }
 
         deleteFriendship($memberId, $otherMemberId);

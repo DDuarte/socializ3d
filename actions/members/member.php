@@ -16,8 +16,8 @@ class MemberHandler {
 
         $member = getMember($memberId, getLoggedId());
         if ($member == false) {
-            $smarty->display("common/404.tpl");
-            exit;
+            http_response_code(404);
+            return;
         }
         getMemberPage($member);
     }
@@ -28,8 +28,8 @@ class MemberHandler {
 
         $member = getMember($memberId, getLoggedId());
         if ($member == false) {
-            include($BASE_DIR . "pages/404.php");
-            exit;
+            http_response_code(404);
+            return;
         }
 
         include($BASE_DIR . 'pages/common/header.php');
@@ -43,13 +43,13 @@ class MemberHandler {
 
         $loggedUserId = getLoggedId();
         if ($memberId != $loggedUserId) {
-            header('HTTP/1.1 403 Forbidden');
-            exit;
+            http_response_code(403);
+            return;
         }
 
         if (!isset($_POST['about']) || !isset($_POST['interests'])) {
-            header('HTTP/1.1 400 Bad Request');
-            exit;
+            http_response_code(400);
+            return;
         }
 
         $aboutInfo = trim($_POST['about']);

@@ -9,14 +9,14 @@ class VotesHandler {
 
         $loggedUserId = getLoggedId();
         if ($loggedUserId == null) {
-            header('HTTP/1.1 403 Forbidden');
-            exit;
+            http_response_code(403);
+            return;
         }
 
 
         if (!isset($_POST['vote'])) {
-            header('HTTP/1.1 400 Bad Request');
-            exit;
+            http_response_code(400);
+            return;
         }
 
         $value = filter_var($_POST['vote'], FILTER_VALIDATE_BOOLEAN);
