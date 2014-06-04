@@ -61,6 +61,11 @@
 <section class="content">
     <div class="row">
         <div class="col-md-8 col-centered" id="upload-form">
+            <div id="error_messages" class="hidden">
+                {foreach $ERROR_MESSAGES as $error}
+                    <div class="error">{$error}<a class="close" href="#">X</a></div>
+                {/foreach}
+            </div>
             <form action="{$BASE_URL}upload" method="post"  enctype="multipart/form-data">
 
                 <div class="box-body">
