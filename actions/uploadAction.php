@@ -97,9 +97,9 @@ class UploadHandler
             return;
         }
 
-        $file_info = new finfo(FILEINFO_MIME_TYPE);
+        $content_type = mime_content_type($_FILES["file"]['tmp_name']);
         if (false === $ext = array_search(
-                $file_info->file($_FILES["file"]['tmp_name']),
+                $content_type,
                 array(
                     'obj' => 'text/plain',
                     'stl' => 'text/plain',
