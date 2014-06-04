@@ -8,12 +8,22 @@ function getGroupPage($group) {
     $smarty->display('groups/group.tpl');
 }
 
+function updateLastAccess($group, $memberId) {
+    global $conn;
+
+    $stmt = $conn->prepare("UPDATE GroupUser SET lastAccess = now() WHERE idGroup = ? AND idMember = ?");
+    $stmt->execute(array($group, $memberId));
+}
+
 class GroupHandler {
     function get($groupId) {
         global $smarty;
         global $BASE_DIR;
+        global $conn;
 
-        if (!isGroupVisibleToMember($groupId, getLoggedId())) {
+        $memberId = getLoggedId();
+
+        if (!isGroupVisibleToMember($groupId, $memberId)) {
             http_response_code(404);
             return;
         }
@@ -23,6 +33,8 @@ class GroupHandler {
             http_response_code(404);
             return;
         }
+
+        updateLastAccess($groupId, $memberId);
 
         include($BASE_DIR . 'pages/common/header.php');
         getGroupPage($group);
@@ -32,8 +44,11 @@ class GroupHandler {
     function get_xhr($groupId) {
         global $BASE_DIR;
         global $smarty;
+        global $conn;
 
-        if (!isGroupVisibleToMember($groupId, getLoggedId())) {
+        $memberId = getLoggedId();
+
+        if (!isGroupVisibleToMember($groupId, $memberId)) {
             http_response_code(404);
             return;
         }
@@ -43,6 +58,8 @@ class GroupHandler {
             http_response_code(404);
             return;
         }
+
+        updateLastAccess($groupId, $memberId);
 
         getGroupPage($group);
     }
