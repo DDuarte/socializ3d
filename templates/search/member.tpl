@@ -1,6 +1,6 @@
 <article class="search-result row user">
     <div class="col-xs-12 col-sm-12 col-md-3">
-        <a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$member.id}" title="Lorem ipsum" class="thumbnail">
+        <a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$member.id}" class="thumbnail">
             <img src="{$GRAVATAR_URL}{$member.hash}?s=140&d=identicon" alt="{$member.name}" />
         </a>
     </div>
@@ -14,10 +14,18 @@
                 <i class="glyphicon glyphicon-tags"></i>
                 <span>Member</span>
             </li>
-            {if !$member.isFriend}
-            <li>
-                <a href="#" class="btn btn-primary" role="button">Add Friend</a>
-            </li>
+            {if $loggedId != null && $member.id != $loggedId}
+
+            {if $member.receivedRequest}
+                <li>
+                    <a href="#" class="btn btn-primary" role="button">Accept Friendship</a>
+                </li>
+            {elseif !$member.sentRequest && !$member.isFriend}
+                <li>
+                    <a href="#" class="btn btn-primary" role="button">Add Friend</a>
+                </li>
+            {/if}
+
             {/if}
         </ul>
     </div>

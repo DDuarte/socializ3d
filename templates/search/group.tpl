@@ -6,17 +6,11 @@
     </div>
     <div class="col-xs-12 col-sm-12 col-md-2">
         <ul class="meta-search">
-            {*
-            <li>
-                <i class="glyphicon glyphicon-calendar"></i>
-                <span>02/13/2014</span>
-            </li>
-            *}
             <li>
                 <i class="glyphicon glyphicon-tags"></i>
                 <span>Group</span>
             </li>
-            {if !$group.memberInGroup}
+            {if $group.memberInGroup}
             <li>
                 <a href="#" class="btn btn-primary" role="button">Leave Group</a>
             </li>

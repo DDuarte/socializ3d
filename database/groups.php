@@ -2,6 +2,22 @@
 
 include_once('users.php');
 
+function getSimpleGroup($id) {
+    $loggedId = getLoggedId();
+
+    global $conn;
+    $stmt = $conn->prepare("SELECT * FROM get_group_profile(?, ?)");
+    $stmt->execute(array($loggedId, $id));
+    $result = $stmt->fetch();
+
+    if ($result == false) return false;
+
+    $result['id'] = $id;
+    $result['isGroupAdmin'] = isGroupAdmin($id, $loggedId) || isAdmin($loggedId);
+    $result['memberInGroup'] = isGroupMember($id, $loggedId);
+    return $result;
+}
+
 function getGroup($id) {
     $loggedId = getLoggedId();
 
@@ -57,6 +73,14 @@ function isGroupVisibleToMember($groupId, $memberId) {
 function isGroupAdmin($idGroup, $idMember) {
     global $conn;
     $stmt = $conn->prepare("SELECT 1 FROM GroupUser WHERE idGroup = ? AND idMember = ? AND isadmin = TRUE");
+    $stmt->execute(array($idGroup, $idMember));
+    $result = $stmt->fetch();
+    return $result;
+}
+
+function isGroupMember($idGroup, $idMember) {
+    global $conn;
+    $stmt = $conn->prepare("SELECT 1 FROM GroupUser WHERE idGroup = ? AND idMember = ?");
     $stmt->execute(array($idGroup, $idMember));
     $result = $stmt->fetch();
     return $result;

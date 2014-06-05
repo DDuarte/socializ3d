@@ -19,6 +19,7 @@ include_once($BASE_DIR . 'actions/groups/invite.php');
 include_once($BASE_DIR . 'actions/groups/create.php');
 include_once($BASE_DIR . 'actions/admin/stats.php');
 include_once($BASE_DIR . 'actions/notifications.php');
+include_once($BASE_DIR . 'actions/searchAction.php');
 
 function getErrorPage($code, $is_xhr) {
     switch ($code) {
@@ -102,5 +103,6 @@ Toro::serve(array(
     '/groups/:number/invite/:number' => 'InvitationHandler',
     '/groups/create' => 'GroupCreateHandler',
     '/admin/stats' => 'StatisticsHandler',
-    '/notifications' => 'NotificationsHandler'
+    '/notifications' => 'NotificationsHandler',
+    '/search' => 'SearchHandler'
 ));

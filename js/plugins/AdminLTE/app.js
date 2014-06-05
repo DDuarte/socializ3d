@@ -83,44 +83,42 @@ function hash_change() {
     Socializ3d.hash = map;
 }
 
-function load_page(event) {
-    function load_ajax(page) {
-        var pageURL= Socializ3d.BASE_URL + page;
-        console.log(pageURL);
-        $("#content-ajax").load(pageURL, function(response, status, xhr) {
-            if (status == "error" && page != "404.html") {
-                load_ajax("404.html");
-            } else {
-                window.history.pushState({html: response}, "", href);
-                hash_change();
-                $("time.timeago").timeago();
-            }
-        });
-    }
+function load_ajax(page) {
+    var pageURL= Socializ3d.BASE_URL + page;
+    console.log(pageURL);
+    $.ajax({
+        url: pageURL,
+        type: 'GET',
+        success: function(data){
+            $("#content-ajax").children().remove();
+            $(data).appendTo("#content-ajax");
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            $("#content-ajax").children().remove();
+            $(jqXHR.responseText).appendTo("#content-ajax");
+        },
+        complete: function (jqXHR, textStatus ) {
+            window.history.pushState({html: jqXHR.responseText}, "", pageURL);
+            hash_change();
+            $("time.timeago").timeago();
+        }
+    });
+}
 
+function search(event) {
+    var href = 'search?q=' + $('#search-input1').val();
+    console.log(href);
+    event.preventDefault();
+    load_ajax(href);
+}
+
+function load_page(event) {
     var href = $(this).attr('href');
     var org = Socializ3d.BASE_URL;
     if (href.indexOf(org) == 0 && href.slice(org.length) != "") {
         event.preventDefault();
         load_ajax(href.slice(org.length));
     }
-}
-
-function load_ajax(name, func) {
-    $("#content-ajax").load("pages/" + name + ".html", function(response, status, XMLHttpRequest) {
-        $('.sidebar-menu .active').removeClass('active');
-        if (name !== "404" && status !== "success") {
-            load_ajax("404");
-        } else {
-            var titleElem = $("#content-ajax>title");
-            document.title = titleElem.text() + " | Socializ3d";
-            titleElem.remove();
-            $("time.timeago").timeago();
-            if (func !== undefined)
-                func();
-            $('li>a[href="#page_' + name + '"]').parent().addClass('active');
-        }
-    });
 }
 
 $(function() {
@@ -263,11 +261,13 @@ $(function() {
     hash_change();
 
     $('body').on('click', 'a.dynamic_load', load_page);
+    $('#search-form').submit(search);
     $(window).bind("popstate", function(event){
         if (event.originalEvent.state) {
             console.log(document.location.href);
             $("#content-ajax").html(event.originalEvent.state.html);
             hash_change();
+            $("time.timeago").timeago();
         }
     });
     window.history.replaceState({ html: $('#content-ajax').html() }, "", document.URL);

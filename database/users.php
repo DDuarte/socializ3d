@@ -1,5 +1,50 @@
 <?php
 
+function isFriend($id1, $id2)
+{
+    global $conn;
+    $stmt = $conn->prepare("SELECT 1 FROM get_complete_friends_of_member(:id1) WHERE memberid = :id2");
+    $stmt->execute(array(':id1' => $id1, ':id2' => $id2));
+    $result = $stmt->fetch();
+    return $result;
+}
+
+function hasRequestedFriendship($id1, $id2)
+{
+    global $conn;
+    $stmt = $conn->prepare("SELECT 1 FROM FriendshipInvite WHERE idSender = :id2 AND idReceiver = :id1 AND accepted IS NULL");
+    $stmt->execute(array(':id1' => $id1, ':id2' => $id2));
+    $result = $stmt->fetch();
+
+    return $result;
+}
+
+function getSimpleMember($id, $id2)
+{
+    global $conn;
+    $stmt = $conn->prepare("SELECT Member.id,
+                                   Member.name,
+                                   Member.about,
+                                   Member.birthDate,
+                                   RegisteredUser.username,
+                                   get_user_hash(:id) AS hash
+                            FROM Member JOIN RegisteredUser ON Member.id = RegisteredUser.id
+                            WHERE Member.id = :id");
+    $stmt->execute(array(':id' => $id));
+    $result = $stmt->fetch();
+
+    if ($result == false) return false;
+
+    $result['isFriend'] = isFriend($id, $id2);
+
+    $result['sentRequest'] = hasRequestedFriendship($id, $id2);
+    $result['receivedRequest'] = hasRequestedFriendship($id2, $id);
+
+    $result['interests_array'] = getMemberInterests($id);
+    $result['interests'] = implode(', ', $result['interests_array']);
+    return $result;
+}
+
 function getMember($id, $id2)
 {
     global $conn;

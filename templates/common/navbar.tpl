@@ -14,9 +14,9 @@
         </a>
         <!-- search form -->
         <div class="navbar-left hidden-xs">
-            <form action="#" method="get" class="navbar-form" role="search" onsubmit="document.location.hash = '#page_search-s_' + $('#search-input1').val(); return false;">
+            <form action="{$BASE_URL}search" method="get" class="navbar-form" id="search-form" role="search">
                 <div class="form-group">
-                    <input type="text" name="q" class="form-control" id="search-input1" placeholder="Search">
+                    <input type="text" name="query" class="form-control" id="search-input1" placeholder="Search">
                 </div>
                 <button type="submit" class="btn btn-default">Submit</button>
             </form>
