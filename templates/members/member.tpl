@@ -170,16 +170,16 @@
                     <ul class="todo-list notifications-list">
                         {foreach $userInfo.groups as $group}
                         <li class="notification-item notification-group-item">
-                            <input type="checkbox">
-                        <span class="text">
-                            <span class="notification-group-name">{$group.groupname}</span>
-                        </span>
+                            <input class="{$group.groupid}" type="checkbox" name="checkboxlist" />
+                            <span class="text">
+                                <span class="notification-group-name" >{$group.groupname}</span>
+                            </span>
                         </li>
                         {/foreach}
                     </ul>
                 </div>
                 <div class="box-footer">
-                    <button class="btn btn-primary">Invite</button>
+                    <button id="confirm-group-invite" class="btn btn-primary">Invite</button>
                 </div>
             </div>
         </div>
@@ -195,7 +195,7 @@
             '<div class="form-group" ><p><input type="password" id="new-pass" class="form-control" placeholder="New password"/></p>' +
             '<p><input type="password" class="form-control" id="confirm-new" placeholder="Confirm"/></p></div>';
     $(function () {
-        $("#open-password-menu").click(function (event) {
+        $('#open-password-menu').click(function (event) {
            event.preventDefault();
             BootstrapDialog.show({
                 type: BootstrapDialog.TYPE_PRIMARY,
@@ -226,7 +226,7 @@
                         $.ajax({
                             url: '{$BASE_URL}actions/members/changepass.php',
                             type: 'POST',
-                            data: {literal}{ old_pass: $("#old-pass").val(), new_pass: $("#new-pass").val()}{/literal},
+                            data: {literal}{ old_pass: $('#old-pass').val(), new_pass: $('#new-pass').val()}{/literal},
                             success: function (a) {
                                 BootstrapDialog.alert({
                                     type: BootstrapDialog.TYPE_SUCCESS,
@@ -266,7 +266,23 @@
             $("#tags-info").addClass("hidden");
         });
 
-        $("#unfriend-btn").click(function (event) {
+        $('#confirm-group-invite').click(function (event) {
+            event.preventDefault();
+            var checkValues = $('input[name=checkboxlist]:checked').map(function() {
+                return $(this).attr('class');
+            }).get();
+            if (checkValues.length == 0) {
+                BootstrapDialog.alert("You didn't choose any groups.");
+                return;
+            }
+
+            var btn = $(this);
+            btn.addClass('disabled');
+            //TODO
+            btn.removeClass('disabled');
+        });
+
+        $('#unfriend-btn').click(function (event) {
             event.preventDefault();
             $('#unfriend-btn').addClass('hidden');
             $.ajax({
@@ -291,12 +307,12 @@
                     BootstrapDialog.alert({
                         title: 'Oops!',
                         message: 'Could not process your request at this time. :(\nError: ' + c});
-                    $('#unfriend-btn').removeClass("hidden");
+                    $('#unfriend-btn').removeClass('hidden');
                 }
             });
         });
 
-        $("#friend-add-button").click(function (event) {
+        $('#friend-add-button').click(function (event) {
             event.preventDefault();
             $('#friend-add-button').addClass('hidden');
             $.ajax({
@@ -321,27 +337,27 @@
                     BootstrapDialog.alert({
                         title: 'Oops!',
                         message: 'Could not process your request at this time. :(\nError: ' + c});
-                    $('#friend-add-button').removeClass("hidden");
+                    $('#friend-add-button').removeClass('hidden');
                 }
             });
         });
 
-        $("#confirm-button").click(function (event) {
+        $('#confirm-button').click(function (event) {
             event.preventDefault();
             $('#confirm-button').addClass('hidden');
             $('#processing_submit_section').removeClass('hidden');
             $.ajax({
                 url: '{$BASE_URL}members/{$member.id}',
                 type: 'POST',
-                data: {literal}{ about: $("#about-me-field").val(), interests: $("#interests-field").val()}{/literal},
+                data: {literal}{ about: $('#about-me-field').val(), interests: $('#interests-field').val()}{/literal},
                 success: function (a) {
-                    $("#member-about-content").text($("#about-me-field").val());
-                    $("#member-interests-content").text($("#interests-field").val().replace(/, */g, ', '));
+                    $('#member-about-content').text($('#about-me-field').val());
+                    $('#member-interests-content').text($('#interests-field').val().replace(/, */g, ', '));
                     BootstrapDialog.alert({
                         title: 'Success!',
                         message: 'Updated your information successfully'});
                     $('#processing_submit_section').addClass('hidden');
-                    $("#confirm-button").removeClass("hidden");
+                    $('#confirm-button').removeClass('hidden');
                     document.location.href='#tab_about';
                 },
                 error: function (a, b, c) {
@@ -349,7 +365,7 @@
                         title: 'Oops!',
                         message: 'Could not process your request at this time. :(\nError: ' + c});
                     $('#processing_submit_section').addClass('hidden');
-                    $("#confirm-button").removeClass("hidden");
+                    $('#confirm-button').removeClass('hidden');
                 }
             });
         });
