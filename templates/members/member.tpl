@@ -172,7 +172,7 @@
             success: function (a) {
                 BootstrapDialog.alert({
                     title: 'Success!',
-                    message: 'Invited this member to join your group!'+'\n'+a
+                    message: 'Invited this member to join your group!'
                 });
                 thisButton.parent().remove();
             },

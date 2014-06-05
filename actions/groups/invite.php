@@ -55,13 +55,5 @@ class InvitationHandler {
         }
 
         createGroupInvite($memberId, $newMemberId, $groupId);
-        echo 'done';
-    }
-
-    function delete($otherMemberId) {
-        global $BASE_DIR;
-        global $smarty;
-
-        //TODO
     }
 }
