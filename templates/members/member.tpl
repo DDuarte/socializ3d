@@ -179,7 +179,7 @@
             error: function (a, b, c) {
                 BootstrapDialog.alert({
                     title: 'Oops!',
-                    message: 'Could not process your request at this time. :(\nError: ' + c});
+                    message: 'Could not process your request at this time. :(\nError: ' + (c === 'Conflict' ? 'Member is already in group or has invitation pending.' : c)});
                 thisButton.find('span').remove();
                 thisButton.removeClass('disabled');
             }
