@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Socializ3d</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
     <link href="{$BASE_URL}css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="{$BASE_URL}css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link href="{$BASE_URL}css/ionicons.min.css" rel="stylesheet" type="text/css" />
@@ -21,6 +22,10 @@
     <script src="{$BASE_URL}js/jquery-2.1.0.min.js"></script>
     <script src="{$BASE_URL}js/plugins/timeago/jquery.timeago.js" type="text/javascript"></script>
     <script src="{$BASE_URL}js/plugins/bootstrap.min.js" type="text/javascript"></script>
+
+    <script src="{$BASE_URL}js/renderer/build/three.min.js"></script>
+    <script src="{$BASE_URL}js/renderer/js/libs/system.min.js"></script>
+    
     <script type="text/javascript">
         if (typeof Socializ3d === 'undefined')
             Socializ3d = {};
