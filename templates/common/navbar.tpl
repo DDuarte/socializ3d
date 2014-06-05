@@ -91,7 +91,7 @@
                             </ul>
                         </li>
                         <li class="footer">
-                            <a class="dynamic_load" href="#page_notifications">View all</a>
+                            <a class="dynamic_load" href="{$BASE_URL}{$NOTIFICATIONS}">View all</a>
                         </li>
                     </ul>
                 </li>

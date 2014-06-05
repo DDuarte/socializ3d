@@ -42,6 +42,7 @@ $smarty->assign('MODELS_PER_PAGE', $MODELS_PER_PAGE);
 $smarty->assign('MEMBERS', 'members');
 $smarty->assign('MODELS', 'models');
 $smarty->assign('GROUPS', 'groups');
+$smarty->assign('NOTIFICATIONS', 'notifications');
 
 unset($_SESSION['success_messages']);
 unset($_SESSION['error_messages']);

@@ -17,20 +17,22 @@
                                 </span>
                                 {foreach $nots as $notification}
                                     <li>
-                                        <i class="fa fa-envelope bg-blue"></i>
+                                        <i class="{$notification.icon}"></i>
                                         <div class="timeline-item">
-                                            <span class="time"><i class="fa fa-clock-o"></i> {$notification.createdate}</span>
-
-                                            <h3 class="timeline-header"><a href="#">{$notification.nottype}</a> ...</h3>
-
-                                            <div class="timeline-body">
-                                                ...
-                                                Content goes here
-                                            </div>
-
-                                            <div class='timeline-footer'>
-                                                <a class="btn btn-primary btn-xs">...</a>
-                                            </div>
+                                            <span class="time"><time class="timeago" datetime="{$notification.createdate}">{$notification.createdate}</time></span>
+                                            {if $notification.text|count_characters:true}
+                                                <h3 class="timeline-header">{$notification.title}</h3>
+                                                <div class="timeline-body">
+                                                    {$notification.text}
+                                                </div>
+                                            {else}
+                                                <h3 class="timeline-header no-border">{$notification.title}</h3>
+                                            {/if}
+                                            {if $notification.subtext|count_characters:true}
+                                                <div class="timeline-footer">
+                                                    {$notification.subtext}
+                                                </div>
+                                            {/if}
                                         </div>
                                     </li>
                                 {/foreach}
@@ -38,7 +40,6 @@
                         {/foreach}
                     </ul>
                 </div>
-                <!-- /.box-body -->
             </div>
         </div>
     </div>
