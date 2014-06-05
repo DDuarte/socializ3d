@@ -61,10 +61,11 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 break;
             case 'GroupApplication':
                 $idGroupApplication = $r['idgroupapplication'];
-                $stmt = $conn->prepare('SELECT idGroup, idMember FROM GroupApplication WHERE id = :id');
+                $stmt = $conn->prepare('SELECT idGroup, idMember, accepted FROM GroupApplication WHERE id = :id');
                 $stmt->execute(array(':id' => $idGroupApplication));
                 $result = $stmt->fetch();
                 $groupId = $result['idgroup'];
+                $accepted = $result['accepted'];
                 $group = getGroup($groupId);
                 $groupName = $group['name'];
                 $groupLink = $BASE_URL . "groups/$groupId";
@@ -77,13 +78,20 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $r['title'] = "<a href=\"$userLink\">$userName</a> applied to your group <a href=\"$groupLink\">$groupName</a>";
                 $r['text'] = '';
                 // TODO: links
-                $r['subtext'] = "<a class=\"btn btn-primary btn-xs\">Accept</a> <a class=\"btn btn-danger btn-xs\">Decline</a>";
+                if (is_null($accepted))
+                    $r['subtext'] = "<a class=\"btn btn-primary btn-xs\">Accept</a> <a class=\"btn btn-danger btn-xs\">Decline</a>";
+                else if ($accepted)
+                    $r['subtext'] = 'This request was accepted.';
+                else
+                    $r['subtext'] = 'This request was declined.';
                 break;
             case 'FriendshipInvite':
                 $friendshipInviteId = $r['idfriendshipinvite'];
-                $stmt = $conn->prepare('SELECT idSender FROM FriendshipInvite WHERE id = :id');
+                $stmt = $conn->prepare('SELECT idSender, accepted FROM FriendshipInvite WHERE id = :id');
                 $stmt->execute(array(':id' => $friendshipInviteId));
-                $userId = $stmt->fetch()['idsender'];
+                $result = $stmt->fetch();
+                $userId = $result['idsender'];
+                $accepted = $result['accepted'];
                 $user = getMember($userId, 0);
                 $userName = $user['name'];
                 $userLink = $BASE_URL . "members/$userId";
@@ -92,7 +100,12 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $r['title'] = "<a href=\"$userLink\">$userName</a> has sent you a friend request";
                 $r['text'] = '';
                 // TODO: Links
-                $r['subtext'] = "<a href=\"$userFriendLink\" class=\"btn btn-primary btn-xs\">Accept</a> <a href=\"$userFriendLink\" class=\"btn btn-danger btn-xs\">Decline</a>";
+                if (is_null($accepted))
+                    $r['subtext'] = "<a href=\"$userFriendLink\" class=\"btn btn-primary btn-xs\">Accept</a> <a href=\"$userFriendLink\" class=\"btn btn-danger btn-xs\">Decline</a>";
+                else if ($accepted)
+                    $r['subtext'] = 'You accepted this request.';
+                else
+                    $r['subtext'] = 'You declined this request.';
                 break;
             case 'FriendshipInviteAccepted':
                 $friendshipInviteId = $r['idfriendshipinvite'];
