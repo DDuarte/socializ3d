@@ -69,7 +69,8 @@
                                 <p>{$model.description}</p>
                                 {if $IS_LOGGED_IN}
                                     <p>
-                                        <button id="download-btn" class="btn bg-blue btn-social" onclick="window.location.href='{$BASE_URL}{$MODELS}/{$model.id}/file'">
+                                        <button id="download-btn" class="btn bg-blue btn-social"
+                                                onclick="window.location.href='{$BASE_URL}{$MODELS}/{$model.id}/file'">
                                             <i class="fa fa-download"></i>
                                             <span>Download</span>
                                         </button>
@@ -210,9 +211,6 @@
 <script src="{$BASE_URL}js/plugins/morris/morris.min.js" type="text/javascript"></script>
 <script src="{$BASE_URL}js/bootstrap-tagsinput.min.js" type="text/javascript"></script>
 <script src="{$BASE_URL}js/plugins/bootstrap3-dialog/bootstrap-dialog.min.js" type="text/javascript"></script>
-
-<script src="{$BASE_URL}js/renderer/build/three.min.js"></script>
-<script src="{$BASE_URL}js/renderer/js/libs/system.min.js"></script>
 
 <script src="{$BASE_URL}js/renderer/libs/spin.js"></script>
 <script src="{$BASE_URL}js/renderer/js/controls/EditorControls.js"></script>
@@ -415,10 +413,10 @@ $(function () {
 
     var editor = new Editor();
 
-    var viewport = new Viewport( editor ).setId( 'viewport' );
+    var viewport = new Viewport(editor).setId('viewport');
     viewport.dom.className += " col-md-offset-2";
     viewport.dom.className += " col-md-8";
-    document.getElementById('rendererContainer').appendChild( viewport.dom );
+    document.getElementById('rendererContainer').appendChild(viewport.dom);
 
 
     /*var toolbar = new Toolbar( editor ).setId( 'toolbar' )
@@ -432,7 +430,7 @@ $(function () {
 
 //
 
-    editor.setTheme( editor.config.getKey( 'theme' ) );
+    editor.setTheme(editor.config.getKey('theme'));
 
     /*editor.storage.init( function () {
 
@@ -486,21 +484,21 @@ $(function () {
 
 //
 
-    document.addEventListener( 'dragover', function ( event ) {
+    document.addEventListener('dragover', function (event) {
 
         event.preventDefault();
         event.dataTransfer.dropEffect = 'copy';
 
-    }, false );
+    }, false);
 
-    document.addEventListener( 'drop', function ( event ) {
+    document.addEventListener('drop', function (event) {
 
         event.preventDefault();
         console.log("drop");
         //viewport.camera.position = THREE.Vector3(10, 10, 10);
-        editor.loader.loadFile( event.dataTransfer.files[ 0 ] );
+        editor.loader.loadFile(event.dataTransfer.files[ 0 ]);
 
-    }, false );
+    }, false);
 
     /*document.addEventListener( 'keydown', function ( event ) {
 
@@ -519,15 +517,38 @@ $(function () {
 
      }, false );*/
 
-    var onWindowResize = function ( event ) {
+    var onWindowResize = function (event) {
 
         editor.signals.windowResize.dispatch();
 
     };
 
-    window.addEventListener( 'resize', onWindowResize, false );
+    window.addEventListener('resize', onWindowResize, false);
 
     onWindowResize();
-})
-;
+
+    console.log("Here");
+
+    var link = "{$BASE_URL}{$MODELS}/{$model.id}/file";
+
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200){
+            var contentDisposition = this.getResponseHeader("Content-Disposition");
+            var matches = contentDisposition.match(/filename=(.*)/);
+            var fileName = matches[1];
+
+            console.log(this.response, typeof this.response, fileName);
+
+            var file = this.response;
+            file.name = fileName;
+
+            editor.loader.loadFile(file);
+        }
+    }
+    xhr.open('GET', '{$BASE_URL}{$MODELS}/{$model.id}/file');
+    xhr.responseType = 'blob';
+    xhr.send();
+
+});
 </script>
