@@ -224,7 +224,7 @@
                         $button.disable();
                         $button.spin();
                         $.ajax({
-                            url: '{$BASE_URL}/actions/members/changepass.php',
+                            url: '{$BASE_URL}actions/members/changepass.php',
                             type: 'POST',
                             data: {literal}{ old_pass: $("#old-pass").val(), new_pass: $("#new-pass").val()}{/literal},
                             success: function (a) {
@@ -270,7 +270,7 @@
             event.preventDefault();
             $('#unfriend-btn').addClass('hidden');
             $.ajax({
-                url: '{$BASE_URL}/members/friend/{$member.id}',
+                url: '{$BASE_URL}members/friend/{$member.id}',
                 type: 'DELETE',
                 success: function (a) {
                     var diagInstance = new BootstrapDialog({
@@ -300,7 +300,7 @@
             event.preventDefault();
             $('#friend-add-button').addClass('hidden');
             $.ajax({
-                url: '{$BASE_URL}/members/friend/{$member.id}',
+                url: '{$BASE_URL}members/friend/{$member.id}',
                 type: 'POST',
                 success: function (a) {
                     var diagInstance = new BootstrapDialog({
@@ -331,7 +331,7 @@
             $('#confirm-button').addClass('hidden');
             $('#processing_submit_section').removeClass('hidden');
             $.ajax({
-                url: '{$BASE_URL}/members/{$member.id}',
+                url: '{$BASE_URL}members/{$member.id}',
                 type: 'POST',
                 data: {literal}{ about: $("#about-me-field").val(), interests: $("#interests-field").val()}{/literal},
                 success: function (a) {

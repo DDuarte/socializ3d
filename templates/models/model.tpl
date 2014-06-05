@@ -327,7 +327,7 @@ $(function () {
             $("#vote_section").addClass("hidden");
             $("#processing_vote_section").removeClass("hidden");
             $.ajax({
-                url: '{$BASE_URL}/models/{$model.id}/votes',
+                url: '{$BASE_URL}models/{$model.id}/votes',
                 type: 'POST',
                 data: {literal}{ vote: true}{/literal},
                 success: function (a) {
@@ -353,7 +353,7 @@ $(function () {
             $("#vote_section").addClass("hidden");
             $("#processing_vote_section").removeClass("hidden");
             $.ajax({
-                url: '{$BASE_URL}/models/{$model.id}/votes',
+                url: '{$BASE_URL}models/{$model.id}/votes',
                 type: 'POST',
                 data: {literal}{ vote: false}{/literal},
                 success: function (a) {
