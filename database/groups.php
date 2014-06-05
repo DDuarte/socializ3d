@@ -61,3 +61,10 @@ function isGroupAdmin($idGroup, $idMember) {
     $result = $stmt->fetch();
     return $result;
 }
+
+function createGroupInvite($memberId, $newMemberId, $groupId)
+{
+    global $conn;
+    $stmt = $conn->prepare("INSERT INTO GroupInvite(idGroup, idReceiver, idSender) VALUES (?, ?, ?)");
+    $stmt->execute(array($groupId, $newMemberId, $memberId));
+}

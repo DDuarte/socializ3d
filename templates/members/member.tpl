@@ -165,9 +165,25 @@
         var groupId = thisButton.attr('name');
         thisButton.addClass('disabled');
         thisButton.prepend('<span class="bootstrap-dialog-button-icon glyphicon glyphicon-asterisk icon-spin"></span>');
-        alert(groupId);
-        thisButton.find('span').remove();
-        thisButton.removeClass('disabled');
+
+        $.ajax({
+            url: '{$BASE_URL}groups/' + groupId + '/invite/{$member.id}',
+            type: 'POST',
+            success: function (a) {
+                BootstrapDialog.alert({
+                    title: 'Success!',
+                    message: 'Invited this member to join your group!'+'\n'+a
+                });
+                thisButton.parent().remove();
+            },
+            error: function (a, b, c) {
+                BootstrapDialog.alert({
+                    title: 'Oops!',
+                    message: 'Could not process your request at this time. :(\nError: ' + c});
+                thisButton.find('span').remove();
+                thisButton.removeClass('disabled');
+            }
+        });
     }
     var groupSettings = '<div class="form-group">' +
             '{foreach $userInfo.groups as $group}' +

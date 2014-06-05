@@ -265,6 +265,16 @@ function getUnansweredFriendRequestsOfMember($id)
     return $result;
 }
 
+function getUnansweredGroupInvitesOfMember($id)
+{
+    global $conn;
+    $stmt = $conn->prepare("SELECT id, idGroup, idReceiver, idSender FROM GroupInvite WHERE idReceiver = :id AND accepted IS NULL");
+    $stmt->execute(array(':id' => $id));
+    $result = $stmt->fetchAll();
+
+    return $result;
+}
+
 function answerFriendshipInvite($friendshipInviteId, $answer)
 {
     global $conn;
