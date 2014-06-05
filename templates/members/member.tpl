@@ -140,12 +140,12 @@
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="tab_groups">
                         {foreach $member.groups as $group}
-                            {include file="search/group.tpl" group=$group }
+                            {include file="members/groupComp.tpl" group=$group }
                         {/foreach}
                     </div>
                     <div class="tab-pane" id="tab_friends">
                         {foreach $member.friends as $friend}
-                            {include file="search/member.tpl" member=$friend }
+                            {include file="members/friendComp.tpl" member=$friend }
                         {/foreach}
                     </div>
                 </div>

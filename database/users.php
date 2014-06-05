@@ -37,8 +37,8 @@ function getSimpleMember($id, $id2)
 
     $result['isFriend'] = isFriend($id, $id2);
 
-    $result['sentRequest'] = hasRequestedFriendship($id, $id2);
-    $result['receivedRequest'] = hasRequestedFriendship($id2, $id);
+    $result['sentRequest'] = hasRequestedFriendship($id, $id2) != false;
+    $result['receivedRequest'] = hasRequestedFriendship($id2, $id) != false;
 
     $result['interests_array'] = getMemberInterests($id);
     $result['interests'] = implode(', ', $result['interests_array']);
