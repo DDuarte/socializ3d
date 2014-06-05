@@ -37,6 +37,33 @@
 </section>
 
 <script src="{$BASE_URL}js/pages/search.js" type="text/javascript"></script>
+<script src="{$BASE_URL}js/plugins/bootstrap3-dialog/bootstrap-dialog.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    function askFriend(btn) {
+        var thisButton = $(btn);
+        var memId = thisButton.attr('name');
+        thisButton.addClass('disabled');
+        thisButton.prepend('<span class="bootstrap-dialog-button-icon glyphicon glyphicon-asterisk icon-spin"></span>');
+        $.ajax({
+            url: '{$BASE_URL}members/friend/' + memId,
+            type: 'POST',
+            success: function (a) {
+                BootstrapDialog.alert({
+                    title: 'Success!',
+                    message: 'Sent this member a friend request!'
+                });
+                thisButton.parent().remove();
+            },
+            error: function (a, b, c) {
+                BootstrapDialog.alert({
+                    title: 'Oops!',
+                    message: 'Could not process your request at this time. :(\nError: ' + c});
+                thisButton.find('span').remove();
+                thisButton.removeClass('disabled');
+            }
+        });
+    }
+</script>
 <script>
     $(document).ready(function() {
 

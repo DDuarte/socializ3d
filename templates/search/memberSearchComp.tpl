@@ -16,13 +16,9 @@
             </li>
             {if $IS_LOGGED_IN && $member.id != $LOGGED_ID}
 
-            {if $member.receivedRequest}
+            {if !$member.sentRequest && !$member.isFriend}
                 <li>
-                    <a href="#" class="btn btn-primary" role="button">Accept Friendship</a>
-                </li>
-            {elseif !$member.sentRequest && !$member.isFriend}
-                <li>
-                    <a href="#" class="btn btn-primary" role="button">Add Friend</a>
+                    <a href="#" name="{$member.id}" class="btn btn-primary" role="button" onclick="askFriend(this);">Add Friend</a>
                 </li>
             {/if}
 
