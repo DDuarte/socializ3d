@@ -106,7 +106,7 @@
                     {if $IS_LOGGED_IN && $LOGGED_ID != $member.id}
                     <li class="pull-left">
                         {if $userInfo.groups|@count > 0}
-                        <button id="add-to-group-btn" class="btn bg-blue btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">
+                        <button id="add-to-group-btn" class="btn bg-blue btn-primary">
                             <i class="fa fa-plus-square-o"></i>
                             <span>Invite to group</span>
                         </button>
@@ -157,44 +157,41 @@
 </section>
 <!-- /.content -->
 
-{if $IS_LOGGED_IN}
-<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="content-header">
-                <h2>Choose the group(s)</h2>
-            </div>
-            <div class="box box-primary">
-                <div class="box-body notifications-box">
-                    <ul class="todo-list notifications-list">
-                        {foreach $userInfo.groups as $group}
-                        <li class="notification-item notification-group-item">
-                            <input class="{$group.groupid}" type="checkbox" name="checkboxlist" />
-                            <span class="text">
-                                <span class="notification-group-name" >{$group.groupname}</span>
-                            </span>
-                        </li>
-                        {/foreach}
-                    </ul>
-                </div>
-                <div class="box-footer">
-                    <button id="confirm-group-invite" class="btn btn-primary">Invite</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-{/if}
-
 <script src="{$BASE_URL}js/bootstrap-tagsinput.min.js" type="text/javascript"></script>
 <script src="{$BASE_URL}js/plugins/bootstrap3-dialog/bootstrap-dialog.min.js" type="text/javascript"></script>
 <script type="text/javascript">
+    function inviteToGroup(btn){
+        var groupId = btn.className.split(' ')[0];
+        alert(groupId);
+    }
+    var groupSettings = '<div class="form-group">' +
+            '{foreach $userInfo.groups as $group}' +
+            '<p style="min-height:45px; border-bottom:1px solid gray;" ><span>{$group.groupname}</span>' +
+            '<button class="{$group.groupid} btn btn-primary" onclick="inviteToGroup(this);" style="float: right;">Invite</button></p>' +
+            '{/foreach}</div>';
+
     var accountSettings =
             '<div class="form-group" ><p><input type="password" class="form-control" id="old-pass" placeholder="Old password"/></p></div>' +
             '<div class="form-group" ><p><input type="password" id="new-pass" class="form-control" placeholder="New password"/></p>' +
             '<p><input type="password" class="form-control" id="confirm-new" placeholder="Confirm"/></p></div>';
     $(function () {
+        $('#add-to-group-btn').click(function (event) {
+            event.preventDefault();
+            BootstrapDialog.show({
+                type: BootstrapDialog.TYPE_PRIMARY,
+                size: BootstrapDialog.SIZE_NORMAL,
+                title: 'Groups',
+                message: groupSettings,
+                buttons: [{
+                    label: 'Done',
+                    cssClass: 'btn-error',
+                    action: function(dialogRef){
+                        dialogRef.close();
+                    }
+                }]
+            });
+        });
+
         $('#open-password-menu').click(function (event) {
            event.preventDefault();
             BootstrapDialog.show({
@@ -266,21 +263,7 @@
             $("#tags-info").addClass("hidden");
         });
 
-        $('#confirm-group-invite').click(function (event) {
-            event.preventDefault();
-            var checkValues = $('input[name=checkboxlist]:checked').map(function() {
-                return $(this).attr('class');
-            }).get();
-            if (checkValues.length == 0) {
-                BootstrapDialog.alert("You didn't choose any groups.");
-                return;
-            }
 
-            var btn = $(this);
-            btn.addClass('disabled');
-            //TODO
-            btn.removeClass('disabled');
-        });
 
         $('#unfriend-btn').click(function (event) {
             event.preventDefault();
