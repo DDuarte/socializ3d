@@ -234,6 +234,7 @@
 
 <!-- WIP -->
 
+<script src="{$BASE_URL}js/renderer/js/TypedGeometry.js"></script>
 <script src="{$BASE_URL}js/renderer/js/BufferGeometryUtils.js"></script>
 <script src="{$BASE_URL}js/renderer/js/renderers/WebGLRenderer3.js"></script>
 
