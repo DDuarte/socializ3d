@@ -161,13 +161,18 @@
 <script src="{$BASE_URL}js/plugins/bootstrap3-dialog/bootstrap-dialog.min.js" type="text/javascript"></script>
 <script type="text/javascript">
     function inviteToGroup(btn){
-        var groupId = btn.className.split(' ')[0];
+        var thisButton = $(btn);
+        var groupId = thisButton.attr('name');
+        thisButton.addClass('disabled');
+        thisButton.prepend('<span class="bootstrap-dialog-button-icon glyphicon glyphicon-asterisk icon-spin"></span>');
         alert(groupId);
+        thisButton.find('span').remove();
+        thisButton.removeClass('disabled');
     }
     var groupSettings = '<div class="form-group">' +
             '{foreach $userInfo.groups as $group}' +
             '<p style="min-height:45px; border-bottom:1px solid gray;" ><span>{$group.groupname}</span>' +
-            '<button class="{$group.groupid} btn btn-primary" onclick="inviteToGroup(this);" style="float: right;">Invite</button></p>' +
+            '<button class="btn btn-primary" onclick="inviteToGroup(this);" style="float: right;" name="{$group.groupid}" >Invite</button></p>' +
             '{/foreach}</div>';
 
     var accountSettings =
