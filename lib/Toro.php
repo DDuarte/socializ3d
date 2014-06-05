@@ -92,10 +92,13 @@ class Toro
             }
             else {
                 ToroHook::fire($notFoundHook, compact('routes', 'discovered_handler', 'request_method', 'regex_matches'));
+                http_response_code(404);
+
             }
         }
         else {
             ToroHook::fire($notFoundHook, compact('routes', 'discovered_handler', 'request_method', 'regex_matches'));
+            http_response_code(404);
         }
 
         ToroHook::fire('after_request', compact('routes', 'discovered_handler', 'request_method', 'regex_matches', 'result'));
