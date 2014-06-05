@@ -53,7 +53,6 @@ class SearchHandler
         $results = $this->getResults($memberId, $query, $limit);
 
         include($BASE_DIR . 'pages/common/header.php');
-        $smarty->assign("loggedId", $memberId);
         $smarty->assign("results", $results);
         $smarty->display('search/search.tpl');
         include($BASE_DIR . 'pages/common/footer.php');
@@ -76,7 +75,6 @@ class SearchHandler
 
         $results = $this->getResults($memberId, $query, $limit);
 
-        $smarty->assign("loggedId", $memberId);
         $smarty->assign("results", $results);
         $smarty->display('search/search.tpl');
     }

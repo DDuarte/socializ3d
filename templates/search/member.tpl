@@ -14,7 +14,7 @@
                 <i class="glyphicon glyphicon-tags"></i>
                 <span>Member</span>
             </li>
-            {if $loggedId != null && $member.id != $loggedId}
+            {if $IS_LOGGED_IN && $member.id != $LOGGED_ID}
 
             {if $member.receivedRequest}
                 <li>
