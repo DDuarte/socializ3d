@@ -101,7 +101,7 @@
                         <a href="#tab_groups" data-toggle="tab">Groups</a>
                     </li>
                     <li class="pull-left header">
-                        {$member.name}'s Profile
+                        {$member.username}'s Profile
                     </li>
                     {if $IS_LOGGED_IN && $LOGGED_ID != $member.id}
                     <li class="pull-left">

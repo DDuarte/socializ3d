@@ -7,8 +7,9 @@ function getMember($id, $id2)
                                    Member.name,
                                    Member.about,
                                    Member.birthDate,
+                                   RegisteredUser.username,
                                    get_user_hash(:id) AS hash
-                            FROM Member
+                            FROM Member JOIN RegisteredUser ON Member.id = RegisteredUser.id
                             WHERE Member.id = :id");
     $stmt->execute(array(':id' => $id));
     $result = $stmt->fetch();
