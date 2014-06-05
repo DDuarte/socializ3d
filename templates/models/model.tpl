@@ -69,7 +69,7 @@
                                 <p>{$model.description}</p>
                                 {if $IS_LOGGED_IN}
                                     <p>
-                                        <button id="download-btn" class="btn bg-blue btn-social">
+                                        <button id="download-btn" class="btn bg-blue btn-social" onclick="window.location.href='{$BASE_URL}{$MODELS}/{$model.id}/file'">
                                             <i class="fa fa-download"></i>
                                             <span>Download</span>
                                         </button>

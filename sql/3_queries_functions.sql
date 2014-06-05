@@ -310,12 +310,13 @@ CREATE OR REPLACE FUNCTION get_model(memberId BIGINT, oldest_date_limit TIMESTAM
 $$ LANGUAGE SQL;
 
 -- Get Model Information --
-CREATE OR REPLACE FUNCTION get_model_info(modelId BIGINT) RETURNS TABLE(idAuthor BIGINT, nameAuthor VARCHAR(70), name VARCHAR(70), description VARCHAR(255), fileName VARCHAR(255), createDate TIMESTAMP, numUpVotes BIGINT, numDownVotes BIGINT) AS $$
+CREATE OR REPLACE FUNCTION get_model_info(modelId BIGINT) RETURNS TABLE(idAuthor BIGINT, nameAuthor VARCHAR(70), name VARCHAR(70), description VARCHAR(255), fileName VARCHAR(255), userFileName VARCHAR(255), createDate TIMESTAMP, numUpVotes BIGINT, numDownVotes BIGINT) AS $$
     SELECT model_info.idAuthor,
            Member.name AS nameAuthor,
            model_info.name,
            model_info.description,
            model_info.fileName,
+          model_info.userFileName,
            model_info.createDate,
            model_info.numUpVotes,
            model_info.numDownVotes
@@ -323,7 +324,7 @@ CREATE OR REPLACE FUNCTION get_model_info(modelId BIGINT) RETURNS TABLE(idAuthor
     WHERE model_info.id = $1
 $$ LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION get_model_info(userId BIGINT, modelId BIGINT) RETURNS TABLE(idAuthor BIGINT, nameAuthor VARCHAR(70), name VARCHAR(70), description VARCHAR(255), fileName VARCHAR(255), createDate TIMESTAMP, numUpVotes BIGINT, numDownVotes BIGINT) AS $$
+CREATE OR REPLACE FUNCTION get_model_info(userId BIGINT, modelId BIGINT) RETURNS TABLE(idAuthor BIGINT, nameAuthor VARCHAR(70), name VARCHAR(70), description VARCHAR(255), fileName VARCHAR(255), userFileName VARCHAR(255), createDate TIMESTAMP, numUpVotes BIGINT, numDownVotes BIGINT) AS $$
 BEGIN
     IF ($2 IN (SELECT * FROM get_all_visibile_models($1))) THEN
         RETURN QUERY SELECT * FROM get_model_info($2);

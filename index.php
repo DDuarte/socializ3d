@@ -8,6 +8,7 @@ include_once($BASE_DIR . 'lib/CompatUtils.php');
 include_once($BASE_DIR . 'actions/indexAction.php');
 include_once($BASE_DIR . 'actions/catalogActions.php');
 include_once($BASE_DIR . 'actions/models/model.php');
+include_once($BASE_DIR . 'actions/models/files.php');
 include_once($BASE_DIR . 'actions/models/comments.php');
 include_once($BASE_DIR . 'actions/models/votes.php');
 include_once($BASE_DIR . 'actions/members/member.php');
@@ -89,6 +90,7 @@ Toro::serve(array(
     '/new/:number' => 'NewHandler',
     '/rand/:number' => 'RandHandler',
     '/models/:number' => 'ModelHandler',
+    '/models/:number/file' => 'ModelFilesHandler',
     '/models/:number/comments' => 'CommentsHandler',
     '/models/:number/comments/:number' => 'CommentsHandler',
     '/models/:number/votes' => 'VotesHandler',
