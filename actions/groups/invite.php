@@ -56,4 +56,31 @@ class InvitationHandler {
 
         createGroupInvite($memberId, $newMemberId, $groupId);
     }
+
+    function delete($groupId, $newMemberId) {
+        global $BASE_DIR;
+        global $smarty;
+
+        $memberId = getLoggedId();
+        if ($memberId == null) {
+            http_response_code(403);
+            exit;
+        }
+
+
+        $otherRequests = getUnansweredGroupInvitesOfMember($newMemberId);
+        $invId = null;
+        foreach ($otherRequests as $key => $value) {
+            if ($otherRequests[$key]['idgroup'] == $groupId) {
+                $invId = $otherRequests[$key]['id'];
+                break;
+            }
+        }
+        if ($invId == null) {
+            http_response_code(404); // No request found
+            exit;
+        }
+
+        answerGroupInvite($invId, false);
+    }
 }

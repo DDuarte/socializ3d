@@ -92,3 +92,21 @@ function createGroupInvite($memberId, $newMemberId, $groupId)
     $stmt = $conn->prepare("INSERT INTO GroupInvite(idGroup, idReceiver, idSender) VALUES (?, ?, ?)");
     $stmt->execute(array($groupId, $newMemberId, $memberId));
 }
+
+
+function getUnansweredGroupInvitesOfMember($id)
+{
+    global $conn;
+    $stmt = $conn->prepare("SELECT id, idGroup, idReceiver, idSender FROM GroupInvite WHERE idReceiver = :id AND accepted IS NULL");
+    $stmt->execute(array(':id' => $id));
+    $result = $stmt->fetchAll();
+
+    return $result;
+}
+
+function answerGroupInvite($inviteId, $answer)
+{
+    global $conn;
+    $stmt = $conn->prepare("UPDATE GroupInvite SET accepted = :accepted WHERE GroupInvite.id = :id;");
+    $stmt->execute(array($answer, $inviteId));
+}
