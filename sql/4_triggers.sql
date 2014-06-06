@@ -198,6 +198,9 @@ CREATE OR REPLACE FUNCTION generate_group_application_notification() RETURNS TRI
         adminId bigint;
     BEGIN
         INSERT INTO Notification (idGroupApplication, notificationType) VALUES (NEW.id, 'GroupApplication') RETURNING id INTO notificationId;
+        FOR adminId IN SELECT idMember FROM GroupUser WHERE idGroup = NEW.idGroup AND isAdmin = TRUE LOOP
+          INSERT INTO UserNotification (idMember, idNotification) VALUES (adminId, notificationId);
+        END LOOP;
         INSERT INTO UserNotification (idMember, idNotification) VALUES (NEW.idMember, notificationId);
         INSERT INTO GroupNotification (idGroup, idNotification) VALUES (NEW.idGroup, notificationId);
         RETURN NEW;
