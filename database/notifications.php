@@ -63,6 +63,7 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                     $r['subtext'] = "You accepted this request";
                 else
                     $r['subtext'] = "You rejected this request";
+
                 break;
             case 'GroupApplication':
                 $idGroupApplication = $r['idgroupapplication'];

@@ -56,14 +56,15 @@
         thisButton.prepend('<span class="bootstrap-dialog-button-icon glyphicon glyphicon-asterisk icon-spin"></span>');
 
         $.ajax({
-            url: '{$BASE_URL}groups/' + groupId + '/invite/{$userInfo.userId}',
+            url: '{$BASE_URL}groups/' + groupId + '/invite/{$member.id}',
             type: reqType,
             success: function (a) {
                 BootstrapDialog.alert({
                     title: 'Success!',
                     message: 'Reply sent.'
                 });
-                //thisButton.parent().remove(); //TODO
+                var textReply = answer ? 'accepted' : 'rejected';
+                thisButton.parent().replaceWith('<div class="timeline-footer">You ' + textReply + ' this request</div>');
             },
             error: function (a, b, c) {
                 BootstrapDialog.alert({

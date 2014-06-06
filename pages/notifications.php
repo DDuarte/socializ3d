@@ -13,6 +13,7 @@ if ($memberId == null) {
 }
 
 $notifications = getMemberNotifications($memberId, '2010-01-01', 1000); // TODO: pagination
-
+$member = getMember($memberId, getLoggedId());
+$smarty->assign('member', $member);
 $smarty->assign('notifications', $notifications);
 $smarty->display('notifications.tpl');
