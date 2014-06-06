@@ -4,7 +4,10 @@ include_once($BASE_DIR . 'database/groups.php');
 
 function getGroupPage($group) {
     global $smarty;
+    $memberId = getLoggedId();
+    $member = array('id' => $memberId);
     $smarty->assign('group', $group);
+    $smarty->assign('visitor', $member);
     $smarty->display('groups/group.tpl');
 }
 

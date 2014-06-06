@@ -94,6 +94,11 @@
                     <li>
                         <a href="#tab_members" data-toggle="tab">Members</a>
                     </li>
+                    {if $group.isGroupAdmin}
+                        <li>
+                            <a href="#tab_notifications" data-toggle="tab">Notifications</a>
+                        </li>
+                    {/if}
                     <li class="pull-left header">
                         <i class="fa fa-group"></i>{$group.name}</li>
                 </ul>
@@ -164,6 +169,26 @@
                         </div>
                         <!-- /.box -->
                     </div>
+                    {if $group.isGroupAdmin}
+                    <div class="tab-pane" id="tab_notifications">
+                        <div class="box box-primary">
+                            <div class="box-body notifications-box">
+                                <ul class="todo-list notifications-list">
+                                    <li class="notification-item notification-group-item">
+                                        <span class="handle">
+                                            <i class="fa fa-comments-o"></i>
+                                        </span>
+                                        <span class="text"> The user '<span class="notification-group-name">Jane Doe</span>' wants to join the group</span>
+                                        <div class="tools">
+                                            <i class="fa fa-check"></i>
+                                            <i class="fa fa-trash-o"></i>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    {/if}
                     <!-- /.tab-pane -->
                 </div>
                 <!-- /.tab-content -->
@@ -287,7 +312,7 @@
             thisButton.addClass('disabled');
             thisButton.prepend('<span class="bootstrap-dialog-button-icon glyphicon glyphicon-asterisk icon-spin"></span>');
             $.ajax({
-                url: '{$BASE_URL}groups/{$group.id}/application/{$userInfo.userId}',
+                url: '{$BASE_URL}groups/{$group.id}/application/{$visitor.id}',
                 type: 'POST',
                 success: function (a) {
                     BootstrapDialog.alert({
