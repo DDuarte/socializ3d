@@ -140,6 +140,37 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $r['text'] = '';
                 $r['subtext'] = '';
                 break;
+            case 'GroupInviteAccepted':
+                $idGroupInvite = $r['idgroupinvite'];
+                $stmt = $conn->prepare('SELECT idGroup, idSender, idReceiver FROM GroupInvite WHERE id = :id');
+                $stmt->execute(array(':id' => $idGroupInvite));
+                $result = $stmt->fetch();
+                $groupId = $result['idgroup'];
+                $userId1 = $result['idsender'];
+                $userId2 = $result['idreceiver'];
+
+                if ($userId1 == $id)
+                    $userId = $userId2;
+                else
+                    $userId = $userId1;
+
+                $group = getGroup($groupId);
+                $groupName = $group['name'];
+                $groupLink = $BASE_URL . "groups/$groupId";
+                $user = getMember($userId, $id);
+                $userName = $user['name'];
+                $userLink = $BASE_URL . "members/$userId";
+                $r['icon'] = 'fa fa-group bg-maroon';
+                if ($userId1 == $id) {
+                    $r['title'] = "<a href=\"$userLink\">$userName</a> accepted your request to join <a href=\"$groupLink\">$groupName</a>";
+                }
+                else {
+                    $r['title'] = "You accepted <a href=\"$userLink\">$userName</a>'s request to join <a href=\"$groupLink\">$groupName</a>";
+                }
+
+                $r['text'] = '';
+                $r['subtext'] = '';
+                break;
         }
 
         $day = date('d M. Y', strtotime($r['createdate']));
