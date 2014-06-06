@@ -80,16 +80,28 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $user = getMember($userId, 0);
                 $userName = $user['name'];
                 $userLink = $BASE_URL . "members/$userId";
-                $r['icon'] = 'ionicons ion-ios7-people bg-purple';
-                $r['title'] = "<a href=\"$userLink\">$userName</a> applied to your group <a href=\"$groupLink\">$groupName</a>";
-                $r['text'] = '';
-                // TODO: links
-                if (is_null($accepted))
-                    $r['subtext'] = "<a class=\"btn btn-primary btn-xs\">Accept</a> <a class=\"btn btn-danger btn-xs\">Decline</a>";
-                else if ($accepted)
-                    $r['subtext'] = 'This request was accepted.';
-                else
-                    $r['subtext'] = 'This request was declined.';
+                $r['icon'] = 'fa fa-group bg-purple';
+                if ($userId !== getLoggedId()) {
+                    $r['title'] = "<a href=\"$userLink\">$userName</a> applied to your group <a href=\"$groupLink\">$groupName</a>";
+                    $r['text'] = '';
+                    // TODO: links
+                    if (is_null($accepted))
+                        $r['subtext'] = "<a class=\"btn btn-primary btn-xs\">Accept</a> <a class=\"btn btn-danger btn-xs\">Decline</a>";
+                    else if ($accepted)
+                        $r['subtext'] = 'This request was accepted.';
+                    else
+                        $r['subtext'] = 'This request was declined.';
+                }
+                else {
+                    $r['title'] = "You applied to join group <a href=\"$groupLink\">$groupName</a>";
+                    $r['text'] = '';
+                    if (is_null($accepted))
+                        $r['subtext'] = "Your application has not yet been answered.";
+                    else if ($accepted)
+                        $r['subtext'] = 'This request was accepted.';
+                    else
+                        $r['subtext'] = 'This request was declined.';
+                }
                 break;
             case 'FriendshipInvite':
                 $friendshipInviteId = $r['idfriendshipinvite'];
