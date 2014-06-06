@@ -58,6 +58,18 @@ class InvitationHandler {
             exit;
         }
 
+        $otherRequests = getUnansweredGroupApplicationsOfMember($newMemberId);
+        $reqId = null;
+        foreach ($otherRequests as $key => $value) {
+            if ($otherRequests[$key]['idgroup'] == $groupId) {
+                $reqId = $otherRequests[$key]['id'];
+                break;
+            }
+        }
+        if ($reqId !== null) {
+            answerGroupApplication($reqId, true);
+            exit;
+        }
 
         $otherRequests = getUnansweredGroupInvitesOfMember($newMemberId);
         $alreadySent = false;
