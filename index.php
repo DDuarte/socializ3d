@@ -16,6 +16,7 @@ include_once($BASE_DIR . 'actions/members/friend.php');
 include_once($BASE_DIR . 'actions/uploadAction.php');
 include_once($BASE_DIR . 'actions/groups/group.php');
 include_once($BASE_DIR . 'actions/groups/invite.php');
+include_once($BASE_DIR . 'actions/groups/application.php');
 include_once($BASE_DIR . 'actions/groups/create.php');
 include_once($BASE_DIR . 'actions/admin/stats.php');
 include_once($BASE_DIR . 'actions/notifications.php');
@@ -101,6 +102,7 @@ Toro::serve(array(
     '/upload' => 'UploadHandler',
     '/groups/:number' => 'GroupHandler',
     '/groups/:number/invite/:number' => 'InvitationHandler',
+    '/groups/:number/application/:number' => 'ApplicationHandler',
     '/groups/create' => 'GroupCreateHandler',
     '/admin/stats' => 'StatisticsHandler',
     '/notifications' => 'NotificationsHandler',

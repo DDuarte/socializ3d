@@ -2,6 +2,20 @@
 
 include_once('users.php');
 
+function isPrivateGroup($id) {
+    global $conn;
+    $stmt = $conn->prepare("SELECT * FROM TGroup WHERE id = ?");
+    $stmt->execute(array($id));
+    $result = $stmt->fetch();
+
+    if ($result == false) return false;
+
+    if ($result['visibility'] == 'private')
+        return false;
+
+    return true;
+}
+
 function getSimpleGroup($id) {
     $loggedId = getLoggedId();
 
@@ -110,4 +124,29 @@ function answerGroupInvite($inviteId, $answer)
     $stmt = $conn->prepare("UPDATE GroupInvite SET accepted = :accepted WHERE GroupInvite.id = :id;");
     $converted_answer = ($answer) ? 'true' : 'false';
     $stmt->execute(array($converted_answer, $inviteId));
+}
+
+function getUnansweredGroupApplicationsOfMember($id)
+{
+    global $conn;
+    $stmt = $conn->prepare("SELECT id, idGroup, idMember FROM GroupApplication WHERE idMember = :id AND accepted IS NULL");
+    $stmt->execute(array(':id' => $id));
+    $result = $stmt->fetchAll();
+
+    return $result;
+}
+
+function createGroupApplication($memberId, $groupId)
+{
+    global $conn;
+    $stmt = $conn->prepare("INSERT INTO GroupApplication(idGroup, idMember) VALUES (?, ?)");
+    $stmt->execute(array($groupId, $memberId));
+}
+
+function answerGroupApplication($appId, $answer)
+{
+    global $conn;
+    $stmt = $conn->prepare("UPDATE GroupApplication SET accepted = :accepted WHERE GroupInvite.id = :id;");
+    $converted_answer = ($answer) ? 'true' : 'false';
+    $stmt->execute(array($converted_answer, $appId));
 }
