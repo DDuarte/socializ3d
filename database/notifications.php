@@ -109,14 +109,28 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 break;
             case 'FriendshipInviteAccepted':
                 $friendshipInviteId = $r['idfriendshipinvite'];
-                $stmt = $conn->prepare('SELECT idSender FROM FriendshipInvite WHERE id = :id');
+                $stmt = $conn->prepare('SELECT idReceiver, idSender FROM FriendshipInvite WHERE id = :id');
                 $stmt->execute(array(':id' => $friendshipInviteId));
-                $userId = $stmt->fetch()['idsender'];
-                $user = getMember($userId, 0);
+
+                $res = $stmt->fetch();
+                $userId1 = $res['idsender'];
+                $userId2 = $res['idreceiver'];
+                if ($userId1 == $id)
+                    $userId = $userId2;
+                else
+                    $userId = $userId1;
+
+                $user = getMember($userId, $id);
                 $userName = $user['name'];
                 $userLink = $BASE_URL . "members/$userId";
                 $r['icon'] = 'fa fa-user bg-green';
-                $r['title'] = "<a href=\"$userLink\">$userName</a> accepted your friend request";
+                if ($userId1 == $id) {
+                    $r['title'] = "<a href=\"$userLink\">$userName</a> accepted your friend request";
+                }
+                else {
+                    $r['title'] = "You accepted <a href=\"$userLink\">$userName</a>'s friend request";
+                }
+
                 $r['text'] = '';
                 $r['subtext'] = '';
                 break;
