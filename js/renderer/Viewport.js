@@ -41,7 +41,7 @@ var Viewport = function ( editor ) {
 
 		}
 
-		if ( editor.selected !== null ) {
+                if ( editor.selected !== null ) {
 
 			signals.objectChanged.dispatch( editor.selected );
 
@@ -390,6 +390,11 @@ var Viewport = function ( editor ) {
 		render();
 
 	} );
+
+    signals.centroidComputed.add(function(centroid){
+        camera.lookAt(centroid);
+        camera.center = centroid;
+    });
 
 	signals.fogTypeChanged.add( function ( fogType ) {
 

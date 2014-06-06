@@ -25,6 +25,7 @@ var Editor = function () {
 		objectAdded: new SIGNALS.Signal(),
 		objectChanged: new SIGNALS.Signal(),
 		objectRemoved: new SIGNALS.Signal(),
+        centroidComputed: new SIGNALS.Signal(),
 
 		helperAdded: new SIGNALS.Signal(),
 		helperRemoved: new SIGNALS.Signal(),
@@ -89,19 +90,44 @@ Editor.prototype = {
 	addObject: function ( object ) {
 
 		var scope = this;
+        var centroid;
 
 		object.traverse( function ( child ) {
 
-			if ( child.geometry !== undefined ) scope.addGeometry( child.geometry );
+			if ( child.geometry !== undefined ) {
+                child.geometry.computeBoundingBox();
+                var boundingBox = child.geometry.boundingBox;
+
+                var x0 = boundingBox.min.x;
+                var x1 = boundingBox.max.x;
+                var y0 = boundingBox.min.y;
+                var y1 = boundingBox.max.y;
+                var z0 = boundingBox.min.z;
+                var z1 = boundingBox.max.z;
+
+                var bWidth = ( x0 > x1 ) ? x0 - x1 : x1 - x0;
+                var bHeight = ( y0 > y1 ) ? y0 - y1 : y1 - y0;
+                var bDepth = ( z0 > z1 ) ? z0 - z1 : z1 - z0;
+
+                var centerX = x0 + ( bWidth / 2 ) + child.position.x;
+                var centerY = y0 + ( bHeight / 2 )+ child.position.y;
+                var centerZ = z0 + ( bDepth / 2 ) + child.position.z;
+
+                centroid = new THREE.Vector3(centerX, centerY, centerZ);
+
+                scope.addGeometry( child.geometry );
+            }
 			if ( child.material !== undefined ) scope.addMaterial( child.material );
 
 		} );
 
 		this.scene.add( object );
-
 		this.signals.objectAdded.dispatch( object );
 		this.signals.sceneGraphChanged.dispatch();
 
+        if (centroid) {
+            this.signals.centroidComputed.dispatch(centroid);
+        }
 	},
 
 	setObjectName: function ( object, name ) {

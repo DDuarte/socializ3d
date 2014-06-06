@@ -60,7 +60,7 @@ THREE.EditorControls = function ( object, domElement ) {
 		distance.multiplyScalar( vector.copy( center ).sub( object.position ).length() * 0.001 );
 
 		object.position.add( distance );
-		center.add( distance );
+		object.center.add( distance );
 
 		scope.dispatchEvent( changeEvent );
 
@@ -71,7 +71,7 @@ THREE.EditorControls = function ( object, domElement ) {
 		normalMatrix.getNormalMatrix( object.matrix );
 
 		distance.applyMatrix3( normalMatrix );
-		distance.multiplyScalar( vector.copy( center ).sub( object.position ).length() * 0.001 );
+		distance.multiplyScalar( vector.copy( object.center ).sub( object.position ).length() * 0.001 );
 
 		object.position.add( distance );
 
@@ -101,7 +101,7 @@ THREE.EditorControls = function ( object, domElement ) {
 
 		object.position.copy( center ).add( vector );
 
-		object.lookAt( center );
+		object.lookAt( object.center );
 
 		scope.dispatchEvent( changeEvent );
 
