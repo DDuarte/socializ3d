@@ -15,6 +15,24 @@ class InvitationHandler {
             exit;
         }
 
+        if ($memberId == $newMemberId) { //accept invite if exists
+            $otherRequests = getUnansweredGroupInvitesOfMember($newMemberId);
+            $reqId = null;
+            foreach ($otherRequests as $key => $value) {
+                if ($otherRequests[$key]['idgroup'] == $groupId) {
+                    $reqId = $otherRequests[$key]['id'];
+                    break;
+                }
+            }
+            if ($reqId == null) {
+                http_response_code(404); // Request not found
+                exit;
+            }
+
+            answerGroupInvite($reqId, true);
+            exit;
+        }
+
         $otherMember = getMember($newMemberId, $memberId);
         if ($otherMember == null) {
             http_response_code(404); // Member not found
