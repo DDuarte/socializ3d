@@ -26,6 +26,7 @@ var Editor = function () {
 		objectChanged: new SIGNALS.Signal(),
 		objectRemoved: new SIGNALS.Signal(),
         centroidComputed: new SIGNALS.Signal(),
+        distanceComputed: new SIGNALS.Signal(),
 
 		helperAdded: new SIGNALS.Signal(),
 		helperRemoved: new SIGNALS.Signal(),
@@ -91,6 +92,7 @@ Editor.prototype = {
 
 		var scope = this;
         var centroid;
+        var distance;
 
 		object.traverse( function ( child ) {
 
@@ -115,6 +117,12 @@ Editor.prototype = {
 
                 centroid = new THREE.Vector3(centerX, centerY, centerZ);
 
+                child.geometry.computeBoundingSphere();
+                var boundingSphere = child.geometry.boundingSphere;
+
+                distance = new THREE.Vector3(centroid.x, centroid.y, centroid.z);
+                distance.add(new THREE.Vector3(0, boundingSphere.radius * 2, boundingSphere.radius * 2));
+
                 scope.addGeometry( child.geometry );
             }
 			if ( child.material !== undefined ) scope.addMaterial( child.material );
@@ -127,6 +135,10 @@ Editor.prototype = {
 
         if (centroid) {
             this.signals.centroidComputed.dispatch(centroid);
+        }
+
+        if (distance) {
+            this.signals.distanceComputed.dispatch(distance);
         }
 	},
 

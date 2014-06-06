@@ -396,6 +396,11 @@ var Viewport = function ( editor ) {
         camera.center = centroid;
     });
 
+    signals.distanceComputed.add(function(position) {
+        camera.position = position;
+        controls.rotate(new THREE.Vector3(0.1, 0.1, 0.1));
+    });
+
 	signals.fogTypeChanged.add( function ( fogType ) {
 
 		if ( fogType !== oldFogType ) {
