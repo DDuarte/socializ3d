@@ -133,7 +133,7 @@ function createGroupApplication($memberId, $groupId)
 function answerGroupApplication($appId, $answer)
 {
     global $conn;
-    $stmt = $conn->prepare("UPDATE GroupApplication SET accepted = :accepted WHERE GroupInvite.id = :id;");
+    $stmt = $conn->prepare("UPDATE GroupApplication SET accepted = :accepted WHERE GroupApplication.id = :id;");
     $converted_answer = ($answer) ? 'true' : 'false';
     $stmt->execute(array($converted_answer, $appId));
 }
