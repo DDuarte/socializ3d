@@ -109,31 +109,6 @@ CREATE TRIGGER generate_group_invite_notification_trigger AFTER INSERT ON GroupI
 FOR EACH ROW EXECUTE PROCEDURE generate_group_invite_notification();
 
 -----------------------
--- GROUP APPLICATION --
------------------------
-
--- Event: a member wants to join a public group
--- Database Event: after insert on GroupApplication
--- Condition: N/A
--- Action: Create Notification for all the group admins of a group
-
-CREATE OR REPLACE FUNCTION generate_group_application_notification() RETURNS TRIGGER AS $$
-    DECLARE
-        notificationId bigint;
-        adminId bigint;
-    BEGIN
-        INSERT INTO Notification (idGroupApplication, notificationType) VALUES (NEW.id, 'GroupApplication') RETURNING id INTO notificationId;
-        FOR adminId IN SELECT idMember FROM GroupUser WHERE idGroup = NEW.idGroup AND isAdmin = TRUE LOOP
-            INSERT INTO UserNotification (idMember, idNotification) VALUES (adminId, notificationId);
-        END LOOP;
-        RETURN NEW;
-    END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER generate_group_application_notification_trigger AFTER INSERT ON GroupApplication
-FOR EACH ROW EXECUTE PROCEDURE generate_group_application_notification();
-
------------------------
 -- FRIENDSHIP INVITE --
 -----------------------
 
@@ -207,6 +182,31 @@ CREATE TRIGGER generate_group_application_notification_accepted_trigger AFTER UP
 FOR EACH ROW
 WHEN (OLD.accepted IS NULL AND NEW.accepted = true)
 EXECUTE PROCEDURE generate_group_application_accepted_notification();
+
+--------------------------------
+-- GROUP APPLICATION REQUESTES --
+--------------------------------
+
+-- Event: a member applied to a group
+-- Database Event: after insert on GroupApplication
+-- Condition: N/A
+-- Action: create Notification for the group
+
+CREATE OR REPLACE FUNCTION generate_group_application_notification() RETURNS TRIGGER AS $$
+    DECLARE
+        notificationId bigint;
+        adminId bigint;
+    BEGIN
+        INSERT INTO Notification (idGroupApplication, notificationType) VALUES (NEW.id, 'GroupApplication') RETURNING id INTO notificationId;
+        INSERT INTO UserNotification (idMember, idNotification) VALUES (NEW.idMember, notificationId);
+        INSERT INTO GroupNotification (idGroup, idNotification) VALUES (NEW.idGroup, notificationId);
+        RETURN NEW;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER generate_group_application_notification_trigger AFTER INSERT ON GroupApplication
+FOR EACH ROW
+EXECUTE PROCEDURE generate_group_application_notification();
 
 --------------------------------
 -- FRIENDSHIP INVITE ACCEPTED --

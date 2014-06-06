@@ -174,16 +174,18 @@
                         <div class="box box-primary">
                             <div class="box-body notifications-box">
                                 <ul class="todo-list notifications-list">
+                                    {foreach $group.groupMemberApplications as $appli}
                                     <li class="notification-item notification-group-item">
                                         <span class="handle">
                                             <i class="fa fa-comments-o"></i>
                                         </span>
-                                        <span class="text"> The user '<span class="notification-group-name">Jane Doe</span>' wants to join the group</span>
+                                        <span class="text"> The user '<a href="{$BASE_URL}members/{$appli.id}" class="notification-group-name">{$appli.username}</a>' wants to join the group</span>
                                         <div class="tools">
                                             <i class="fa fa-check"></i>
                                             <i class="fa fa-trash-o"></i>
                                         </div>
                                     </li>
+                                    {/foreach}
                                 </ul>
                             </div>
                         </div>

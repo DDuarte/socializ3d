@@ -181,3 +181,28 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
 
     return $newResult;
 }
+
+function getGroupUnansweredApplications($id) {
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT GroupApplication.idMember AS id FROM Notification " .
+        "JOIN GroupNotification ON GroupNotification.idGroup = :id AND GroupNotification.idNotification = Notification.id " .
+        "JOIN GroupApplication ON GroupApplication.id = Notification.idGroupApplication " .
+        "WHERE Notification.notificationType = 'GroupApplication' AND GroupApplication.accepted IS NULL;");
+
+    $stmt->execute(array(':id' => $id));
+
+    $result = $stmt->fetchAll();
+
+    if ($result == false) return false;
+
+    $newRes = array();
+    foreach ($result as $r) {
+        $mem = getMember($r['id'], 0);
+        $r['username'] = $mem['username'];
+        $newRes[] = $r;
+    }
+
+
+    return $newRes;
+}

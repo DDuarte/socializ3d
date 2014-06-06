@@ -1,6 +1,7 @@
 <?php
 
 include_once('users.php');
+include_once('notifications.php');
 
 function getSimpleGroup($id) {
     $loggedId = getLoggedId();
@@ -33,6 +34,7 @@ function getGroup($id) {
     $result['members'] = getMembersOfGroup($id);
     $result['isMember'] = isGroupMember($id, $loggedId);
     $result['isGroupAdmin'] = isGroupAdmin($id, $loggedId) || isAdmin($loggedId);
+    $result['groupMemberApplications'] = getGroupUnansweredApplications($id);
 
     return $result;
 }
