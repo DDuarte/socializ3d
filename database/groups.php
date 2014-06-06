@@ -2,20 +2,6 @@
 
 include_once('users.php');
 
-function isPrivateGroup($id) {
-    global $conn;
-    $stmt = $conn->prepare("SELECT * FROM TGroup WHERE id = ?");
-    $stmt->execute(array($id));
-    $result = $stmt->fetch();
-
-    if ($result == false) return false;
-
-    if ($result['visibility'] == 'private')
-        return false;
-
-    return true;
-}
-
 function getSimpleGroup($id) {
     $loggedId = getLoggedId();
 
@@ -45,6 +31,7 @@ function getGroup($id) {
     $result['id'] = $id;
     $result['models'] = getGroupModels($id);
     $result['members'] = getMembersOfGroup($id);
+    $result['isMember'] = isGroupMember($id, $loggedId);
     $result['isGroupAdmin'] = isGroupAdmin($id, $loggedId) || isAdmin($loggedId);
 
     return $result;

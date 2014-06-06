@@ -16,7 +16,14 @@
                     <li>
                         <a href="#tab_activity" data-toggle="tab">Recent Activity</a>
                     </li>
-                    {if $group.isGroupAdmin}
+                    {if !$group.isMember}
+                    <li class="pull-left">
+                        <button id="apply-to-group-btn" class="btn bg-blue btn-primary">
+                            <i class="fa fa-plus-square-o"></i>
+                            <span>Apply to group</span>
+                        </button>
+                    </li>
+                    {elseif $group.isGroupAdmin}
                     <li class="pull-right">
                         <a href="#tab_settings" data-toggle="tab">
                             <i class="fa fa-gear"></i>
@@ -259,6 +266,7 @@
 </div>
 {/if}
 
+<script src="{$BASE_URL}js/plugins/bootstrap3-dialog/bootstrap-dialog.min.js" type="text/javascript"></script>
 <script>
     $('#table_search').keyup(function(){
         var valThis = $(this).val().toLowerCase();
@@ -270,5 +278,33 @@
                 (text.indexOf(valThis) >= 0) ? $(this).show() : $(this).hide();
             });
         };
+    });
+
+    $(function () {
+        $('#apply-to-group-btn').click(function (event) {
+            event.preventDefault();
+            var thisButton = $(this);
+            thisButton.addClass('disabled');
+            thisButton.prepend('<span class="bootstrap-dialog-button-icon glyphicon glyphicon-asterisk icon-spin"></span>');
+            $.ajax({
+                url: '{$BASE_URL}groups/{$group.id}/application/{$userInfo.userId}',
+                type: 'POST',
+                success: function (a) {
+                    BootstrapDialog.alert({
+                        title: 'Success!',
+                        message: 'Applied to join this group!'
+                    });
+                    thisButton.parent().remove();
+                },
+                error: function (a, b, c) {
+                    BootstrapDialog.alert({
+                        title: 'Oops!',
+                        message: 'Could not process your request at this time. :(\nError: ' + (c === 'Conflict' ? 'Member is already in group or has application pending.' : c)});
+                    thisButton.find('span.bootstrap-dialog-button-icon').remove();
+                    thisButton.removeClass('disabled');
+                }
+            });
+        });
+
     });
 </script>

@@ -9,7 +9,7 @@ class ApplicationHandler {
         global $BASE_DIR;
         global $smarty;
 
-        if (isPrivateGroup($groupId)) {
+        if (!isGroupVisibleToMember($groupId, $newMemberId)) {
             http_response_code(403); //private group
             exit;
         }
@@ -57,7 +57,7 @@ class ApplicationHandler {
             }
         }
 
-        if (!$thisIsMember) {
+        if ($thisIsMember) {
             http_response_code(409); //already a member
             exit;
         }
@@ -95,7 +95,7 @@ class ApplicationHandler {
         global $BASE_DIR;
         global $smarty;
 
-        if (isPrivateGroup($groupId)) {
+        if (!isGroupVisibleToMember($groupId, $newMemberId)) {
             http_response_code(403); //private group
             exit;
         }
