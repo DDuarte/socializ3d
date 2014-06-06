@@ -108,5 +108,6 @@ function answerGroupInvite($inviteId, $answer)
 {
     global $conn;
     $stmt = $conn->prepare("UPDATE GroupInvite SET accepted = :accepted WHERE GroupInvite.id = :id;");
-    $stmt->execute(array($answer, $inviteId));
+    $converted_answer = ($answer) ? 'true' : 'false';
+    $stmt->execute(array($converted_answer, $inviteId));
 }

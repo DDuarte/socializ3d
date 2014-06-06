@@ -314,5 +314,6 @@ function answerFriendshipInvite($friendshipInviteId, $answer)
 {
     global $conn;
     $stmt = $conn->prepare("UPDATE FriendshipInvite SET accepted = :accepted WHERE FriendshipInvite.id = :id;");
-    $stmt->execute(array($answer, $friendshipInviteId));
+    $converted_answer = ($answer) ? 'true' : 'false';
+    $stmt->execute(array($converted_answer, $friendshipInviteId));
 }

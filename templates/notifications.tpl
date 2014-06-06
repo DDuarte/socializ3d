@@ -44,3 +44,34 @@
         </div>
     </div>
 </section>
+
+
+<script src="{$BASE_URL}js/plugins/bootstrap3-dialog/bootstrap-dialog.min.js" type="text/javascript"></script>
+<script>
+    function groupInviteReply(btn, answer) {
+        var thisButton = $(btn);
+        var groupId = thisButton.attr('name');
+        var reqType = answer ? 'POST' : 'DELETE';
+        thisButton.addClass('disabled');
+        thisButton.prepend('<span class="bootstrap-dialog-button-icon glyphicon glyphicon-asterisk icon-spin"></span>');
+
+        $.ajax({
+            url: '{$BASE_URL}groups/' + groupId + '/invite/{$userInfo.userId}',
+            type: reqType,
+            success: function (a) {
+                BootstrapDialog.alert({
+                    title: 'Success!',
+                    message: 'Reply sent.'
+                });
+                //thisButton.parent().remove(); //TODO
+            },
+            error: function (a, b, c) {
+                BootstrapDialog.alert({
+                    title: 'Oops!',
+                    message: 'Could not process your request at this time. :(\nError: ' + (c === 'Conflict' ? 'Member is already in group or has invitation pending.' : c)});
+                thisButton.find('span').remove();
+                thisButton.removeClass('disabled');
+            }
+        });
+    }
+</script>

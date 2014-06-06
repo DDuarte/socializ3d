@@ -41,7 +41,7 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 break;
             case 'GroupInvite':
                 $idGroupInvite = $r['idgroupinvite'];
-                $stmt = $conn->prepare('SELECT idGroup, idSender FROM GroupInvite WHERE id = :id');
+                $stmt = $conn->prepare('SELECT idGroup, idSender, accepted FROM GroupInvite WHERE id = :id');
                 $stmt->execute(array(':id' => $idGroupInvite));
                 $result = $stmt->fetch();
                 $groupId = $result['idgroup'];
@@ -56,8 +56,13 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $r['icon'] = 'fa fa-group bg-maroon';
                 $r['title'] = "You were invited to group <a href=\"$groupLink\">$groupName</a> by <a href=\"$userLink\">$userName</a>";
                 $r['text'] = $groupAbout;
-                // TODO: links
-                $r['subtext'] = "<a href=\"$groupLink\" class=\"btn bg-maroon btn-xs\">View Group</a> <a class=\"btn btn-primary btn-xs\">Accept</a> <a class=\"btn btn-danger btn-xs\">Decline</a>";
+                $accepted = $result['accepted'];
+                if (is_null($accepted))
+                    $r['subtext'] = "<a href=\"$groupLink\" class=\"btn bg-maroon btn-xs\">View Group</a> <a href=\"#\" class=\"btn btn-primary btn-xs\" name=\"$groupId\" onclick=\"groupInviteReply(this, true);\" >Accept</a> <a href=\"#\" class=\"btn btn-danger btn-xs\" name=\"$groupId\" onclick=\"groupInviteReply(this, false);\">Decline</a>";
+                else if($accepted)
+                    $r['subtext'] = "You accepted this request";
+                else
+                    $r['subtext'] = "You rejected this request";
                 break;
             case 'GroupApplication':
                 $idGroupApplication = $r['idgroupapplication'];

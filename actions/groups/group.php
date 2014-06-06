@@ -25,13 +25,13 @@ class GroupHandler {
 
         if (!isGroupVisibleToMember($groupId, $memberId)) {
             http_response_code(404);
-            return;
+            exit;
         }
 
         $group = getGroup($groupId);
         if ($group == false) {
             http_response_code(404);
-            return;
+            exit;
         }
 
         updateLastAccess($groupId, $memberId);
@@ -50,17 +50,18 @@ class GroupHandler {
 
         if (!isGroupVisibleToMember($groupId, $memberId)) {
             http_response_code(404);
-            return;
+            exit;
         }
 
         $group = getGroup($groupId);
         if ($group == false) {
             http_response_code(404);
-            return;
+            exit;
         }
 
         updateLastAccess($groupId, $memberId);
 
         getGroupPage($group);
+        exit;
     }
 }
