@@ -20,10 +20,17 @@
                     <li class="pull-left">
                         <button id="apply-to-group-btn" class="btn bg-blue btn-primary">
                             <i class="fa fa-plus-square-o"></i>
-                            <span>Apply to group</span>
+                            <span>Apply to Group</span>
                         </button>
                     </li>
-                    {elseif $group.isGroupAdmin}
+                    {else}
+                    <li class="pull-left">
+                        <button id="leave-group-btn" class="btn btn-danger pull-right" onclick="excludeMember(this, {$visitor.id});">
+                            <span>Leave</span>
+                        </button>
+                    </li>
+                    {/if}
+                    {if $group.isGroupAdmin}
                     <li class="pull-right">
                         <a href="#tab_settings" data-toggle="tab">
                             <i class="fa fa-gear"></i>
@@ -258,9 +265,9 @@
     function excludeMember(btn, memId) {
         var thisButton = $(btn);
         BootstrapDialog.show({
-            message: 'Are you sure you want to kick out this member?',
+            message: memId == {$visitor.id} ? 'Are you sure you want to leave this group?' : 'Are you sure you want to kick out this member?',
             buttons: [{
-                label: 'Exclude member',
+                label: memId == {$visitor.id} ? 'Leave' : 'Exclude member',
                 cssClass: 'btn-danger',
                 autospin: true,
                 action: function(dialogRef){
@@ -273,6 +280,8 @@
                         success: function (a) {
                             thisButton.parent().parent().remove();
                             thisRef.close();
+                            if (memId == {$visitor.id})
+                                window.location.reload(true);
                         },
                         error: function (a, b, c) {
                             BootstrapDialog.alert({

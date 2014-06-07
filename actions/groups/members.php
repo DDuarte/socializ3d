@@ -69,6 +69,14 @@ class GroupMemberHandler {
         }
 
         if (isGroupAdmin($groupId, $otherMemberId)) {
+            if ($otherMemberId == $memberId) {
+                $groupMems = getMembersOfGroup($groupId);
+                if (count($groupMems) < 2) {
+                    removeGroupUser($groupId, $otherMemberId);
+                    deleteGroup($groupId);
+                    exit;
+                }
+            }
             http_response_code(401);
             exit;
         }

@@ -28,13 +28,13 @@ class GroupHandler {
 
         if (!isGroupVisibleToMember($groupId, $memberId)) {
             http_response_code(404);
-            exit;
+            return;
         }
 
         $group = getGroup($groupId);
         if ($group == false) {
             http_response_code(404);
-            exit;
+            return;
         }
 
         updateLastAccess($groupId, $memberId);

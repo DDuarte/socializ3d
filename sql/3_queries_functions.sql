@@ -44,7 +44,7 @@ CREATE OR REPLACE FUNCTION get_complete_groups_of_member(memberId BIGINT)
 RETURNS TABLE(groupId BIGINT, groupName VARCHAR(70), about VARCHAR, coverimg VARCHAR) AS $$
     SELECT TGroup.id, TGroup.name, TGroup.about, TGroup.coverImg
     FROM TGroup
-    JOIN GroupUser ON GroupUser.idGroup = TGroup.id AND GroupUser.idMember = $1
+    JOIN GroupUser ON GroupUser.idGroup = TGroup.id AND GroupUser.idMember = $1 AND TGroup.deleteDate IS NULL
 $$ LANGUAGE SQL;
 
 DROP VIEW IF EXISTS model_info;
@@ -365,7 +365,7 @@ BEGIN
         $1 NOT IN (SELECT GroupUser.idMember FROM GroupUser WHERE GroupUser.idGroup = $2)) THEN
         RAISE EXCEPTION 'User % does not have permission to access group % profile.', $1, $2;
     ELSE
-        RETURN QUERY SELECT TGroup.name, TGroup.about, TGroup.avatarImg, TGroup.coverImg FROM TGroup WHERE TGroup.id = $2;
+        RETURN QUERY SELECT TGroup.name, TGroup.about, TGroup.avatarImg, TGroup.coverImg FROM TGroup WHERE TGroup.id = $2 AND TGroup.deleteDate IS NULL;
     END IF;
 END;
 $$ LANGUAGE PLPGSQL;

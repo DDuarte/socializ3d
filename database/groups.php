@@ -175,3 +175,10 @@ function removeGroupUser($groupId, $userId)
     $stmt = $conn->prepare("DELETE FROM GroupUser WHERE idGroup = :group AND idMember = :member;");
     $stmt->execute(array(':group' => $groupId, ':member' => $userId));
 }
+
+function deleteGroup($groupId)
+{
+    global $conn;
+    $stmt = $conn->prepare('UPDATE TGroup SET deleteDate = now() WHERE id = :id');
+    $stmt->execute(array(':id' => $groupId));
+}
