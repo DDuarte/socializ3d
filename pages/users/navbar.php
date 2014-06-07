@@ -1,4 +1,6 @@
 <?php
+    if (!isset($BASE_DIR))
+        include_once('../../config/init.php');
     include_once($BASE_DIR . 'database/users.php');
     include_once($BASE_DIR . 'database/notifications.php');
 

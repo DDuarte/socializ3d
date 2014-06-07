@@ -1,4 +1,4 @@
-<header class="header">
+<header id="navbar-header" class="header">
     <a href="{$BASE_URL}" class="logo">
         <!-- Add the class icon to your logo image or logo icon to add the margining -->
         Socializ3D

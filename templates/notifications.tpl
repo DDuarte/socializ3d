@@ -47,6 +47,7 @@
 
 
 <script src="{$BASE_URL}js/plugins/bootstrap3-dialog/bootstrap-dialog.min.js" type="text/javascript"></script>
+<script src="{$BASE_URL}js/pages/reloadInfo.js" type="text/javascript"></script>
 <script>
     var busy = false;
 
@@ -152,4 +153,7 @@
             }
         });
     }
+    $(function () {
+        setInterval(reloadNotifications(),5000);
+    });
 </script>
