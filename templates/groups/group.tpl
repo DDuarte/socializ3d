@@ -2,7 +2,7 @@
     <div class="row" style="padding-top:10px">
         <div class="col-md-12">
             <div class="thumbnail">
-                <img src="{$group.coverimg}" alt="...">
+                <img id="group-cover-img" src="{$group.coverimg}" alt="...">
             </div>
         </div>
     </div>
@@ -34,7 +34,7 @@
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_about">
                         <div class="thumbnail">
-                            <img src="{$group.avatarimg}" alt="...">
+                            <img id="group-avatar-img" src="{$group.avatarimg}" alt="...">
                         </div>
                         <p id="group-about-content">{$group.about}</p>
                     </div>
@@ -70,6 +70,10 @@
                     {if $group.isGroupAdmin}
                     <div class="tab-pane" id="tab_settings">
                         <div class="form-group">
+                            <label for="cover-img">Cover URL:</label>
+                            <input type="text" class="form-control" id="cover-img-url" placeHolder="Cover img URL here" value="{$group.coverimg}"/>
+                            <label for="banner-img">Avatar URL:</label>
+                            <input type="text" class="form-control" id="avatar-img-url" placeHolder="Avatar img URL here" value="{$group.avatarimg}" />
                             <label for="description-field">About:</label>
                             <textarea class="form-control" id="about-me-field" placeHolder="Enter your text here">{$group.about}</textarea>
                         </div>
@@ -343,13 +347,15 @@
             $.ajax({
                 url: '{$BASE_URL}groups/{$group.id}',
                 type: 'POST',
-                data: {literal}{ about: $('#about-me-field').val()}{/literal},
+                data: {literal}{ about: $('#about-me-field').val(), cover: $('#cover-img-url').val(), avatar: $('#avatar-img-url').val()}{/literal},
                 success: function (a) {
                     BootstrapDialog.alert({
                         title: 'Success!',
                         message: 'Updated successfully!'
                     });
                     $('#group-about-content').text($('#about-me-field').val());
+                    $('#group-cover-img').attr('src',$('#cover-img-url').val());
+                    $('#group-avatar-img').attr('src',$('#avatar-img-url').val());
                     thisButton.find('span.bootstrap-dialog-button-icon').remove();
                     thisButton.removeClass('disabled');
                 },

@@ -141,9 +141,9 @@ function answerGroupApplication($appId, $answer)
     $stmt->execute(array($converted_answer, $appId));
 }
 
-function updateGroupAbout($groupId, $aboutInfo)
+function updateGroupInfo($groupId, $aboutInfo, $coverImg, $avatarImg)
 {
     global $conn;
-    $stmt = $conn->prepare('UPDATE TGroup SET about = :about WHERE id = :id');
-    $stmt->execute(array(':id' => $groupId, ":about" => $aboutInfo));
+    $stmt = $conn->prepare('UPDATE TGroup SET about = :about, coverImg = :cover, avatarImg = :avatar WHERE id = :id');
+    $stmt->execute(array(':id' => $groupId, ":about" => $aboutInfo, ":cover" => $coverImg, ":avatar" => $avatarImg));
 }
