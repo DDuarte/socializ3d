@@ -58,7 +58,7 @@ class GroupMemberHandler {
             exit;
         }
 
-        if (!isGroupAdmin($groupId, $memberId)) {
+        if (!isGroupAdmin($groupId, $memberId) && $memberId != $otherMemberId) {
             http_response_code(403);
             exit;
         }
