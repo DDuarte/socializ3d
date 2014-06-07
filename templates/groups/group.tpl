@@ -54,7 +54,7 @@
                                         <img class="media-object" src="{$activ.img}" alt="...">
                                     </a>
                                     <div class="media-body">
-                                        <h4 class="media-heading">
+                                        <h4 class="media-heading" {if $group.isMember && $activ.createdate > $visitor.lastaccess}style="font-weight: bolder"{/if}>
                                             {$activ.text}
                                         </h4>
                                         <span class="time"><time class="timeago" datetime="{$activ.createdate}">{$activ.createdate}</time></span>
@@ -267,10 +267,11 @@
                         url: '{$BASE_URL}groups/{$group.id}/members/' + memId,
                         type: 'DELETE',
                         success: function (a) {
-                            thisButton.parent().parent().remove();
                             thisRef.close();
                             if (memId == {$visitor.id})
                                 window.location.reload(true);
+                            else
+                                thisButton.parent().parent().remove();
                         },
                         error: function (a, b, c) {
                             BootstrapDialog.alert({

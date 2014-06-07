@@ -183,3 +183,12 @@ function deleteGroup($groupId)
     $stmt = $conn->prepare('UPDATE TGroup SET deleteDate = now() WHERE id = :id');
     $stmt->execute(array(':id' => $groupId));
 }
+
+function getMemberLastAccess($idGroup, $idMember)
+{
+    global $conn;
+    $stmt = $conn->prepare('SELECT * FROM GroupUser WHERE idGroup = :id AND idMember = :id2');
+    $stmt->execute(array(':id' => $idGroup, ':id2' =>$idMember));
+    $result = $stmt->fetch();
+    return $result['lastaccess'];
+}

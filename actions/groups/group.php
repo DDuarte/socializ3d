@@ -6,6 +6,7 @@ function getGroupPage($group) {
     global $smarty;
     $memberId = getLoggedId();
     $member = array('id' => $memberId);
+    $member['lastaccess'] = getMemberLastAccess($group['id'], $memberId);
     $smarty->assign('group', $group);
     $smarty->assign('visitor', $member);
     $smarty->display('groups/group.tpl');
@@ -37,11 +38,11 @@ class GroupHandler {
             return;
         }
 
-        updateLastAccess($groupId, $memberId);
-
         include($BASE_DIR . 'pages/common/header.php');
         getGroupPage($group);
         include($BASE_DIR . 'pages/common/footer.php');
+
+        updateLastAccess($groupId, $memberId);
     }
 
     function get_xhr($groupId) {
@@ -62,9 +63,8 @@ class GroupHandler {
             exit;
         }
 
-        updateLastAccess($groupId, $memberId);
-
         getGroupPage($group);
+        updateLastAccess($groupId, $memberId);
         exit;
     }
 

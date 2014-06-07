@@ -328,7 +328,7 @@ function getGroupUnansweredApplications($id) {
 
     $newRes = array();
     foreach ($result as $r) {
-        $mem = getMember($r['id'], 0);
+        $mem = getSimpleMember($r['id'], 0);
         $r['username'] = $mem['username'];
         $newRes[] = $r;
     }
