@@ -4,7 +4,7 @@ function reloadNotificationsNow() {
         return;
     inProgress = true;
     $.ajax({
-        url: '../../pages/users/navbar.php',
+        url: Socializ3d.BASE_URL + 'pages/users/navbar.php',
         type: 'GET',
         success: function (a) {
 
@@ -28,7 +28,7 @@ function reloadSchedule() {
         inProgress = true;
         reloadSidebar();
         $.ajax({
-            url: '../../pages/users/navbar.php',
+            url: Socializ3d.BASE_URL + 'pages/users/navbar.php',
             type: 'GET',
             success: function (a) {
 
@@ -57,7 +57,7 @@ function reloadSidebar() {
         return;
     sideInProgress = true;
     $.ajax({
-        url: '../../pages/users/sidebar.php',
+        url: Socializ3d.BASE_URL + 'pages/users/sidebar.php',
         type: 'GET',
         success: function (a) {
             var newH = $(a);
