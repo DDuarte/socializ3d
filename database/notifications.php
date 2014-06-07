@@ -8,7 +8,7 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
     global $conn;
     global $BASE_URL;
 
-    $stmt = $conn->prepare("SELECT * FROM get_member_notifications(:id, :date, :limit)");
+    $stmt = $conn->prepare("SELECT * FROM get_complete_member_notifications(:id, :date, :limit);");
     $stmt->execute(array(
         ':id' => $id,
         ':date' => $dateLimit,
@@ -24,39 +24,26 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
         switch ($r['nottype']) {
             case 'Publication':
                 $idModel = $r['idmodel'];
-                $stmt = $conn->prepare('SELECT idAuthor, name, description FROM Model WHERE id = :id');
-                $stmt->execute(array(':id' => $idModel));
-                $result = $stmt->fetch();
-                $idAuthor = $result['idauthor'];
-                $modelName = $result['name'];
-                $description = $result['description'];
-                $user = getSimpleMember($idAuthor, 0);
-                $userName = $user['username'];
-                $userLink = $BASE_URL . "members/$idAuthor";
+                $userName = $r['username'];
+                $userLink = $BASE_URL . "members/" . $r['idmember'];
                 $modelLink = $BASE_URL . "models/$idModel";
                 $r['icon'] = 'fa fa-file-image-o bg-yellow';
-                $r['title'] = "<a href=\"$userLink\">$userName</a> published the model <a href=\"$modelLink\">$modelName</a>";
-                $r['text'] = $description;
+                $r['title'] = "<a href=\"$userLink\">$userName</a> published the model <a href=\"$modelLink\">".$r['modelname']."</a>";
+                $r['text'] = $r['modeldescription'];
                 $r['subtext'] = "<a href=\"$modelLink\" class=\"btn btn-warning btn-xs\">View Model</a>";
                 break;
             case 'GroupInvite':
-                $idGroupInvite = $r['idgroupinvite'];
-                $stmt = $conn->prepare('SELECT idGroup, idSender, accepted FROM GroupInvite WHERE id = :id');
-                $stmt->execute(array(':id' => $idGroupInvite));
-                $result = $stmt->fetch();
-                $groupId = $result['idgroup'];
-                $group = getSimpleGroup($groupId);
-                $groupName = $group['name'];
+                $groupId = $r['idgroup'];
+                $groupName = $r['groupname'];
                 $groupLink = $BASE_URL . "groups/$groupId";
-                $groupAbout = $group['about'];
-                $userId = $result['idsender'];
-                $user = getSimpleMember($userId, 0);
-                $userName = $user['username'];
+                $groupAbout = $r['groupabout'];
+                $userId = $r['idmember'];
+                $userName = $r['username'];
                 $userLink = $BASE_URL . "members/$userId";
                 $r['icon'] = 'fa fa-group bg-maroon';
                 $r['title'] = "You were invited to group <a href=\"$groupLink\">$groupName</a> by <a href=\"$userLink\">$userName</a>";
                 $r['text'] = $groupAbout;
-                $accepted = $result['accepted'];
+                $accepted = $r['accepted'];
                 if (is_null($accepted))
                     $r['subtext'] = "<a href=\"$groupLink\" class=\"btn bg-maroon btn-xs\">View Group</a> <a href=\"#\" class=\"btn btn-primary btn-xs\" name=\"$groupId\" onclick=\"groupInviteReply(this, true);\" >Accept</a> <a href=\"#\" class=\"btn btn-danger btn-xs\" name=\"$groupId\" onclick=\"groupInviteReply(this, false);\">Decline</a>";
                 else if($accepted)
@@ -66,18 +53,12 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
 
                 break;
             case 'GroupApplication':
-                $idGroupApplication = $r['idgroupapplication'];
-                $stmt = $conn->prepare('SELECT idGroup, idMember, accepted FROM GroupApplication WHERE id = :id');
-                $stmt->execute(array(':id' => $idGroupApplication));
-                $result = $stmt->fetch();
-                $groupId = $result['idgroup'];
-                $accepted = $result['accepted'];
-                $group = getSimpleGroup($groupId);
-                $groupName = $group['name'];
+                $groupId = $r['idgroup'];
+                $accepted = $r['accepted'];
+                $groupName = $r['groupname'];
                 $groupLink = $BASE_URL . "groups/$groupId";
-                $userId = $result['idmember'];
-                $user = getSimpleMember($userId, 0);
-                $userName = $user['username'];
+                $userId = $r['idmember'];
+                $userName = $r['username'];
                 $userLink = $BASE_URL . "members/$userId";
                 $r['icon'] = 'fa fa-group bg-purple';
                 if ($userId !== getLoggedId()) {
@@ -103,14 +84,9 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 }
                 break;
             case 'FriendshipInvite':
-                $friendshipInviteId = $r['idfriendshipinvite'];
-                $stmt = $conn->prepare('SELECT idSender, accepted FROM FriendshipInvite WHERE id = :id');
-                $stmt->execute(array(':id' => $friendshipInviteId));
-                $result = $stmt->fetch();
-                $userId = $result['idsender'];
-                $accepted = $result['accepted'];
-                $user = getSimpleMember($userId, 0);
-                $userName = $user['username'];
+                $userId = $r['idmember'];
+                $accepted = $r['accepted'];
+                $userName = $r['username'];
                 $userLink = $BASE_URL . "members/$userId";
                 $userFriendLink = $BASE_URL . "members/friend/$userId";
                 $r['icon'] = 'fa fa-user bg-aqua';
@@ -125,76 +101,38 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                     $r['subtext'] = 'You declined this request.';
                 break;
             case 'FriendshipInviteAccepted':
-                $friendshipInviteId = $r['idfriendshipinvite'];
-                $stmt = $conn->prepare('SELECT idReceiver, idSender FROM FriendshipInvite WHERE id = :id');
-                $stmt->execute(array(':id' => $friendshipInviteId));
-
-                $res = $stmt->fetch();
-                $userId1 = $res['idsender'];
-                $userId2 = $res['idreceiver'];
-                if ($userId1 == $id)
-                    $userId = $userId2;
-                else
-                    $userId = $userId1;
-
-                $user = getSimpleMember($userId, $id);
-                $userName = $user['username'];
+                $userId = $r['idmember'];
+                $userName = $r['username'];
                 $userLink = $BASE_URL . "members/$userId";
                 $r['icon'] = 'fa fa-user bg-green';
-                if ($userId1 == $id) {
-                    $r['title'] = "<a href=\"$userLink\">$userName</a> accepted your friend request";
-                }
-                else {
-                    $r['title'] = "You accepted <a href=\"$userLink\">$userName</a>'s friend request";
-                }
+                $r['title'] = "<a href=\"$userLink\">$userName</a> accepted your friend request";
 
                 $r['text'] = '';
                 $r['subtext'] = '';
                 break;
             case 'GroupInviteAccepted':
-                $idGroupInvite = $r['idgroupinvite'];
-                $stmt = $conn->prepare('SELECT idGroup, idSender, idReceiver FROM GroupInvite WHERE id = :id');
-                $stmt->execute(array(':id' => $idGroupInvite));
-                $result = $stmt->fetch();
-                $groupId = $result['idgroup'];
-                $userId1 = $result['idsender'];
-                $userId2 = $result['idreceiver'];
+                $userId = $r['idmember'];
 
-                if ($userId1 == $id)
-                    $userId = $userId2;
-                else
-                    $userId = $userId1;
-
-                $group = getSimpleGroup($groupId);
-                $groupName = $group['name'];
+                $groupId = $r['idgroup'];
+                $groupName = $r['groupname'];
                 $groupLink = $BASE_URL . "groups/$groupId";
-                $user = getSimpleMember($userId, $id);
-                $userName = $user['username'];
+                $userName = $r['username'];
                 $userLink = $BASE_URL . "members/$userId";
                 $r['icon'] = 'fa fa-group bg-maroon';
-                if ($userId1 == $id) {
-                    $r['title'] = "<a href=\"$userLink\">$userName</a> accepted your request to join <a href=\"$groupLink\">$groupName</a>";
-                }
-                else {
-                    $r['title'] = "You accepted <a href=\"$userLink\">$userName</a>'s request to join <a href=\"$groupLink\">$groupName</a>";
-                }
+                $r['title'] = "<a href=\"$userLink\">$userName</a> accepted your request to join <a href=\"$groupLink\">$groupName</a>";
+
 
                 $r['text'] = '';
                 $r['subtext'] = '';
                 break;
             case 'GroupApplicationAccepted':
-                $idGroupApplication = $r['idgroupapplication'];
-                $stmt = $conn->prepare('SELECT idGroup, idMember FROM GroupApplication WHERE id = :id');
-                $stmt->execute(array(':id' => $idGroupApplication));
-                $result = $stmt->fetch();
-                $groupId = $result['idgroup'];
-                $userId = $result['idmember'];
+                $groupId = $r['idgroup'];
+                $userId = $r['idmember'];
 
-                $group = getSimpleGroup($groupId);
-                $groupName = $group['name'];
+                $groupName = $r['groupname'];
                 $groupLink = $BASE_URL . "groups/$groupId";
-                $user = getSimpleMember($userId, $id);
-                $userName = $user['username'];
+
+                $userName = $r['username'];
                 $userLink = $BASE_URL . "members/$userId";
                 $r['icon'] = 'fa fa-group bg-purple';
                 if ($userId == $id) {
