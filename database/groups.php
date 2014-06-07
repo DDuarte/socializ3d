@@ -168,3 +168,10 @@ function updateGroupUserStatus($groupId, $memberId, $isAdmin)
     $adminValue = ($isAdmin) ? 'true' : 'false';
     $stmt->execute(array(':admin' => $adminValue, ':member' => $memberId, ':group' => $groupId));
 }
+
+function removeGroupUser($groupId, $userId)
+{
+    global $conn;
+    $stmt = $conn->prepare("DELETE FROM GroupUser WHERE idGroup = :group AND idMember = :member;");
+    $stmt->execute(array(':group' => $groupId, ':member' => $userId));
+}

@@ -44,7 +44,21 @@ class GroupMemberHandler {
             exit;
         }
 
+        if (!isGroupAdmin($groupId, $memberId)) {
+            http_response_code(403);
+            exit;
+        }
 
+        if (!isGroupMember($groupId, $otherMemberId)) {
+            http_response_code(404);
+            exit;
+        }
 
+        if (isGroupAdmin($groupId, $otherMemberId)) {
+            http_response_code(401);
+            exit;
+        }
+
+        removeGroupUser($groupId, $otherMemberId);
     }
 }

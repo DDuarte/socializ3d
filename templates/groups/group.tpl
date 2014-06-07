@@ -162,7 +162,7 @@
                                         {if $group.isGroupAdmin}
                                         <td>
                                             {if $member.memberid != $visitor.id}
-                                            <button class="btn btn-sm btn-flat btn-default pull-right" data-toggle="modal" data-target="#delete-modal">
+                                            <button class="btn btn-sm btn-flat btn-default pull-right" onclick="excludeMember(this, {$member.memberid});">
                                                 <i class="fa fa-times"></i>
                                             </button>
                                             {/if}
@@ -277,10 +277,47 @@
             error: function (a, b, c) {
                 BootstrapDialog.alert({
                     title: 'Oops!',
-                    message: 'Could not process your request at this time. :(\nError: ' + (c === 'Conflict' ? 'Member is already in group or has invitation pending.' : c)});
+                    message: 'Could not process your request at this time. :(\nError: ' + c});
                 thisButton.find('span').remove();
                 thisButton.removeClass('disabled');
             }
+        });
+    }
+
+    function excludeMember(btn, memId) {
+        var thisButton = $(btn);
+        BootstrapDialog.show({
+            message: 'Are you sure you want to kick out this member?',
+            buttons: [{
+                label: 'Exclude member',
+                cssClass: 'btn-danger',
+                autospin: true,
+                action: function(dialogRef){
+                    var thisRef = dialogRef;
+                    dialogRef.enableButtons(false);
+                    dialogRef.setClosable(false);
+                    $.ajax({
+                        url: '{$BASE_URL}groups/{$group.id}/members/' + memId,
+                        type: 'DELETE',
+                        success: function (a) {
+                            thisButton.parent().parent().remove();
+                            thisRef.close();
+                        },
+                        error: function (a, b, c) {
+                            BootstrapDialog.alert({
+                                title: 'Oops!',
+                                message: 'Could not process your request at this time. :(\nError: ' + (c === 'Unauthorized' ? 'Member is still an Admin, you need to demote him/her first.' : c)});
+                            thisRef.enableButtons(true);
+                            thisRef.setClosable(true);
+                        }
+                    });
+                }
+            }, {
+                label: 'Cancel',
+                action: function(dialogRef){
+                    dialogRef.close();
+                }
+            }]
         });
     }
 
