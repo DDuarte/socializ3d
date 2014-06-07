@@ -85,15 +85,15 @@ class UploadHandler
                 return;
             case UPLOAD_ERR_INI_SIZE:
             case UPLOAD_ERR_FORM_SIZE:
-                http_reponse_code(400);
+                http_response_code(400);
                 return;
             default:
-                http_reponse_code(400);
+                http_response_code(400);
                 return;
         }
 
         if ($_FILES["file"]["size"] > (100 * 1024 * 1024)) { // MAX File Size 100 MB
-            http_reponse_code(400);
+            http_response_code(400);
             return;
         }
 
