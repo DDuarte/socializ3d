@@ -5,16 +5,37 @@ class SearchHandler
     function getResults($userId, $query, $limit) {
         global $conn;
 
-        $stmt = $conn->prepare("SELECT * FROM (
-                                SELECT id, 'group' AS type, ts_rank_cd(to_tsvector('english', name), plainto_tsquery(lower(:searchTerm))) * 0.7 + ts_rank_cd(to_tsvector('english', about), plainto_tsquery(lower(:searchTerm))) * 0.3 AS score
-                                FROM TGroup WHERE visibility = 'public'
-                                UNION ALL
-                                SELECT id, 'member' AS type, ts_rank_cd(to_tsvector('english', name), plainto_tsquery(lower(:searchTerm))) * 0.7 + ts_rank_cd(to_tsvector('english', about), plainto_tsquery(lower(:searchTerm))) * 0.3 AS score
-                                FROM Member
-                                UNION ALL
-                                SELECT Model.id, 'model' AS type, ts_rank_cd(to_tsvector('english', name), plainto_tsquery(lower(:searchTerm))) * 0.7 + ts_rank_cd(to_tsvector('english', description), plainto_tsquery(lower(:searchTerm))) * 0.3 AS score
-                                FROM get_all_visibile_models(:userId) JOIN Model ON get_all_visibile_models.id = Model.id
-                                ) AS q ORDER BY score DESC LIMIT :limit;");
+        $stmt = $conn->prepare(
+"SELECT
+  *
+FROM
+  (
+    SELECT
+      id,
+      'group'                                                                              AS type,
+      ts_rank_cd(to_tsvector('english', name), plainto_tsquery(lower(:searchTerm))) * 0.7 +
+      ts_rank_cd(to_tsvector('english', about), plainto_tsquery(lower(:searchTerm))) * 0.3 AS score
+    FROM TGroup
+    WHERE visibility = 'public'
+    UNION ALL
+    SELECT
+      id,
+      'member'                                                                             AS type,
+      ts_rank_cd(to_tsvector('english', name), plainto_tsquery(lower(:searchTerm))) * 0.35 +
+      ts_rank_cd(to_tsvector('english', username), plainto_tsquery(lower(:searchTerm))) * 0.35 +
+      ts_rank_cd(to_tsvector('english', about), plainto_tsquery(lower(:searchTerm))) * 0.3 AS score
+    FROM Member JOIN registeredUser USING (id)
+    UNION ALL
+    SELECT
+      Model.id,
+      'model'                                                                                    AS type,
+      ts_rank_cd(to_tsvector('english', name), plainto_tsquery(lower(:searchTerm))) * 0.7 +
+      ts_rank_cd(to_tsvector('english', description), plainto_tsquery(lower(:searchTerm))) * 0.3 AS score
+    FROM get_all_visibile_models(:userId) JOIN Model ON get_all_visibile_models.id = Model.id
+  ) AS q
+WHERE score <> 0
+ORDER BY score DESC
+LIMIT :limit;");
 
         $stmt->execute(Array(":searchTerm" => $query, ":userId" => $userId, ":limit" => $limit));
         $results = $stmt->fetchAll();
