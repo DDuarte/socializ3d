@@ -1,1 +1,1 @@
-//$('#submit').click(function(event) { event.preventDefault(); $('form').submit(); })
+$('#submit').click(function(event) { event.preventDefault(); $('form').submit(); })

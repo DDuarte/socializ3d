@@ -18,40 +18,6 @@ Socializ3d.update_hash = function () {
     document.location.hash = str.slice(0, -1);
 };
 
-/*function hash_change() {
-    if (Socializ3d._ignoreHashChange === true) {
-        delete Socializ3d._ignoreHashChange;
-        return;
-    }
-
-    if (document.location.hash.length === 0)
-        document.location.hash = "page_catalog"; // default page
-    var hash_parts = document.location.hash.slice(1).split("-"); // first character is #
-
-    var map = {};
-
-    hash_parts.forEach(function (hash) {
-        var pattern = /([A-Za-z0-9]+)_([A-Za-z0-9]*)/; // name_value
-        var result = pattern.exec(hash);
-        map[result[1]] = result[2];
-    });
-
-    Socializ3d.hash = map;
-
-    var pageName = map["page"];
-    if (pageName) {
-        var tabName = map["tab"];
-        if (tabName)
-            load_ajax(pageName, function() {
-                $("a[href=\"#tab_" + tabName + "\"]").trigger("click");
-                var pos = $("a[href=\"#tab_" + tabName + "\"]").offset();
-                $('body').animate({ scrollTop: pos.top });
-            });
-        else
-            load_ajax(pageName);
-    }
-}*/
-
 function hash_change() {
     if (Socializ3d._ignoreHashChange === true) {
         delete Socializ3d._ignoreHashChange;
@@ -85,7 +51,6 @@ function hash_change() {
 
 function load_ajax(page) {
     var pageURL= Socializ3d.BASE_URL + page;
-    console.log(pageURL);
     $.ajax({
         url: pageURL,
         type: 'GET',
@@ -107,7 +72,6 @@ function load_ajax(page) {
 
 function search(event) {
     var href = 'search?q=' + $('#search-input1').val();
-    console.log(href);
     event.preventDefault();
     load_ajax(href);
 }
@@ -264,7 +228,6 @@ $(function() {
     $('#search-form').submit(search);
     $(window).bind("popstate", function(event){
         if (event.originalEvent.state) {
-            console.log(document.location.href);
             $("#content-ajax").html(event.originalEvent.state.html);
             hash_change();
             $("time.timeago").timeago();
