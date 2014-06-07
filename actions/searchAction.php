@@ -43,7 +43,7 @@ FROM
 
 WHERE score <> 0
 ORDER BY score DESC
-LIMIT :limit;");
+LIMIT :limit;", array(PDO::ATTR_EMULATE_PREPARES => true));
 
         $stmt->execute(Array(":searchTerm" => $query, ":userId" => $userId, ":limit" => $limit));
         $results = $stmt->fetchAll();
