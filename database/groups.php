@@ -36,6 +36,7 @@ function getGroup($id) {
     $result['isGroupAdmin'] = isGroupAdmin($id, $loggedId) || isAdmin($loggedId);
     $result['groupMemberApplications'] = getGroupUnansweredApplications($id);
 
+
     return $result;
 }
 

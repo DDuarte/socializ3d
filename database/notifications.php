@@ -183,6 +183,31 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $r['text'] = '';
                 $r['subtext'] = '';
                 break;
+            case 'GroupApplicationAccepted':
+                $idGroupApplication = $r['idgroupapplication'];
+                $stmt = $conn->prepare('SELECT idGroup, idMember FROM GroupApplication WHERE id = :id');
+                $stmt->execute(array(':id' => $idGroupApplication));
+                $result = $stmt->fetch();
+                $groupId = $result['idgroup'];
+                $userId = $result['idmember'];
+
+                $group = getGroup($groupId);
+                $groupName = $group['name'];
+                $groupLink = $BASE_URL . "groups/$groupId";
+                $user = getMember($userId, $id);
+                $userName = $user['name'];
+                $userLink = $BASE_URL . "members/$userId";
+                $r['icon'] = 'fa fa-group bg-purple';
+                if ($userId == $id) {
+                    $r['title'] = "Your application to join <a href=\"$groupLink\">$groupName</a> has been accepted";
+                }
+                else {
+                    $r['title'] = "<a href=\"$userLink\">$userName</a>'s application to join <a href=\"$groupLink\">$groupName</a> has been accepted";
+                }
+
+                $r['text'] = '';
+                $r['subtext'] = '';
+                break;
         }
 
         $day = date('d M. Y', strtotime($r['createdate']));
@@ -206,7 +231,7 @@ function getGroupUnansweredApplications($id) {
 
     $result = $stmt->fetchAll();
 
-    if ($result == false) return false;
+    if ($result == false) return array();
 
     $newRes = array();
     foreach ($result as $r) {

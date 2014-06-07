@@ -180,10 +180,10 @@
                                             <i class="fa fa-comments-o"></i>
                                         </span>
                                         <span class="text"> The user '<a href="{$BASE_URL}members/{$appli.id}" class="notification-group-name">{$appli.username}</a>' wants to join the group</span>
-                                        <div class="tools">
-                                            <i class="fa fa-check"></i>
-                                            <i class="fa fa-trash-o"></i>
-                                        </div>
+                                        <span class="pull-right">
+                                            <button name="{$appli.id}" onclick="replyToApplication(this, true);" class="btn btn-primary btn-xs">Accept</button>
+                                            <button name="{$appli.id}" onclick="replyToApplication(this, true);" class="btn btn-danger btn-xs">Decline</button>
+                                        </span>
                                     </li>
                                     {/foreach}
                                 </ul>
@@ -306,6 +306,34 @@
             });
         };
     });
+
+    function replyToApplication(btn, answer) {
+        var thisButton = $(btn);
+        var memid = thisButton.attr('name');
+        var reqType = answer ? 'POST' : 'DELETE';
+        thisButton.addClass('disabled');
+        thisButton.prepend('<span class="bootstrap-dialog-button-icon glyphicon glyphicon-asterisk icon-spin"></span>');
+
+        $.ajax({
+            url: '{$BASE_URL}groups/{$group.id}/application/'+memid,
+            type: reqType,
+            success: function (a) {
+                BootstrapDialog.alert({
+                    title: 'Success!',
+                    message: 'Reply sent.'
+                });
+                var textReply = answer ? 'accepted' : 'rejected';
+                thisButton.parent().parent().remove();
+            },
+            error: function (a, b, c) {
+                BootstrapDialog.alert({
+                    title: 'Oops!',
+                    message: 'Could not process your request at this time. :(\nError: ' + (c === 'Conflict' ? 'Member is already in group or has invitation pending.' : c)});
+                thisButton.find('span').remove();
+                thisButton.removeClass('disabled');
+            }
+        });
+    }
 
     $(function () {
         $('#apply-to-group-btn').click(function (event) {
