@@ -182,7 +182,7 @@
                                         <span class="text"> The user '<a href="{$BASE_URL}members/{$appli.id}" class="notification-group-name">{$appli.username}</a>' wants to join the group</span>
                                         <span class="pull-right">
                                             <button name="{$appli.id}" onclick="replyToApplication(this, true);" class="btn btn-primary btn-xs">Accept</button>
-                                            <button name="{$appli.id}" onclick="replyToApplication(this, true);" class="btn btn-danger btn-xs">Decline</button>
+                                            <button name="{$appli.id}" onclick="replyToApplication(this, false);" class="btn btn-danger btn-xs">Decline</button>
                                         </span>
                                     </li>
                                     {/foreach}
