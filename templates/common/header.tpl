@@ -25,7 +25,8 @@
 
     <script src="{$BASE_URL}js/renderer/build/three.min.js"></script>
     <script src="{$BASE_URL}js/renderer/js/libs/system.min.js"></script>
-    
+    <script src="{$BASE_URL}js/vendor/jquery.fullscreen.js"></script>
+
     <script type="text/javascript">
         if (typeof Socializ3d === 'undefined')
             Socializ3d = {};

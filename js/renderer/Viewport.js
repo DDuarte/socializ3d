@@ -143,7 +143,19 @@ var Viewport = function ( editor, isMobile ) {
         light.position = camera.position;
     });
 
+    function onMouseWheel(event) {
+        event.preventDefault();
+        return false;
+    }
+
     this.activateControls = function (activate) {
+
+        if (activate) {
+            container.dom.addEventListener('mousewheel', onMouseWheel, false);
+        } else {
+            container.dom.removeEventListener('mousewheel', onMouseWheel, false);
+        }
+
         controls.activateControls(activate);
     };
 
@@ -405,12 +417,12 @@ var Viewport = function ( editor, isMobile ) {
 
 	} );
 
-    container.dom.addEventListener('mousewheel', function(event) {
-        event.preventDefault();
-        return false;
-    }, false);
-
-	//
+    if (!isMobile) {
+        container.dom.addEventListener('mousewheel', function (event) {
+            event.preventDefault();
+            return false;
+        }, false);
+    }
 
 	var clearColor, renderer;
 
