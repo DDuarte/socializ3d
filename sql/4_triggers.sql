@@ -100,6 +100,7 @@ CREATE OR REPLACE FUNCTION generate_group_invite_notification() RETURNS TRIGGER 
     BEGIN
         INSERT INTO Notification (idGroupInvite, notificationtype) VALUES (NEW.id, 'GroupInvite') RETURNING id INTO notificationId;
         INSERT INTO UserNotification (idMember, idNotification) VALUES (NEW.idReceiver, notificationId);
+        INSERT INTO GroupNotification (idGroup, idNotification) VALUES (NEW.idGroup, notificationId);
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;

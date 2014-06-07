@@ -30,7 +30,7 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $idAuthor = $result['idauthor'];
                 $modelName = $result['name'];
                 $description = $result['description'];
-                $user = getMember($idAuthor, 0);
+                $user = getSimpleMember($idAuthor, 0);
                 $userName = $user['username'];
                 $userLink = $BASE_URL . "members/$idAuthor";
                 $modelLink = $BASE_URL . "models/$idModel";
@@ -45,12 +45,12 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $stmt->execute(array(':id' => $idGroupInvite));
                 $result = $stmt->fetch();
                 $groupId = $result['idgroup'];
-                $group = getGroup($groupId);
+                $group = getSimpleGroup($groupId);
                 $groupName = $group['name'];
                 $groupLink = $BASE_URL . "groups/$groupId";
                 $groupAbout = $group['about'];
                 $userId = $result['idsender'];
-                $user = getMember($userId, 0);
+                $user = getSimpleMember($userId, 0);
                 $userName = $user['username'];
                 $userLink = $BASE_URL . "members/$userId";
                 $r['icon'] = 'fa fa-group bg-maroon';
@@ -72,12 +72,11 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $result = $stmt->fetch();
                 $groupId = $result['idgroup'];
                 $accepted = $result['accepted'];
-                $group = getGroup($groupId);
+                $group = getSimpleGroup($groupId);
                 $groupName = $group['name'];
                 $groupLink = $BASE_URL . "groups/$groupId";
-                $groupAbout = $group['about'];
                 $userId = $result['idmember'];
-                $user = getMember($userId, 0);
+                $user = getSimpleMember($userId, 0);
                 $userName = $user['username'];
                 $userLink = $BASE_URL . "members/$userId";
                 $r['icon'] = 'fa fa-group bg-purple';
@@ -110,7 +109,7 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $result = $stmt->fetch();
                 $userId = $result['idsender'];
                 $accepted = $result['accepted'];
-                $user = getMember($userId, 0);
+                $user = getSimpleMember($userId, 0);
                 $userName = $user['username'];
                 $userLink = $BASE_URL . "members/$userId";
                 $userFriendLink = $BASE_URL . "members/friend/$userId";
@@ -138,7 +137,7 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 else
                     $userId = $userId1;
 
-                $user = getMember($userId, $id);
+                $user = getSimpleMember($userId, $id);
                 $userName = $user['username'];
                 $userLink = $BASE_URL . "members/$userId";
                 $r['icon'] = 'fa fa-user bg-green';
@@ -166,10 +165,10 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 else
                     $userId = $userId1;
 
-                $group = getGroup($groupId);
+                $group = getSimpleGroup($groupId);
                 $groupName = $group['name'];
                 $groupLink = $BASE_URL . "groups/$groupId";
-                $user = getMember($userId, $id);
+                $user = getSimpleMember($userId, $id);
                 $userName = $user['username'];
                 $userLink = $BASE_URL . "members/$userId";
                 $r['icon'] = 'fa fa-group bg-maroon';
@@ -191,10 +190,10 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $groupId = $result['idgroup'];
                 $userId = $result['idmember'];
 
-                $group = getGroup($groupId);
+                $group = getSimpleGroup($groupId);
                 $groupName = $group['name'];
                 $groupLink = $BASE_URL . "groups/$groupId";
-                $user = getMember($userId, $id);
+                $user = getSimpleMember($userId, $id);
                 $userName = $user['username'];
                 $userLink = $BASE_URL . "members/$userId";
                 $r['icon'] = 'fa fa-group bg-purple';
@@ -242,7 +241,7 @@ function getGroupNotifications($id, $dateLimit, $numLimit) {
                 $result = $stmt->fetch();
                 $idAuthor = $result['idauthor'];
                 $modelName = $result['name'];
-                $user = getMember($idAuthor, 0);
+                $user = getSimpleMember($idAuthor, 0);
                 $userName = $user['username'];
                 $userLink = $BASE_URL . "members/$idAuthor";
                 $modelLink = $BASE_URL . "models/$idModel";
@@ -255,7 +254,7 @@ function getGroupNotifications($id, $dateLimit, $numLimit) {
                 $stmt->execute(array(':id' => $idGroupApplication));
                 $result = $stmt->fetch();
                 $userId = $result['idmember'];
-                $user = getMember($userId, 0);
+                $user = getSimpleMember($userId, 0);
                 $userName = $user['username'];
                 $userLink = $BASE_URL . "members/$userId";
                 $r['img'] = 'http://www.gravatar.com/avatar/' . $user['hash'] . '?s=50&d=identicon';
@@ -267,7 +266,7 @@ function getGroupNotifications($id, $dateLimit, $numLimit) {
                 $stmt->execute(array(':id' => $idGroupApplication));
                 $result = $stmt->fetch();
                 $userId = $result['idmember'];
-                $user = getMember($userId, $id);
+                $user = getSimpleMember($userId, $id);
                 $userName = $user['username'];
                 $userLink = $BASE_URL . "members/$userId";
                 $r['img'] = 'http://www.gravatar.com/avatar/' . $user['hash'] . '?s=50&d=identicon';
@@ -275,28 +274,28 @@ function getGroupNotifications($id, $dateLimit, $numLimit) {
                 break;
             case 'GroupInvite':
                 $idGroupInvite = $r['idgroupinvite'];
-                $stmt = $conn->prepare('SELECT idGroup, idSender, accepted FROM GroupInvite WHERE id = :id');
+                $stmt = $conn->prepare('SELECT idGroup, idSender, idReceiver, accepted FROM GroupInvite WHERE id = :id');
                 $stmt->execute(array(':id' => $idGroupInvite));
                 $result = $stmt->fetch();
                 $userId = $result['idsender'];
-                $user = getMember($userId, 0);
+                $user = getSimpleMember($userId, 0);
                 $userName = $user['username'];
                 $userLink = $BASE_URL . "members/$userId";
                 $userId2 = $result['idreceiver'];
-                $user2 = getMember($userId2, 0);
+                $user2 = getSimpleMember($userId2, 0);
                 $userName2 = $user2['username'];
                 $userLink2 = $BASE_URL . "members/$userId2";
                 $r['img'] = 'http://www.gravatar.com/avatar/' . $user2['hash'] . '?s=50&d=identicon';
                 $r['text'] = "<a href=\"$userLink2\">$userName2</a> was invited by <a href=\"$userLink\">$userName</a> to join this group";
                 break;
-            case 'GroupInvitationAccepted':
+            case 'GroupInviteAccepted':
                 $idGroupInvite = $r['idgroupinvite'];
                 $stmt = $conn->prepare('SELECT idGroup, idSender, idReceiver FROM GroupInvite WHERE id = :id');
                 $stmt->execute(array(':id' => $idGroupInvite));
                 $result = $stmt->fetch();
                 $userId = $result['idreceiver'];
 
-                $user = getMember($userId, $id);
+                $user = getSimpleMember($userId, $id);
                 $userName = $user['username'];
                 $r['img'] = 'http://www.gravatar.com/avatar/' . $user['hash'] . '?s=50&d=identicon';
                 $userLink = $BASE_URL . "members/$userId";
