@@ -105,7 +105,7 @@
                     </li>
                     {if $IS_LOGGED_IN && $LOGGED_ID != $member.id}
                     <li class="pull-left">
-                        {if $userInfo.groups|@count > 0}
+                        {if $diffGroups|@count > 0}
                         <button id="add-to-group-btn" class="btn bg-blue btn-primary">
                             <i class="fa fa-plus-square-o"></i>
                             <span>Invite to group</span>
@@ -186,8 +186,7 @@
         });
     }
     var groupSettings = '<div class="form-group">' +
-            '{foreach $userInfo.groups as $group}' +
-            '<p style="min-height:45px; border-bottom:1px solid gray;" ><span>{$group.groupname}</span>' +
+            '{foreach $diffGroups as $group}<p style="min-height:45px; border-bottom:1px solid gray;" ><span>{$group.groupname}</span>' +
             '<button class="btn btn-primary" onclick="inviteToGroup(this);" style="float: right;" name="{$group.groupid}" >Invite</button></p>' +
             '{/foreach}</div>';
 
