@@ -25,6 +25,19 @@ class GroupMemberHandler {
             exit;
         }
 
+        if (isGroupAdmin($groupId, $otherMemberId)) {
+            $groupMems = getMembersOfGroup($groupId);
+            $numAdmins = 0;
+            foreach ($groupMems as $mem) {
+                if ($mem['isadmin'])
+                    $numAdmins++;
+            }
+            if ($numAdmins < 2) {
+                http_response_code(401);
+                exit;
+            }
+        }
+
         if (!isset($_POST['adm'])) {
             http_response_code(400);
             exit;
@@ -32,6 +45,7 @@ class GroupMemberHandler {
 
         $value = filter_var($_POST['adm'], FILTER_VALIDATE_BOOLEAN);
         updateGroupUserStatus($groupId, $otherMemberId, $value == 1);
+
     }
 
     function delete($groupId, $otherMemberId) {

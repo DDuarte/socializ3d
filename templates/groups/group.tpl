@@ -248,7 +248,7 @@
             error: function (a, b, c) {
                 BootstrapDialog.alert({
                     title: 'Oops!',
-                    message: 'Could not process your request at this time. :(\nError: ' + c});
+                    message: 'Could not process your request at this time. :(\nError: ' + (c === 'Conflict' ? 'Member is already in group or has application pending.' : c)});
                 thisButton.find('span').remove();
                 thisButton.removeClass('disabled');
             }
@@ -318,7 +318,7 @@
                         error: function (a, b, c) {
                             BootstrapDialog.alert({
                                 title: 'Oops!',
-                                message: 'Could not process your request at this time. :(\nError: ' + (c === 'Conflict' ? 'Member is already in group or has application pending.' : c)});
+                                message: 'Could not process your request at this time. :(\nError: ' + (c === 'Unauthorized' ? 'You are the last admin of the group, please make someone else an Admin first' : c)});
                             thisRef.enableButtons(true);
                             thisRef.setClosable(true);
                         }
