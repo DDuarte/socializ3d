@@ -12,6 +12,7 @@
     <link href="{$BASE_URL}css/AdminLTE.css" rel="stylesheet" type="text/css" />
     <link href="{$BASE_URL}css/bootstrap-tagsinput.css" rel="stylesheet" type="text/css" />
     <link href="{$BASE_URL}css/bootstrap3-dialog/bootstrap-dialog.min.css" rel="stylesheet" type="text/css" />
+    <link href="{$BASE_URL}css/bootstrapValidator.min.css" rel="stylesheet" type="text/css" />
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
