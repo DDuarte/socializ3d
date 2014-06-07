@@ -214,7 +214,7 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
         $newResult[$day][] = $r;
     }
 
-    $newResult = array_reverse($newResult);
+    return $newResult;
 
     return $newResult;
 }

@@ -292,12 +292,12 @@ $$ LANGUAGE SQL;
 
 -- List the newest member notifications within a given range --
 CREATE OR REPLACE FUNCTION get_member_notifications(memberId BIGINT, oldest_date_limit TIMESTAMP, max_notifications_limit INTEGER) RETURNS TABLE(idNotification BIGINT, notType notification_type, idFriendshipInvite BIGINT, idGroupApplication BIGINT, idGroupInvite BIGINT, idModel BIGINT, createDate TIMESTAMP) AS $$
-    SELECT Notification.id, Notification.notificationType, Notification.idFriendshipInvite, Notification.idGroupApplication, Notification.idGroupInvite, Notification.idModel, Notification.createDate FROM Notification JOIN UserNotification ON UserNotification.idMember = $1 AND UserNotification.idNotification = Notification.id WHERE createDate >= $2 ORDER BY createDate LIMIT $3
+    SELECT Notification.id, Notification.notificationType, Notification.idFriendshipInvite, Notification.idGroupApplication, Notification.idGroupInvite, Notification.idModel, Notification.createDate FROM Notification JOIN UserNotification ON UserNotification.idMember = $1 AND UserNotification.idNotification = Notification.id WHERE createDate >= $2 ORDER BY createDate DESC LIMIT $3
 $$ LANGUAGE SQL;
 
 -- List the newest group notifications within a given range --
-CREATE OR REPLACE FUNCTION get_group_notifications(groupId BIGINT, oldest_date_limit TIMESTAMP, max_notifications_limit INTEGER) RETURNS TABLE(idNotification BIGINT, notType notification_type, idFriendshipInvite BIGINT, idGroupApplication BIGINT, idGroupInvite BIGINT, idModel BIGINT) AS $$
-    SELECT Notification.id, Notification.notificationType, Notification.idFriendshipInvite, Notification.idGroupApplication, Notification.idGroupInvite, Notification.idModel FROM Notification JOIN GroupNotification ON GroupNotification.idGroup = $1 AND GroupNotification.idNotification = Notification.id  WHERE createDate < $2 LIMIT $3
+CREATE OR REPLACE FUNCTION get_group_notifications(groupId BIGINT, oldest_date_limit TIMESTAMP, max_notifications_limit INTEGER) RETURNS TABLE(idNotification BIGINT, notType notification_type, idFriendshipInvite BIGINT, idGroupApplication BIGINT, idGroupInvite BIGINT, idModel BIGINT, createDate TIMESTAMP) AS $$
+    SELECT Notification.id, Notification.notificationType, Notification.idFriendshipInvite, Notification.idGroupApplication, Notification.idGroupInvite, Notification.idModel, Notification.createDate FROM Notification JOIN GroupNotification ON GroupNotification.idGroup = $1 AND GroupNotification.idNotification = Notification.id  WHERE createDate < $2 ORDER BY createDate DESC LIMIT $3
 $$ LANGUAGE SQL;
 
 -- List the newest publications for a particular member --
