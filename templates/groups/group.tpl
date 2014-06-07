@@ -152,7 +152,7 @@
                                         <td>
                                             <time class="timeago" datetime="{{$member.lastaccess}}">{{$member.lastaccess}}</time>
                                         </td>
-                                        <td>
+                                        <td id="mem-role-description">
                                             {if $member.isadmin}
                                             <span class="label label-success">Admin</span>
                                             {else}
@@ -161,10 +161,12 @@
                                         </td>
                                         {if $group.isGroupAdmin}
                                         <td>
+                                            {if $member.memberid != $visitor.id}
                                             <button class="btn btn-sm btn-flat btn-default pull-right" data-toggle="modal" data-target="#delete-modal">
                                                 <i class="fa fa-times"></i>
                                             </button>
-                                            <button class="btn btn-sm btn-flat btn-default pull-right" data-toggle="modal" data-target="#change-role-modal">
+                                            {/if}
+                                            <button class="btn btn-sm btn-flat btn-default pull-right" onclick="roleSelect(this, {$member.memberid}, {if $member.isadmin}true{else}false{/if});">
                                                 <i class="fa fa-sort-down"></i>
                                             </button>
                                         </td>
@@ -238,37 +240,6 @@
         </div>
     </div>
 </div>
-
-<div id="change-role-modal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="content-header" style="text-align: center">
-                <h2>Change role</h2>
-            </div>
-            <div class="box box-primary">
-                <div class="box-body notifications-box">
-                    <ul class="todo-list notifications-list">
-                        <li class="notification-item notification-group-item">
-                            <input type="radio" name="role">
-                            <span class="text">
-                                <span class="notification-group-name">Admin</span>
-                            </span>
-                        </li>
-                        <li class="notifiation-item notification-friendship-item">
-                            <input type="radio" name="role">
-                            <span class="text">
-                                <span class="notification-friendship-name">Member</span>
-                            </span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="box-footer">
-                    <button class="btn btn-primary">Commit changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 {/if}
 
 <script src="{$BASE_URL}js/plugins/bootstrap3-dialog/bootstrap-dialog.min.js" type="text/javascript"></script>
@@ -282,7 +253,7 @@
                 var text = $(this).text().toLowerCase();
                 (text.indexOf(valThis) >= 0) ? $(this).show() : $(this).hide();
             });
-        };
+        }
     });
 
     function replyToApplication(btn, answer) {
@@ -310,6 +281,48 @@
                 thisButton.find('span').remove();
                 thisButton.removeClass('disabled');
             }
+        });
+    }
+
+    function roleSelect(btn, memId, isAdmin) {
+        var thisButton = $(btn);
+        BootstrapDialog.show({
+            message: isAdmin ? 'This member is currently an Admin' : 'This is a regular member',
+            buttons: [{
+                label: isAdmin ? 'Demote to member' : 'Promote to Admin',
+                cssClass: isAdmin ? 'btn-danger' : 'btn-success',
+                autospin: true,
+                action: function(dialogRef){
+                    var thisRef = dialogRef;
+                    dialogRef.enableButtons(false);
+                    dialogRef.setClosable(false);
+
+                    $.ajax({
+                        url: '{$BASE_URL}groups/{$group.id}/members/' + memId,
+                        type: 'POST',
+                        data: {literal}{adm: isAdmin ? 'false' : 'true'}{/literal},
+                        success: function (a) {
+                            var innerSpan = !isAdmin ? '<span class="label label-success">Admin</span>' : '<span class="label label-primary">Member</span>';
+                            thisButton.parent().parent().find('#mem-role-description').replaceWith('<td id="mem-role-description">' + innerSpan + '</td>');
+                            thisButton.attr('onclick','roleSelect(this, '+ memId + ', ' + (isAdmin ? 'false' : 'true') +');');
+                            thisRef.close();
+                        },
+                        error: function (a, b, c) {
+                            BootstrapDialog.alert({
+                                title: 'Oops!',
+                                message: 'Could not process your request at this time. :(\nError: ' + (c === 'Conflict' ? 'Member is already in group or has application pending.' : c)});
+                            thisRef.enableButtons(true);
+                            thisRef.setClosable(true);
+                        }
+                    }
+                    );
+                }
+            }, {
+                label: 'Close',
+                action: function(dialogRef){
+                    dialogRef.close();
+                }
+            }]
         });
     }
 

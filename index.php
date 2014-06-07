@@ -18,6 +18,7 @@ include_once($BASE_DIR . 'actions/groups/group.php');
 include_once($BASE_DIR . 'actions/groups/invite.php');
 include_once($BASE_DIR . 'actions/groups/application.php');
 include_once($BASE_DIR . 'actions/groups/create.php');
+include_once($BASE_DIR . 'actions/groups/members.php');
 include_once($BASE_DIR . 'actions/admin/stats.php');
 include_once($BASE_DIR . 'actions/notifications.php');
 include_once($BASE_DIR . 'actions/searchAction.php');
@@ -103,6 +104,7 @@ Toro::serve(array(
     '/groups/:number' => 'GroupHandler',
     '/groups/:number/invite/:number' => 'InvitationHandler',
     '/groups/:number/application/:number' => 'ApplicationHandler',
+    '/groups/:number/members/:number' => 'GroupMemberHandler',
     '/groups/create' => 'GroupCreateHandler',
     '/admin/stats' => 'StatisticsHandler',
     '/notifications' => 'NotificationsHandler',

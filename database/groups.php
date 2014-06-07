@@ -160,3 +160,11 @@ function createGroup($creator, $groupName, $aboutInfo, $coverImg, $avatarImg, $v
 
     return $res['groupid'];
 }
+
+function updateGroupUserStatus($groupId, $memberId, $isAdmin)
+{
+    global $conn;
+    $stmt = $conn->prepare("UPDATE GroupUser SET isAdmin = :admin WHERE idMember = :member AND idGroup = :group;");
+    $adminValue = ($isAdmin) ? 'true' : 'false';
+    $stmt->execute(array(':admin' => $adminValue, ':member' => $memberId, ':group' => $groupId));
+}
