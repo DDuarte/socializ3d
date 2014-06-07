@@ -198,7 +198,11 @@
                                         enter.
                                         <br/>Once finished you can click the submit button.</p>
                                 </div>
-                                <input type="submit"/>
+                                <div class="input-group-btn">
+                                    <button class="btn btn-success" type="submit">
+                                        Submit
+                                    </button>
+                                </div>
                             </form>
                         </div>
                     {/if}
