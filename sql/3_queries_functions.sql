@@ -62,12 +62,16 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION get_all_visibile_models(userId BIGINT)
 RETURNS TABLE (id BIGINT) AS $$
 BEGIN
+  IF (userId IN (SELECT registeredUser.id FROM registeredUser WHERE isAdmin = TRUE)) THEN
+    RETURN QUERY SELECT Model.id FROM Model;
+  ELSE
     RETURN QUERY SELECT Model.id
     FROM Model
     WHERE idAuthor = userId OR -- my models
           visibility = 'public' OR -- public model
          (visibility = 'friends' AND idAuthor IN (SELECT friendId FROM get_friends_of_member(userId))) -- my friends
     UNION SELECT get_group_visibile_models(userId);
+  END IF;
 END;
 $$ LANGUAGE plpgsql;
 
