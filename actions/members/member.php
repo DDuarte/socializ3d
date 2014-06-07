@@ -6,16 +6,18 @@ function getMemberPage($member) {
     global $smarty;
     $userInfo = getUserSidebarInfo(getLoggedId());
     $differentGroups = array();
-    foreach ($userInfo['groups'] as $g1) {
-        $otherIsInGroup = false;
-        foreach ($member['groups'] as $g2) {
-            if ($g1['groupid'] == $g2['id']) {
-                $otherIsInGroup = true;
-                break;
+    if ($userInfo){
+        foreach ($userInfo['groups'] as $g1) {
+            $otherIsInGroup = false;
+            foreach ($member['groups'] as $g2) {
+                if ($g1['groupid'] == $g2['id']) {
+                    $otherIsInGroup = true;
+                    break;
+                }
             }
+            if (!$otherIsInGroup)
+                $differentGroups[] = $g1;
         }
-        if (!$otherIsInGroup)
-            $differentGroups[] = $g1;
     }
     $smarty->assign('userInfo', $userInfo);
     $smarty->assign('member', $member);
