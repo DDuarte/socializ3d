@@ -55,7 +55,7 @@
             </div>
             <div class="footer">
                 <button type="submit" class="btn bg-olive btn-block">Confirm</button>
-                <a href="login.php" class="text-center">I'm already registered</a>
+                <a href="{$BASE_URL}login.php" class="text-center">I'm already registered</a>
             </div>
         </form>
     </div>
