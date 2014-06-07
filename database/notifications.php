@@ -31,7 +31,7 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $modelName = $result['name'];
                 $description = $result['description'];
                 $user = getMember($idAuthor, 0);
-                $userName = $user['name'];
+                $userName = $user['username'];
                 $userLink = $BASE_URL . "members/$idAuthor";
                 $modelLink = $BASE_URL . "models/$idModel";
                 $r['icon'] = 'fa fa-file-image-o bg-yellow';
@@ -51,7 +51,7 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $groupAbout = $group['about'];
                 $userId = $result['idsender'];
                 $user = getMember($userId, 0);
-                $userName = $user['name'];
+                $userName = $user['username'];
                 $userLink = $BASE_URL . "members/$userId";
                 $r['icon'] = 'fa fa-group bg-maroon';
                 $r['title'] = "You were invited to group <a href=\"$groupLink\">$groupName</a> by <a href=\"$userLink\">$userName</a>";
@@ -78,7 +78,7 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $groupAbout = $group['about'];
                 $userId = $result['idmember'];
                 $user = getMember($userId, 0);
-                $userName = $user['name'];
+                $userName = $user['username'];
                 $userLink = $BASE_URL . "members/$userId";
                 $r['icon'] = 'fa fa-group bg-purple';
                 if ($userId !== getLoggedId()) {
@@ -111,7 +111,7 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $userId = $result['idsender'];
                 $accepted = $result['accepted'];
                 $user = getMember($userId, 0);
-                $userName = $user['name'];
+                $userName = $user['username'];
                 $userLink = $BASE_URL . "members/$userId";
                 $userFriendLink = $BASE_URL . "members/friend/$userId";
                 $r['icon'] = 'fa fa-user bg-aqua';
@@ -139,7 +139,7 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                     $userId = $userId1;
 
                 $user = getMember($userId, $id);
-                $userName = $user['name'];
+                $userName = $user['username'];
                 $userLink = $BASE_URL . "members/$userId";
                 $r['icon'] = 'fa fa-user bg-green';
                 if ($userId1 == $id) {
@@ -170,7 +170,7 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $groupName = $group['name'];
                 $groupLink = $BASE_URL . "groups/$groupId";
                 $user = getMember($userId, $id);
-                $userName = $user['name'];
+                $userName = $user['username'];
                 $userLink = $BASE_URL . "members/$userId";
                 $r['icon'] = 'fa fa-group bg-maroon';
                 if ($userId1 == $id) {
@@ -195,7 +195,7 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $groupName = $group['name'];
                 $groupLink = $BASE_URL . "groups/$groupId";
                 $user = getMember($userId, $id);
-                $userName = $user['name'];
+                $userName = $user['username'];
                 $userLink = $BASE_URL . "members/$userId";
                 $r['icon'] = 'fa fa-group bg-purple';
                 if ($userId == $id) {
@@ -215,6 +215,100 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
     }
 
     return $newResult;
+}
+
+function getGroupNotifications($id, $dateLimit, $numLimit) {
+    global $conn;
+    global $BASE_URL;
+
+    $stmt = $conn->prepare("SELECT * FROM get_member_notifications(:id, :date, :limit)");
+    $stmt->execute(array(
+        ':id' => $id,
+        ':date' => $dateLimit,
+        ':limit' => $numLimit
+    ));
+
+    $result = $stmt->fetchAll();
+
+    if ($result == false) return false;
+
+    $newResult = Array();
+    foreach ($result as $r) {
+        switch ($r['nottype']) { //TODO
+            case 'Publication':
+                $idModel = $r['idmodel'];
+                $stmt = $conn->prepare('SELECT idAuthor, name, description FROM Model WHERE id = :id');
+                $stmt->execute(array(':id' => $idModel));
+                $result = $stmt->fetch();
+                $idAuthor = $result['idauthor'];
+                $modelName = $result['name'];
+                $user = getMember($idAuthor, 0);
+                $userName = $user['username'];
+                $userLink = $BASE_URL . "members/$idAuthor";
+                $modelLink = $BASE_URL . "models/$idModel";
+                $r['img'] = 'http://www.gravatar.com/avatar/' . $user['hash'] . '?s=50&d=identicon';
+                $r['text'] = "<a href=\"$userLink\">$userName</a> published <a href=\"$modelLink\">$modelName</a>";
+                break;
+            case 'GroupApplication':
+                $idGroupApplication = $r['idgroupapplication'];
+                $stmt = $conn->prepare('SELECT idGroup, idMember, accepted FROM GroupApplication WHERE id = :id');
+                $stmt->execute(array(':id' => $idGroupApplication));
+                $result = $stmt->fetch();
+                $userId = $result['idmember'];
+                $user = getMember($userId, 0);
+                $userName = $user['username'];
+                $userLink = $BASE_URL . "members/$userId";
+                $r['img'] = 'http://www.gravatar.com/avatar/' . $user['hash'] . '?s=50&d=identicon';
+                $r['text'] = "<a href=\"$userLink\">$userName</a> applied to join this group";
+                break;
+            case 'GroupApplicationAccepted':
+                $idGroupApplication = $r['idgroupapplication'];
+                $stmt = $conn->prepare('SELECT idGroup, idMember FROM GroupApplication WHERE id = :id');
+                $stmt->execute(array(':id' => $idGroupApplication));
+                $result = $stmt->fetch();
+                $userId = $result['idmember'];
+                $user = getMember($userId, $id);
+                $userName = $user['username'];
+                $userLink = $BASE_URL . "members/$userId";
+                $r['img'] = 'http://www.gravatar.com/avatar/' . $user['hash'] . '?s=50&d=identicon';
+                $r['text'] = "<a href=\"$userLink\">$userName</a>'s application to join this group has been accepted";
+                break;
+            case 'GroupInvite':
+                $idGroupInvite = $r['idgroupinvite'];
+                $stmt = $conn->prepare('SELECT idGroup, idSender, accepted FROM GroupInvite WHERE id = :id');
+                $stmt->execute(array(':id' => $idGroupInvite));
+                $result = $stmt->fetch();
+                $userId = $result['idsender'];
+                $user = getMember($userId, 0);
+                $userName = $user['username'];
+                $userLink = $BASE_URL . "members/$userId";
+                $userId2 = $result['idreceiver'];
+                $user2 = getMember($userId2, 0);
+                $userName2 = $user2['username'];
+                $userLink2 = $BASE_URL . "members/$userId2";
+                $r['img'] = 'http://www.gravatar.com/avatar/' . $user2['hash'] . '?s=50&d=identicon';
+                $r['text'] = "<a href=\"$userLink2\">$userName2</a> was invited by <a href=\"$userLink\">$userName</a> to join this group";
+                break;
+            case 'GroupInvitationAccepted':
+                $idGroupInvite = $r['idgroupinvite'];
+                $stmt = $conn->prepare('SELECT idGroup, idSender, idReceiver FROM GroupInvite WHERE id = :id');
+                $stmt->execute(array(':id' => $idGroupInvite));
+                $result = $stmt->fetch();
+                $userId = $result['idreceiver'];
+
+                $user = getMember($userId, $id);
+                $userName = $user['username'];
+                $r['img'] = 'http://www.gravatar.com/avatar/' . $user['hash'] . '?s=50&d=identicon';
+                $userLink = $BASE_URL . "members/$userId";
+                $r['text'] = "<a href=\"$userLink\">$userName</a> accepted the invitation to join this group";
+                break;
+            default:
+                $r['img'] = '';
+                $r['text'] = '';
+                break;
+        }
+        $newResult[] = $r;
+    }
 
     return $newResult;
 }

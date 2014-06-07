@@ -34,6 +34,7 @@ function getGroup($id) {
     $result['members'] = getMembersOfGroup($id);
     $result['isMember'] = isGroupMember($id, $loggedId);
     $result['isGroupAdmin'] = isGroupAdmin($id, $loggedId) || isAdmin($loggedId);
+    $result['activity'] = getGroupNotifications($id, '2010-01-01', 1000); // TODO: pagination
     $result['groupMemberApplications'] = getGroupUnansweredApplications($id);
 
 

@@ -48,30 +48,19 @@
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="tab_activity">
                         <ul class="media-list">
-                            <li class="media">
-                                <a class="pull-left" href="#">
-                                    <img class="media-object" src="img/user.jpg" alt="...">
-                                </a>
-                                <div class="media-body">
-                                    <h4 class="media-heading">
-                                        <a href="#">Jane Doe</a>published a
-                                        <a href="#">model</a>
-                                    </h4>
-                                    28th February
-                                </div>
-                            </li>
-                            <li class="media">
-                                <a class="pull-left" href="#">
-                                    <img class="media-object" src="img/user2.jpg" alt="...">
-                                </a>
-                                <div class="media-body">
-                                    <h4 class="media-heading">
-                                        <a href="#">John Doe</a>published a
-                                        <a href="#">model</a>
-                                    </h4>
-                                    23rd February
-                                </div>
-                            </li>
+                            {foreach $group.activity as $activ}
+                                <li class="media">
+                                    <a class="pull-left" href="#">
+                                        <img class="media-object" src="{$activ.img}" alt="...">
+                                    </a>
+                                    <div class="media-body">
+                                        <h4 class="media-heading">
+                                            {$activ.text}
+                                        </h4>
+                                        <span class="time"><time class="timeago" datetime="{$activ.createdate}">{$activ.createdate}</time></span>
+                                    </div>
+                                </li>
+                            {/foreach}
                         </ul>
                     </div>
                     {if $group.isGroupAdmin}
