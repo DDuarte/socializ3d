@@ -221,7 +221,7 @@ function getGroupNotifications($id, $dateLimit, $numLimit) {
     global $conn;
     global $BASE_URL;
 
-    $stmt = $conn->prepare("SELECT * FROM get_member_notifications(:id, :date, :limit)");
+    $stmt = $conn->prepare("SELECT * FROM get_group_notifications(:id, :date, :limit)");
     $stmt->execute(array(
         ':id' => $id,
         ':date' => $dateLimit,
