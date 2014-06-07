@@ -53,14 +53,14 @@
                         {/if}
                     </a>
                     <ul class="dropdown-menu notifications-dropdown">
-                        <li class="header">You have {$userUnreadNots|@count} notifications</li>
+                        <li class="header">You have {$userUnreadNots|@count} new notifications</li>
                         {if $userUnreadNots|@count > 0}
                         <li>
                             <!-- inner menu: contains the actual data -->
                             <ul class="menu">
                                 {foreach $userUnreadNots as $noti}
                                     <li>
-                                        <a class="dynamic_load" href="#">
+                                        <a class="dynamic_load" href="{$BASE_URL}{$NOTIFICATIONS}/#elem_{$noti.idnotification}">
                                             <i class="{$noti.icon}"></i>
                                             <span class="text">{$noti.title}</span>
                                         </a>

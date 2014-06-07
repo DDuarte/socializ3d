@@ -16,7 +16,7 @@
                                     {$date}
                                 </span>
                                 {foreach $nots as $notification}
-                                    <li>
+                                    <li id="elem_{$notification.idnotification}">
                                         <i class="{$notification.icon}"></i>
                                         <div class="timeline-item">
                                             <span class="time"><time class="timeago" datetime="{$notification.createdate}">{$notification.createdate}</time></span>
