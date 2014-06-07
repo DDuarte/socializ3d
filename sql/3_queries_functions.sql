@@ -333,7 +333,7 @@ CREATE OR REPLACE FUNCTION get_group_notifications(groupId BIGINT, oldest_date_l
 $$ LANGUAGE SQL;
 
 -- List the newest group notifications within a given range with the required data --
-CREATE OR REPLACE FUNCTION get_complete_groupr_notifications (groupId BIGINT, oldest_date_limit TIMESTAMP, max_notifications_limit INTEGER)
+CREATE OR REPLACE FUNCTION get_complete_group_notifications (groupId BIGINT, oldest_date_limit TIMESTAMP, max_notifications_limit INTEGER)
   RETURNS TABLE(idNotification BIGINT, notType notification_type, idFriendshipInvite BIGINT, idGroupApplication BIGINT, idGroupInvite BIGINT, idModel BIGINT, createDate TIMESTAMP, idMember BIGINT, modelName VARCHAR(70), modelDescription VARCHAR(1024),
   accepted BOOLEAN, idGroup BIGINT, idSender BIGINT, username VARCHAR(20), hash TEXT, senderUsername VARCHAR(20))
 AS
@@ -360,7 +360,7 @@ AS
        (CASE WHEN notification.nottype = 'GroupInvite' THEN gInvite.idSender
         WHEN notification.nottype = 'GroupInviteAccepted' THEN gInvite.idSender END) AS idSender
      FROM
-       get_group_notifications(1, '2010-01-01', 1000) AS notification
+       get_group_notifications($1, $2, $3) AS notification
        LEFT JOIN model on idmodel = model.id
        LEFT JOIN friendshipinvite as fInvite on idfriendshipinvite = fInvite.id
        LEFT JOIN groupinvite as gInvite on idgroupinvite = gInvite.id
