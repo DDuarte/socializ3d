@@ -143,6 +143,9 @@
                                         <th>User</th>
                                         <th>Last Activity</th>
                                         <th>Role</th>
+                                        {if $group.isGroupAdmin}
+                                            <th><span class="pull-right">Tools</span></th>
+                                        {/if}
                                     </tr>
                                     {foreach $group.members as $member}
                                     <tr class="member_row">
@@ -209,38 +212,6 @@
         </div>
     </div>
 </section>
-
-{if $group.isGroupAdmin}
-<div id="delete-modal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="content-header" style="text-align: center">
-                <h2>Remove member</h2>
-            </div>
-            <div class="box box-primary">
-                <div class="row">
-                    <div class="col-md-12" style="text-align: center">
-                        <h3>Are you sure?</h3>
-                    </div>
-                </div>
-                <div class="box-body notifications-box row">
-
-                    <div class="col-md-6" style="text-align: center">
-                        <button class="btn bg-blue btn-primary">
-                            <span>Yes</span>
-                        </button>
-                    </div>
-                    <div class="col-md-6" style="text-align: center">
-                        <button class="btn bg-blue btn-primary">
-                            <span>No</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-{/if}
 
 <script src="{$BASE_URL}js/plugins/bootstrap3-dialog/bootstrap-dialog.min.js" type="text/javascript"></script>
 <script>
