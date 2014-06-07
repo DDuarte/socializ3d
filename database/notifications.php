@@ -158,7 +158,7 @@ function getGroupNotifications($id, $dateLimit, $numLimit) {
     global $conn;
     global $BASE_URL;
 
-    $stmt = $conn->prepare("SELECT * FROM get_group_notifications(:id, :date, :limit)");
+    $stmt = $conn->prepare("SELECT * FROM get_complete_group_notifications(:id, :date, :limit)");
     $stmt->execute(array(
         ':id' => $id,
         ':date' => $dateLimit,
@@ -174,68 +174,42 @@ function getGroupNotifications($id, $dateLimit, $numLimit) {
         switch ($r['nottype']) { //TODO
             case 'Publication':
                 $idModel = $r['idmodel'];
-                $stmt = $conn->prepare('SELECT idAuthor, name, description FROM Model WHERE id = :id');
-                $stmt->execute(array(':id' => $idModel));
-                $result = $stmt->fetch();
-                $idAuthor = $result['idauthor'];
-                $modelName = $result['name'];
-                $user = getSimpleMember($idAuthor, 0);
-                $userName = $user['username'];
+                $idAuthor = $r['idmember'];
+                $modelName = $r['modelname'];
+                $userName = $r['username'];
                 $userLink = $BASE_URL . "members/$idAuthor";
                 $modelLink = $BASE_URL . "models/$idModel";
-                $r['img'] = 'http://www.gravatar.com/avatar/' . $user['hash'] . '?s=50&d=identicon';
+                $r['img'] = 'http://www.gravatar.com/avatar/' . $r['hash'] . '?s=50&d=identicon';
                 $r['text'] = "<a href=\"$userLink\">$userName</a> published <a href=\"$modelLink\">$modelName</a>";
                 break;
             case 'GroupApplication':
-                $idGroupApplication = $r['idgroupapplication'];
-                $stmt = $conn->prepare('SELECT idGroup, idMember, accepted FROM GroupApplication WHERE id = :id');
-                $stmt->execute(array(':id' => $idGroupApplication));
-                $result = $stmt->fetch();
-                $userId = $result['idmember'];
-                $user = getSimpleMember($userId, 0);
-                $userName = $user['username'];
+                $userId = $r['idmember'];
+                $userName = $r['username'];
                 $userLink = $BASE_URL . "members/$userId";
-                $r['img'] = 'http://www.gravatar.com/avatar/' . $user['hash'] . '?s=50&d=identicon';
+                $r['img'] = 'http://www.gravatar.com/avatar/' . $r['hash'] . '?s=50&d=identicon';
                 $r['text'] = "<a href=\"$userLink\">$userName</a> applied to join this group";
                 break;
             case 'GroupApplicationAccepted':
-                $idGroupApplication = $r['idgroupapplication'];
-                $stmt = $conn->prepare('SELECT idGroup, idMember FROM GroupApplication WHERE id = :id');
-                $stmt->execute(array(':id' => $idGroupApplication));
-                $result = $stmt->fetch();
-                $userId = $result['idmember'];
-                $user = getSimpleMember($userId, $id);
-                $userName = $user['username'];
+                $userId = $r['idmember'];
+                $userName = $r['username'];
                 $userLink = $BASE_URL . "members/$userId";
-                $r['img'] = 'http://www.gravatar.com/avatar/' . $user['hash'] . '?s=50&d=identicon';
+                $r['img'] = 'http://www.gravatar.com/avatar/' . $r['hash'] . '?s=50&d=identicon';
                 $r['text'] = "<a href=\"$userLink\">$userName</a>'s application to join this group has been accepted";
                 break;
             case 'GroupInvite':
-                $idGroupInvite = $r['idgroupinvite'];
-                $stmt = $conn->prepare('SELECT idGroup, idSender, idReceiver, accepted FROM GroupInvite WHERE id = :id');
-                $stmt->execute(array(':id' => $idGroupInvite));
-                $result = $stmt->fetch();
-                $userId = $result['idsender'];
-                $user = getSimpleMember($userId, 0);
-                $userName = $user['username'];
+                $userId = $r['idsender'];
+                $userName = $r['senderusername'];
                 $userLink = $BASE_URL . "members/$userId";
-                $userId2 = $result['idreceiver'];
-                $user2 = getSimpleMember($userId2, 0);
-                $userName2 = $user2['username'];
+                $userId2 = $r['idmember'];
+                $userName2 = $r['username'];
                 $userLink2 = $BASE_URL . "members/$userId2";
-                $r['img'] = 'http://www.gravatar.com/avatar/' . $user2['hash'] . '?s=50&d=identicon';
+                $r['img'] = 'http://www.gravatar.com/avatar/' . $r['hash'] . '?s=50&d=identicon';
                 $r['text'] = "<a href=\"$userLink2\">$userName2</a> was invited by <a href=\"$userLink\">$userName</a> to join this group";
                 break;
             case 'GroupInviteAccepted':
-                $idGroupInvite = $r['idgroupinvite'];
-                $stmt = $conn->prepare('SELECT idGroup, idSender, idReceiver FROM GroupInvite WHERE id = :id');
-                $stmt->execute(array(':id' => $idGroupInvite));
-                $result = $stmt->fetch();
-                $userId = $result['idreceiver'];
-
-                $user = getSimpleMember($userId, $id);
-                $userName = $user['username'];
-                $r['img'] = 'http://www.gravatar.com/avatar/' . $user['hash'] . '?s=50&d=identicon';
+                $userId = $r['idmember'];
+                $userName = $r['username'];
+                $r['img'] = 'http://www.gravatar.com/avatar/' . $r['hash'] . '?s=50&d=identicon';
                 $userLink = $BASE_URL . "members/$userId";
                 $r['text'] = "<a href=\"$userLink\">$userName</a> accepted the invitation to join this group";
                 break;
