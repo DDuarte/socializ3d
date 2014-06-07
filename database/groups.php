@@ -147,3 +147,16 @@ function updateGroupInfo($groupId, $aboutInfo, $coverImg, $avatarImg)
     $stmt = $conn->prepare('UPDATE TGroup SET about = :about, coverImg = :cover, avatarImg = :avatar WHERE id = :id');
     $stmt->execute(array(':id' => $groupId, ":about" => $aboutInfo, ":cover" => $coverImg, ":avatar" => $avatarImg));
 }
+
+function createGroup($creator, $groupName, $aboutInfo, $coverImg, $avatarImg, $visibility)
+{
+    global $conn;
+    $stmt = $conn->prepare("INSERT INTO TGroup(name, about, avatarImg, coverImg, visibility) VALUES (:name, :about, :avatar, :cover, :visibility) RETURNING id AS groupid;");
+    $stmt->execute(array(':name' => $groupName, ":about" => $aboutInfo, ":cover" => $coverImg, ":avatar" => $avatarImg, ":visibility" => $visibility));
+    $res = $stmt->fetch();
+
+    $stmt = $conn->prepare('INSERT INTO GroupUser(idGroup, idMember, isAdmin) VALUES (:idgroup, :idmem, true);');
+    $stmt->execute(array(':idgroup' => $res['groupid'], ':idmem' => $creator));
+
+    return $res['groupid'];
+}

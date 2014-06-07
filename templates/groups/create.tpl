@@ -51,31 +51,33 @@
 <section class="content">
     <div class="row">
         <div class="col-md-8 col-centered" id="upload-form">
-            <form action="#" method="put">
+            <form action="#" method="POST">
 
                 <div class="box-body">
+
                     <div class="form-group">
-                        <div id="drop-files" class="box box-drop col-centered">
-                            <h2>Drag &amp; drop the cover image here or</h2>
-                            <div id="upload-button" class="btn btn-primary btn-lg btn-drop">Choose a image file to upload</div>
-                        </div>
+                        <label for="name-field">Group name:</label>
+                        <input name="name" required type="text" class="form-control" id="name-field" placeHolder="Enter the group name" />
                     </div>
 
-                    <hr>
+                    <div class="form-group">
+                        <label for="cover-image">Cover image:</label>
+                        <input name="cover" type="text" class="form-control" id="cover-image" placeHolder="Cover img URL" />
+                    </div>
 
                     <div class="form-group">
-                        <label for="name-filed">Group name:</label>
-                        <input required type="text" class="form-control" id="name-filed" placeHolder="Enter the group name" />
+                        <label for="avatar-image">Avatar image:</label>
+                        <input name="avatar" type="text" class="form-control" id="avatar-image" placeHolder="Avatar img URL" />
                     </div>
 
                     <div class="form-group">
                         <label for="description-field">About:</label>
-                        <textarea required class="form-control" id="description-field" placeHolder="What's the group about?"></textarea>
+                        <textarea name="about" class="form-control" id="description-field" placeHolder="What's the group about?"></textarea>
                     </div>
 
                     <div class="form-group">
                         <label for="to-field">Visibility:</label>
-                        <select class="form-control" id="to-field">
+                        <select name="visibility" class="form-control" id="to-field">
                             <option>Public</option>
                             <option>Private</option>
                         </select>
