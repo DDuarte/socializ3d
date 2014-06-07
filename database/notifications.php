@@ -151,6 +151,7 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
         $newResult[$day][] = $r;
     }
 
+    markUserNotificationsAsRead($id);
     return $newResult;
 }
 
@@ -247,4 +248,12 @@ function getGroupUnansweredApplications($id) {
 
 
     return $newRes;
+}
+
+function markUserNotificationsAsRead($id)
+{
+    global $conn;
+
+    $stmt = $conn->prepare("UPDATE UserNotification SET seen = true WHERE idMember = :id");
+    $stmt->execute(array(':id' => $id));
 }

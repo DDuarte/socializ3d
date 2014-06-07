@@ -291,13 +291,13 @@ CREATE OR REPLACE FUNCTION get_notifications(oldest_date_limit TIMESTAMP, max_no
 $$ LANGUAGE SQL;
 
 -- List the newest member notifications within a given range --
-CREATE OR REPLACE FUNCTION get_member_notifications(memberId BIGINT, oldest_date_limit TIMESTAMP, max_notifications_limit INTEGER) RETURNS TABLE(idNotification BIGINT, notType notification_type, idFriendshipInvite BIGINT, idGroupApplication BIGINT, idGroupInvite BIGINT, idModel BIGINT, createDate TIMESTAMP) AS $$
-    SELECT Notification.id, Notification.notificationType, Notification.idFriendshipInvite, Notification.idGroupApplication, Notification.idGroupInvite, Notification.idModel, Notification.createDate FROM Notification JOIN UserNotification ON UserNotification.idMember = $1 AND UserNotification.idNotification = Notification.id WHERE createDate >= $2 ORDER BY createDate DESC LIMIT $3
+CREATE OR REPLACE FUNCTION get_member_notifications(memberId BIGINT, oldest_date_limit TIMESTAMP, max_notifications_limit INTEGER) RETURNS TABLE(idNotification BIGINT, notType notification_type, idFriendshipInvite BIGINT, idGroupApplication BIGINT, idGroupInvite BIGINT, idModel BIGINT, createDate TIMESTAMP, seen boolean) AS $$
+    SELECT Notification.id, Notification.notificationType, Notification.idFriendshipInvite, Notification.idGroupApplication, Notification.idGroupInvite, Notification.idModel, Notification.createDate, UserNotification.seen FROM Notification JOIN UserNotification ON UserNotification.idMember = $1 AND UserNotification.idNotification = Notification.id WHERE createDate >= $2 ORDER BY createDate DESC LIMIT $3
 $$ LANGUAGE SQL;
 
 -- List the newest member notifications within a given range with the required data --
 CREATE OR REPLACE FUNCTION get_complete_member_notifications (in memberid int8, in oldest_date_limit timestamp, in max_notifications_limit int4)
-  RETURNS TABLE(idNotification BIGINT, notType notification_type, idFriendshipInvite BIGINT, idGroupApplication BIGINT, idGroupInvite BIGINT, idModel BIGINT, createDate TIMESTAMP, idMember BIGINT, modelName VARCHAR(70), modelDescription VARCHAR(1024), accepted BOOLEAN, idGroup BIGINT, username VARCHAR(20), groupName VARCHAR(70), groupAbout VARCHAR(1024))
+  RETURNS TABLE(idNotification BIGINT, notType notification_type, idFriendshipInvite BIGINT, idGroupApplication BIGINT, idGroupInvite BIGINT, idModel BIGINT, createDate TIMESTAMP, seen boolean, idMember BIGINT, modelName VARCHAR(70), modelDescription VARCHAR(1024), accepted BOOLEAN, idGroup BIGINT, username VARCHAR(20), groupName VARCHAR(70), groupAbout VARCHAR(1024))
 AS
   $BODY$
   SELECT q.*, registeredUser.username, tgroup.name AS groupName, tgroup.about AS groupAbout FROM

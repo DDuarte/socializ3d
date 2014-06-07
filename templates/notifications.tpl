@@ -21,12 +21,12 @@
                                         <div class="timeline-item">
                                             <span class="time"><time class="timeago" datetime="{$notification.createdate}">{$notification.createdate}</time></span>
                                             {if $notification.text|count_characters:true}
-                                                <h3 class="timeline-header">{$notification.title}</h3>
+                                                <h3 class="timeline-header" {if !$notification.seen}style="font-weight: bolder"{/if}>{$notification.title}</h3>
                                                 <div class="timeline-body">
                                                     {$notification.text}
                                                 </div>
                                             {else}
-                                                <h3 class="timeline-header no-border">{$notification.title}</h3>
+                                                <h3 class="timeline-header no-border" {if !$notification.seen}style="font-weight: bolder"{/if}>{$notification.title}</h3>
                                             {/if}
                                             {if $notification.subtext|count_characters:true}
                                                 <div class="timeline-footer">
