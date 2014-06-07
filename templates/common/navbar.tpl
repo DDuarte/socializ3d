@@ -48,48 +48,27 @@
                 <li class="dropdown notifications-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa  fa-flag"></i>
-                        <span class="label label-warning">10</span>
+                        {if $userUnreadNots|@count > 0}
+                            <span class="label label-warning">{if $userUnreadNots|@count < 100}{$userUnreadNots|@count}{else}+99{/if}</span>
+                        {/if}
                     </a>
                     <ul class="dropdown-menu notifications-dropdown">
-                        <li class="header">You have 10 notifications</li>
+                        <li class="header">You have {$userUnreadNots|@count} notifications</li>
+                        {if $userUnreadNots|@count > 0}
                         <li>
                             <!-- inner menu: contains the actual data -->
                             <ul class="menu">
-                                <li>
-                                    <a class="dynamic_load" href="#">
-                                        <i class="ion ion-ios7-people info"></i>
-                                            <span class="text">The user '
-                                                <span class="notification-friendship-name">John Doe</span>' accepted your...</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dynamic_load" href="#">
-                                        <i class="ion ion-ios7-people info"></i>Very long description here that may not..
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dynamic_load" href="#">
-                                        <i class="ion ion-ios7-people info"></i>
-                                            <span class="text">A new model was published in the '
-                                                <span class="notification-group-activity-name">Top Model Crew</span>'...</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dynamic_load" href="#">
-                                        <i class="ion ion-ios7-people info"></i>
-                                            <span class="text">A new model was published in the '
-                                                <span class="notification-group-activity-name">Oporto Anime Fans</span>'...</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dynamic_load" href="#">
-                                        <i class="ion ion-ios7-people info"></i>
-                                            <span class="text">A new model was published in the '
-                                                <span class="notification-group-activity-name">Top Notch Design</span>'...</span>
-                                    </a>
-                                </li>
+                                {foreach $userUnreadNots as $noti}
+                                    <li>
+                                        <a class="dynamic_load" href="#">
+                                            <i class="{$noti.icon}"></i>
+                                            <span class="text">{$noti.title}</span>
+                                        </a>
+                                    </li>
+                                {/foreach}
                             </ul>
                         </li>
+                        {/if}
                         <li class="footer">
                             <a class="dynamic_load" href="{$BASE_URL}{$NOTIFICATIONS}">View all</a>
                         </li>

@@ -3,6 +3,27 @@
 include_once($BASE_DIR . 'database/users.php');
 include_once($BASE_DIR . 'database/groups.php');
 
+function getMemberUnreadNotifications($id, $dateLimit, $numLimit)
+{
+    global $conn;
+    global $BASE_URL;
+
+    $stmt = $conn->prepare("SELECT * FROM get_complete_member_notifications(:id, :date, :limit) WHERE seen = false;");
+    $stmt->execute(array(
+        ':id' => $id,
+        ':date' => $dateLimit,
+        ':limit' => $numLimit
+    ));
+
+    $result = $stmt->fetchAll();
+
+    if ($result == false) return false;
+
+    $newResult = parseUserNotifications($id, $result, false);
+
+    return $newResult;
+}
+
 function getMemberNotifications($id, $dateLimit, $numLimit)
 {
     global $conn;
@@ -19,6 +40,15 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
 
     if ($result == false) return false;
 
+    $newResult = parseUserNotifications($id, $result, true);
+
+    markUserNotificationsAsRead($id);
+    return $newResult;
+}
+
+function parseUserNotifications($id, $result, $full)
+{
+    global $BASE_URL;
     $newResult = Array();
     foreach ($result as $r) {
         switch ($r['nottype']) {
@@ -28,7 +58,12 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $userLink = $BASE_URL . "members/" . $r['idmember'];
                 $modelLink = $BASE_URL . "models/$idModel";
                 $r['icon'] = 'fa fa-file-image-o bg-yellow';
-                $r['title'] = "<a href=\"$userLink\">$userName</a> published the model <a href=\"$modelLink\">".$r['modelname']."</a>";
+                if ($full)
+                    $r['title'] = "<a href=\"$userLink\">$userName</a> published the model <a href=\"$modelLink\">".$r['modelname']."</a>";
+                else {
+                    $r['title'] = "$userName published the model " . $r['modelname'];
+                    break;
+                }
                 $r['text'] = $r['modeldescription'];
                 $r['subtext'] = "<a href=\"$modelLink\" class=\"btn btn-warning btn-xs\">View Model</a>";
                 break;
@@ -41,7 +76,12 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $userName = $r['username'];
                 $userLink = $BASE_URL . "members/$userId";
                 $r['icon'] = 'fa fa-group bg-maroon';
-                $r['title'] = "You were invited to group <a href=\"$groupLink\">$groupName</a> by <a href=\"$userLink\">$userName</a>";
+                if ($full)
+                    $r['title'] = "You were invited to group <a href=\"$groupLink\">$groupName</a> by <a href=\"$userLink\">$userName</a>";
+                else {
+                    $r['title'] = "You were invited to group $groupName by $userName";
+                    break;
+                }
                 $r['text'] = $groupAbout;
                 $accepted = $r['accepted'];
                 if (is_null($accepted))
@@ -62,7 +102,12 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $userLink = $BASE_URL . "members/$userId";
                 $r['icon'] = 'fa fa-group bg-purple';
                 if ($userId !== getLoggedId()) {
-                    $r['title'] = "<a href=\"$userLink\">$userName</a> applied to your group <a href=\"$groupLink\">$groupName</a>";
+                    if ($full)
+                        $r['title'] = "<a href=\"$userLink\">$userName</a> applied to your group <a href=\"$groupLink\">$groupName</a>";
+                    else {
+                        $r['title'] = "$userName applied to your group $groupName";
+                        break;
+                    }
                     $r['text'] = '';
                     if (is_null($accepted))
                         $r['subtext'] = "<button class=\"btn btn-primary btn-xs\" name=\"$groupId $userId\" onclick=\"groupApplicationReply(this, true);\">Accept</button> <button class=\"btn btn-danger btn-xs\" name=\"$groupId $userId\" onclick=\"groupApplicationReply(this, false);\">Decline</button>";
@@ -72,7 +117,12 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                         $r['subtext'] = 'This request was declined.';
                 }
                 else {
-                    $r['title'] = "You applied to join group <a href=\"$groupLink\">$groupName</a>";
+                    if ($full)
+                        $r['title'] = "You applied to join group <a href=\"$groupLink\">$groupName</a>";
+                    else {
+                        $r['title'] = "You applied to join group $groupName";
+                        break;
+                    }
                     $r['text'] = '';
                     if (is_null($accepted))
                         $r['subtext'] = "Your application has not yet been answered.";
@@ -89,9 +139,13 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $userLink = $BASE_URL . "members/$userId";
                 $userFriendLink = $BASE_URL . "members/friend/$userId";
                 $r['icon'] = 'fa fa-user bg-aqua';
-                $r['title'] = "<a href=\"$userLink\">$userName</a> has sent you a friend request";
+                if ($full)
+                    $r['title'] = "<a href=\"$userLink\">$userName</a> has sent you a friend request";
+                else {
+                    $r['title'] = "$userName has sent you a friend request";
+                    break;
+                }
                 $r['text'] = '';
-                // TODO: Links
                 if (is_null($accepted))
                     $r['subtext'] = "<button class=\"btn btn-primary btn-xs\" name=\"$userId\" onclick=\"friendshipReply(this, true);\">Accept</button> <button class=\"btn btn-danger btn-xs\" name=\"$userId\" onclick=\"friendshipReply(this, false);\">Decline</button>";
                 else if ($accepted)
@@ -104,7 +158,12 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $userName = $r['username'];
                 $userLink = $BASE_URL . "members/$userId";
                 $r['icon'] = 'fa fa-user bg-green';
-                $r['title'] = "<a href=\"$userLink\">$userName</a> accepted your friend request";
+                if ($full)
+                    $r['title'] = "<a href=\"$userLink\">$userName</a> accepted your friend request";
+                else {
+                    $r['title'] = "$userName accepted your friend request";
+                    break;
+                }
 
                 $r['text'] = '';
                 $r['subtext'] = '';
@@ -118,7 +177,12 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $userName = $r['username'];
                 $userLink = $BASE_URL . "members/$userId";
                 $r['icon'] = 'fa fa-group bg-maroon';
-                $r['title'] = "<a href=\"$userLink\">$userName</a> accepted your request to join <a href=\"$groupLink\">$groupName</a>";
+                if ($full)
+                    $r['title'] = "<a href=\"$userLink\">$userName</a> accepted your request to join <a href=\"$groupLink\">$groupName</a>";
+                else {
+                    $r['title'] = "$userName accepted your request to join $groupName";
+                    break;
+                }
 
 
                 $r['text'] = '';
@@ -135,10 +199,20 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $userLink = $BASE_URL . "members/$userId";
                 $r['icon'] = 'fa fa-group bg-purple';
                 if ($userId == $id) {
-                    $r['title'] = "Your application to join <a href=\"$groupLink\">$groupName</a> has been accepted";
+                    if ($full)
+                        $r['title'] = "Your application to join <a href=\"$groupLink\">$groupName</a> has been accepted";
+                    else {
+                        $r['title'] = "Your application to join $groupName has been accepted";
+                        break;
+                    }
                 }
                 else {
-                    $r['title'] = "<a href=\"$userLink\">$userName</a>'s application to join <a href=\"$groupLink\">$groupName</a> has been accepted";
+                    if ($full)
+                        $r['title'] = "<a href=\"$userLink\">$userName</a>'s application to join <a href=\"$groupLink\">$groupName</a> has been accepted";
+                    else {
+                        $r['title'] = "$userName's application to join $groupName has been accepted";
+                        break;
+                    }
                 }
 
                 $r['text'] = '';
@@ -146,11 +220,14 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 break;
         }
 
-        $day = date('d M. Y', strtotime($r['createdate']));
-        $newResult[$day][] = $r;
+        if ($full) {
+            $day = date('d M. Y', strtotime($r['createdate']));
+            $newResult[$day][] = $r;
+        }
+        else {
+            $newResult[] = $r;
+        }
     }
-
-    markUserNotificationsAsRead($id);
     return $newResult;
 }
 
@@ -171,7 +248,7 @@ function getGroupNotifications($id, $dateLimit, $numLimit) {
 
     $newResult = Array();
     foreach ($result as $r) {
-        switch ($r['nottype']) { //TODO
+        switch ($r['nottype']) {
             case 'Publication':
                 $idModel = $r['idmodel'];
                 $idAuthor = $r['idmember'];
