@@ -118,7 +118,7 @@ function getFriendsOfMember($id)
 function getGroupsOfMember($id)
 {
     global $conn;
-    $stmt  = $conn->prepare("SELECT groupid AS id, groupname AS name, about, coverimg FROM get_complete_groups_of_member(:id)");
+    $stmt  = $conn->prepare("SELECT groupid AS id, groupname AS name, about, avatarimg FROM get_complete_groups_of_member(:id)");
     $stmt->execute(array(':id' => $id));
     $result = $stmt->fetchAll();
 

@@ -41,8 +41,8 @@ $$ LANGUAGE SQL;
 
 -- List the id and name of all the groups of a user --
 CREATE OR REPLACE FUNCTION get_complete_groups_of_member(memberId BIGINT)
-RETURNS TABLE(groupId BIGINT, groupName VARCHAR(70), about VARCHAR, coverimg VARCHAR) AS $$
-    SELECT TGroup.id, TGroup.name, TGroup.about, TGroup.coverImg
+RETURNS TABLE(groupId BIGINT, groupName VARCHAR(70), about VARCHAR, avatarimg VARCHAR) AS $$
+    SELECT TGroup.id, TGroup.name, TGroup.about, TGroup.avatarImg
     FROM TGroup
     JOIN GroupUser ON GroupUser.idGroup = TGroup.id AND GroupUser.idMember = $1 AND TGroup.deleteDate IS NULL
 $$ LANGUAGE SQL;
