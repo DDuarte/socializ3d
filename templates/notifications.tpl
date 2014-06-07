@@ -50,6 +50,40 @@
 <script>
     var busy = false;
 
+    function friendshipReply(btn, answer) {
+        if (busy) {
+            return;
+        }
+        busy = true;
+        var thisButton = $(btn);
+        var userId = thisButton.attr('name');
+        var reqType = answer ? 'POST' : 'DELETE';
+        thisButton.addClass('disabled');
+        thisButton.prepend('<span class="bootstrap-dialog-button-icon glyphicon glyphicon-asterisk icon-spin"></span>');
+
+        $.ajax({
+            url: '{$BASE_URL}members/friend/' + userId,
+            type: reqType,
+            success: function (a) {
+                BootstrapDialog.alert({
+                    title: 'Success!',
+                    message: 'Reply sent.'
+                });
+                var textReply = answer ? 'accepted' : 'declined';
+                thisButton.parent().replaceWith('<div class="timeline-footer">You '+ textReply +' this request.</div>');
+                busy = false;
+            },
+            error: function (a, b, c) {
+                BootstrapDialog.alert({
+                    title: 'Oops!',
+                    message: 'Could not process your request at this time. :(\nError: ' + c});
+                thisButton.find('span').remove();
+                thisButton.removeClass('disabled');
+                busy = false;
+            }
+        });
+    }
+
     function groupApplicationReply(btn, answer) {
         if (busy) {
             return;

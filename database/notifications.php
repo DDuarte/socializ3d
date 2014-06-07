@@ -64,7 +64,6 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 if ($userId !== getLoggedId()) {
                     $r['title'] = "<a href=\"$userLink\">$userName</a> applied to your group <a href=\"$groupLink\">$groupName</a>";
                     $r['text'] = '';
-                    // TODO: links
                     if (is_null($accepted))
                         $r['subtext'] = "<button class=\"btn btn-primary btn-xs\" name=\"$groupId $userId\" onclick=\"groupApplicationReply(this, true);\">Accept</button> <button class=\"btn btn-danger btn-xs\" name=\"$groupId $userId\" onclick=\"groupApplicationReply(this, false);\">Decline</button>";
                     else if ($accepted)
@@ -94,7 +93,7 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $r['text'] = '';
                 // TODO: Links
                 if (is_null($accepted))
-                    $r['subtext'] = "<button class=\"btn btn-primary btn-xs\">Accept</button> <button class=\"btn btn-danger btn-xs\">Decline</button>";
+                    $r['subtext'] = "<button class=\"btn btn-primary btn-xs\" name=\"$userId\" onclick=\"friendshipReply(this, true);\">Accept</button> <button class=\"btn btn-danger btn-xs\" name=\"$userId\" onclick=\"friendshipReply(this, false);\">Decline</button>";
                 else if ($accepted)
                     $r['subtext'] = 'You accepted this request.';
                 else
