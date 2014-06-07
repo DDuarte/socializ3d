@@ -148,8 +148,8 @@ class UploadHandler
             $ifStmt = $conn->prepare('SELECT 1 FROM final.GroupUser WHERE idMember = ? AND idGroup = ?');
             $stmt = $conn->prepare('INSERT INTO GroupModel (idGroup, idModel) VALUES (?, ?)');
             foreach ($groups as $groupId) {
-                $stmt->execute(array($memberId, $groupId));
-                if (count($stmt->fetchAll()) < 1) {
+                $ifStmt->execute(array($memberId, $groupId));
+                if (count($ifStmt->fetchAll()) < 1) {
                     $conn->rollBack();
                     http_response_code(403);
                     return;
