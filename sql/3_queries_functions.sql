@@ -295,6 +295,38 @@ CREATE OR REPLACE FUNCTION get_member_notifications(memberId BIGINT, oldest_date
     SELECT Notification.id, Notification.notificationType, Notification.idFriendshipInvite, Notification.idGroupApplication, Notification.idGroupInvite, Notification.idModel, Notification.createDate FROM Notification JOIN UserNotification ON UserNotification.idMember = $1 AND UserNotification.idNotification = Notification.id WHERE createDate >= $2 ORDER BY createDate DESC LIMIT $3
 $$ LANGUAGE SQL;
 
+-- List the newest member notifications within a given range with the required data --
+CREATE OR REPLACE FUNCTION get_complete_member_notifications (in memberid int8, in oldest_date_limit timestamp, in max_notifications_limit int4)
+  RETURNS TABLE(idNotification BIGINT, notType notification_type, idFriendshipInvite BIGINT, idGroupApplication BIGINT, idGroupInvite BIGINT, idModel BIGINT, createDate TIMESTAMP, idMember BIGINT, modelName VARCHAR(70), modelDescription VARCHAR(1024), accepted BOOLEAN, idGroup BIGINT, username VARCHAR(20), groupName VARCHAR(70), groupAbout VARCHAR(1024))
+AS
+  $BODY$
+  SELECT q.*, registeredUser.username, tgroup.name AS groupName, tgroup.about AS groupAbout FROM
+    (SELECT
+       notification.*,
+       (CASE WHEN notification.nottype = 'Publication' THEN model.idAuthor
+        WHEN notification.nottype = 'GroupInvite' THEN gInvite.idSender
+        WHEN notification.nottype = 'GroupInviteAccepted' THEN gInvite.idReceiver
+        WHEN notification.nottype = 'GroupApplication' OR notification.nottype = 'GroupApplicationAccepted' THEN gapplication.idMember
+        WHEN notification.nottype = 'FriendshipInvite' THEN fInvite.idSender
+        WHEN notification.nottype = 'FriendshipInviteAccepted' THEN fInvite.idReceiver END) AS idMember,
+       model.name AS modelName, model.description AS modelDescription,
+       (CASE WHEN notification.nottype = 'FriendshipInvite' OR  notification.nottype = 'FriendshipInviteAccepted' THEN fInvite.accepted
+        WHEN notification.nottype = 'GroupInvite' OR  notification.nottype = 'GroupInviteAccepted' THEN gInvite.accepted
+        WHEN notification.nottype = 'GroupApplication' OR  notification.nottype = 'GroupApplicationAccepted' THEN gApplication.accepted
+        ELSE NULL END) AS accepted,
+       (CASE WHEN notification.nottype = 'GroupInvite' OR  notification.nottype = 'GroupInviteAccepted' THEN gInvite.idGroup
+        WHEN notification.nottype = 'GroupApplication' OR  notification.nottype = 'GroupApplicationAccepted' THEN gapplication.idGroup
+        ELSE NULL END) AS idGroup
+     FROM get_member_notifications($1, $2, $3) AS notification
+       LEFT JOIN (SELECT * FROM model) AS model on idmodel = model.id
+       LEFT JOIN (SELECT * FROM friendshipinvite) as fInvite on idfriendshipinvite = fInvite.id
+       LEFT JOIN (SELECT * FROM groupinvite) as gInvite on idgroupinvite = gInvite.id
+       LEFT JOIN (SELECT * FROM groupapplication) as gapplication on idgroupapplication = gapplication.id) AS q
+    JOIN registeredUser ON idMember = registeredUser.id
+    LEFT JOIN tgroup ON idGroup = tgroup.id;
+$BODY$
+LANGUAGE sql VOLATILE;
+
 -- List the newest group notifications within a given range --
 CREATE OR REPLACE FUNCTION get_group_notifications(groupId BIGINT, oldest_date_limit TIMESTAMP, max_notifications_limit INTEGER) RETURNS TABLE(idNotification BIGINT, notType notification_type, idFriendshipInvite BIGINT, idGroupApplication BIGINT, idGroupInvite BIGINT, idModel BIGINT, createDate TIMESTAMP) AS $$
     SELECT Notification.id, Notification.notificationType, Notification.idFriendshipInvite, Notification.idGroupApplication, Notification.idGroupInvite, Notification.idModel, Notification.createDate FROM Notification JOIN GroupNotification ON GroupNotification.idGroup = $1 AND GroupNotification.idNotification = Notification.id  WHERE createDate >= $2 ORDER BY createDate DESC LIMIT $3
