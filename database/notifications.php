@@ -45,7 +45,7 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $r['text'] = $groupAbout;
                 $accepted = $r['accepted'];
                 if (is_null($accepted))
-                    $r['subtext'] = "<a href=\"$groupLink\" class=\"btn bg-maroon btn-xs\">View Group</a> <a href=\"#\" class=\"btn btn-primary btn-xs\" name=\"$groupId\" onclick=\"groupInviteReply(this, true);\" >Accept</a> <a href=\"#\" class=\"btn btn-danger btn-xs\" name=\"$groupId\" onclick=\"groupInviteReply(this, false);\">Decline</a>";
+                    $r['subtext'] = "<a href=\"$groupLink\" class=\"btn bg-maroon btn-xs\">View Group</a> <button class=\"btn btn-primary btn-xs\" name=\"$groupId\" onclick=\"groupInviteReply(this, true);\" >Accept</button> <button class=\"btn btn-danger btn-xs\" name=\"$groupId\" onclick=\"groupInviteReply(this, false);\">Decline</button>";
                 else if($accepted)
                     $r['subtext'] = "You accepted this request";
                 else
@@ -66,7 +66,7 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                     $r['text'] = '';
                     // TODO: links
                     if (is_null($accepted))
-                        $r['subtext'] = "<a class=\"btn btn-primary btn-xs\">Accept</a> <a class=\"btn btn-danger btn-xs\">Decline</a>";
+                        $r['subtext'] = "<button class=\"btn btn-primary btn-xs\" name=\"$groupId $userId\" onclick=\"groupApplicationReply(this, true);\">Accept</button> <button class=\"btn btn-danger btn-xs\" name=\"$groupId $userId\" onclick=\"groupApplicationReply(this, false);\">Decline</button>";
                     else if ($accepted)
                         $r['subtext'] = 'This request was accepted.';
                     else
@@ -94,7 +94,7 @@ function getMemberNotifications($id, $dateLimit, $numLimit)
                 $r['text'] = '';
                 // TODO: Links
                 if (is_null($accepted))
-                    $r['subtext'] = "<a href=\"$userFriendLink\" class=\"btn btn-primary btn-xs\">Accept</a> <a href=\"$userFriendLink\" class=\"btn btn-danger btn-xs\">Decline</a>";
+                    $r['subtext'] = "<button class=\"btn btn-primary btn-xs\">Accept</button> <button class=\"btn btn-danger btn-xs\">Decline</button>";
                 else if ($accepted)
                     $r['subtext'] = 'You accepted this request.';
                 else

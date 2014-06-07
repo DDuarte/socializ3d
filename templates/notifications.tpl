@@ -48,7 +48,48 @@
 
 <script src="{$BASE_URL}js/plugins/bootstrap3-dialog/bootstrap-dialog.min.js" type="text/javascript"></script>
 <script>
+    var busy = false;
+
+    function groupApplicationReply(btn, answer) {
+        if (busy) {
+            return;
+        }
+        busy = true;
+        var thisButton = $(btn);
+        var groupId = thisButton.attr('name').split(' ')[0];
+        var userId = thisButton.attr('name').split(' ')[1];
+        var reqType = answer ? 'POST' : 'DELETE';
+        thisButton.addClass('disabled');
+        thisButton.prepend('<span class="bootstrap-dialog-button-icon glyphicon glyphicon-asterisk icon-spin"></span>');
+
+        $.ajax({
+            url: '{$BASE_URL}groups/' + groupId + '/application/' + userId,
+            type: reqType,
+            success: function (a) {
+                BootstrapDialog.alert({
+                    title: 'Success!',
+                    message: 'Reply sent.'
+                });
+                var textReply = answer ? 'accepted' : 'declined';
+                thisButton.parent().replaceWith('<div class="timeline-footer">This request was '+ textReply +'.</div>');
+                busy = false;
+            },
+            error: function (a, b, c) {
+                BootstrapDialog.alert({
+                    title: 'Oops!',
+                    message: 'Could not process your request at this time. :(\nError: ' + c});
+                thisButton.find('span').remove();
+                thisButton.removeClass('disabled');
+                busy = false;
+            }
+        });
+    }
+
     function groupInviteReply(btn, answer) {
+        if (busy) {
+            return;
+        }
+        busy = true;
         var thisButton = $(btn);
         var groupId = thisButton.attr('name');
         var reqType = answer ? 'POST' : 'DELETE';
@@ -65,13 +106,15 @@
                 });
                 var textReply = answer ? 'accepted' : 'rejected';
                 thisButton.parent().replaceWith('<div class="timeline-footer">You ' + textReply + ' this request</div>');
+                busy = false;
             },
             error: function (a, b, c) {
                 BootstrapDialog.alert({
                     title: 'Oops!',
-                    message: 'Could not process your request at this time. :(\nError: ' + (c === 'Conflict' ? 'Member is already in group or has invitation pending.' : c)});
+                    message: 'Could not process your request at this time. :(\nError: ' + c});
                 thisButton.find('span').remove();
                 thisButton.removeClass('disabled');
+                busy = false;
             }
         });
     }
