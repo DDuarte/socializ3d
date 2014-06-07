@@ -137,7 +137,6 @@ function parseUserNotifications($id, $result, $full)
                 $accepted = $r['accepted'];
                 $userName = $r['username'];
                 $userLink = $BASE_URL . "members/$userId";
-                $userFriendLink = $BASE_URL . "members/friend/$userId";
                 $r['icon'] = 'fa fa-user bg-aqua';
                 if ($full)
                     $r['title'] = "<a href=\"$userLink\">$userName</a> has sent you a friend request";
@@ -184,7 +183,6 @@ function parseUserNotifications($id, $result, $full)
                     break;
                 }
 
-
                 $r['text'] = '';
                 $r['subtext'] = '';
                 break;
@@ -224,9 +222,8 @@ function parseUserNotifications($id, $result, $full)
             $day = date('d M. Y', strtotime($r['createdate']));
             $newResult[$day][] = $r;
         }
-        else {
+        else
             $newResult[] = $r;
-        }
     }
     return $newResult;
 }
