@@ -1,4 +1,4 @@
-<aside class="left-side sidebar-offcanvas">
+<aside id="usr-side-bar" class="left-side sidebar-offcanvas">
     <section class="sidebar" style="border-bottom: none;">
         {if $IS_LOGGED_IN}<a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$userInfo.userId}">{/if}
             <div class="user-panel">
@@ -31,7 +31,7 @@
                     <span>Groups</span>
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
-                <ul class="treeview-menu">
+                <ul id="groups-listing" class="treeview-menu">
                     {foreach $userInfo.groups as $group}
                         <li>
                             <a class="dynamic_load" href="{$BASE_URL}{$GROUPS}/{$group.groupid}" class="pull-left">
@@ -46,7 +46,7 @@
                     <span>Friends</span>
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
-                <ul class="treeview-menu">
+                <ul id="friends-listing" class="treeview-menu">
                     {foreach $userInfo.friends as $friend}
                         <li>
                             <a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$friend.memberid}">
@@ -72,4 +72,4 @@
         </ul>
         {/if}
     </section>
-</aside> <!-- /.sidebar -->
+</aside>

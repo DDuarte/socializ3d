@@ -73,6 +73,8 @@
                 var textReply = answer ? 'accepted' : 'declined';
                 thisButton.parent().replaceWith('<div class="timeline-footer">You '+ textReply +' this request.</div>');
                 busy = false;
+                if (answer)
+                    reloadSidebar();
             },
             error: function (a, b, c) {
                 BootstrapDialog.alert({
@@ -142,6 +144,8 @@
                 var textReply = answer ? 'accepted' : 'rejected';
                 thisButton.parent().replaceWith('<div class="timeline-footer">You ' + textReply + ' this request</div>');
                 busy = false;
+                if (answer)
+                    reloadSidebar();
             },
             error: function (a, b, c) {
                 BootstrapDialog.alert({

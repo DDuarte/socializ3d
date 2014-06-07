@@ -39,19 +39,22 @@
                         </li>
                     </ul>
                 </li>
-                <li id="drop-down-toggler" class="dropdown notifications-menu">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <li class="dropdown notifications-menu">
+                    <a href="#" id="noti-count-st" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa  fa-flag"></i>
                         {if $userUnreadNots|@count > 0}
                             <span class="label label-warning">{if $userUnreadNots|@count < 100}{$userUnreadNots|@count}{else}+99{/if}</span>
                         {/if}
                     </a>
-                    <ul class="dropdown-menu notifications-dropdown">
+                    <ul id="noti-menu-st" class="dropdown-menu notifications-dropdown">
                         <li class="header">You have {$userUnreadNots|@count} new notifications</li>
                         {if $userUnreadNots|@count > 0}
                         <li>
                             <ul class="menu">
                                 {foreach $userUnreadNots as $noti}
+                                    {if $smarty.foreach.noti.index == 4}
+                                        {break}
+                                    {/if}
                                     <li>
                                         <a class="dynamic_load" href="{$BASE_URL}{$NOTIFICATIONS}/#elem_{$noti.idnotification}">
                                             <i class="{$noti.icon}"></i>

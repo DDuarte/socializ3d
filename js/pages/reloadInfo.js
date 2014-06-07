@@ -7,16 +7,11 @@ function reloadNotificationsNow() {
         url: '../../pages/users/navbar.php',
         type: 'GET',
         success: function (a) {
-            var isOpen = false;
-            var dropToggles = $('#drop-down-toggler');
-            if (dropToggles)
-                isOpen = dropToggles.hasClass('open');
 
             var newH = $(a);
-            if (isOpen)
-                newH.find('#drop-down-toggler').addClass('open');
-            if (newH.html() !== $('#navbar-header').html())
-                $('#navbar-header').replaceWith(newH);
+            $('#noti-count-st').html(newH.find('#noti-count-st').html());
+
+            $('#noti-menu-st').html(newH.find('#noti-menu-st').html());
 
             inProgress = false;
         },
@@ -31,20 +26,16 @@ function reloadSchedule() {
         if (inProgress)
             return;
         inProgress = true;
+        reloadSidebar();
         $.ajax({
             url: '../../pages/users/navbar.php',
             type: 'GET',
             success: function (a) {
-                var isOpen = false;
-                var dropToggles = $('#drop-down-toggler');
-                if (dropToggles)
-                    isOpen = dropToggles.hasClass('open');
 
                 var newH = $(a);
-                if (isOpen)
-                    newH.find('#drop-down-toggler').addClass('open');
-                if (newH.html() !== $('#navbar-header').html())
-                    $('#navbar-header').replaceWith(newH);
+                $('#noti-count-st').html(newH.find('#noti-count-st').html());
+
+                $('#noti-menu-st').html(newH.find('#noti-menu-st').html());
 
                 inProgress = false;
             },
@@ -58,4 +49,28 @@ function reloadSchedule() {
             timeout: 30000
         });
     })();
+}
+
+var sideInProgress = false;
+function reloadSidebar() {
+    if (sideInProgress)
+        return;
+    sideInProgress = true;
+    $.ajax({
+        url: '../../pages/users/sidebar.php',
+        type: 'GET',
+        success: function (a) {
+            var newH = $(a);
+
+            $('#groups-listing').html(newH.find('#groups-listing').html());
+
+            $('#friends-listing').html(newH.find('#friends-listing').html());
+
+            sideInProgress = false;
+        },
+        error: function (a, b, c) {
+            sideInProgress = false;
+        },
+        timeout: 30000
+    });
 }
