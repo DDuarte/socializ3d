@@ -16,7 +16,7 @@
             </li>
             {if $IS_LOGGED_IN && $member.id != $LOGGED_ID}
 
-            {if !$member.sentRequest && !$member.isFriend}
+            {if !$member.sentrequest && !$member.isfriend}
                 <li>
                     <a href="#" name="{$member.id}" class="btn btn-primary" role="button" onclick="askFriend(this);">Add Friend</a>
                 </li>

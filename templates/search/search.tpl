@@ -22,11 +22,11 @@
                 <section class="col-xs-12 col-sm-6 col-md-12">
                     {foreach $results as $result }
                         {if $result.type === 'model'}
-                            {include file="search/modelSearchComp.tpl" model=$result.value}
+                            {include file="search/modelSearchComp.tpl" model=$result}
                         {elseif $result.type === 'member'}
-                            {include file="search/memberSearchComp.tpl" member=$result.value}
+                            {include file="search/memberSearchComp.tpl" member=$result}
                         {elseif $result.type === 'group'}
-                            {include file="search/groupSearchComp.tpl" group=$result.value}
+                            {include file="search/groupSearchComp.tpl" group=$result}
                         {/if}
                     {/foreach}
 
