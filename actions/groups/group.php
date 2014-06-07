@@ -67,4 +67,25 @@ class GroupHandler {
         getGroupPage($group);
         exit;
     }
+
+    function post($id) {
+        $loggedUserId = getLoggedId();
+        if (!isGroupAdmin($id, $loggedUserId)) {
+            http_response_code(403);
+            exit;
+        }
+
+        if (!isset($_POST['about'])) {
+            http_response_code(400);
+            return;
+        }
+
+        $aboutInfo = trim($_POST['about']);
+        if (strlen($aboutInfo) < 1024)
+            $aboutInfo = $_POST['about'];
+        else
+            $aboutInfo = substr($_POST['about'], 0, 1024);
+
+        updateGroupAbout($id, $aboutInfo);
+    }
 }

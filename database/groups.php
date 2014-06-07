@@ -140,3 +140,10 @@ function answerGroupApplication($appId, $answer)
     $converted_answer = ($answer) ? 'true' : 'false';
     $stmt->execute(array($converted_answer, $appId));
 }
+
+function updateGroupAbout($groupId, $aboutInfo)
+{
+    global $conn;
+    $stmt = $conn->prepare('UPDATE TGroup SET about = :about WHERE id = :id');
+    $stmt->execute(array(':id' => $groupId, ":about" => $aboutInfo));
+}

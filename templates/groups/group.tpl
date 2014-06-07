@@ -36,7 +36,7 @@
                         <div class="thumbnail">
                             <img src="{$group.avatarimg}" alt="...">
                         </div>
-                        <p>{$group.about}</p>
+                        <p id="group-about-content">{$group.about}</p>
                     </div>
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="tab_activity">
@@ -73,10 +73,14 @@
                             <label for="description-field">About:</label>
                             <textarea class="form-control" id="about-me-field" placeHolder="Enter your text here">{$group.about}</textarea>
                         </div>
-                        <button id="delete-group-btn" class="btn bg-blue btn-primary" data-toggle="modal" data-target="#delete-group-modal">
-                            <i class="fa fa-times"></i>
+                        <button id="confirm-changes-btn" class="btn btn-success" >
+                            <span>Confirm Changes</span>
+                        </button>
+                        <!--
+                        <button id="delete-group-btn" class="btn btn-danger" >
                             <span>Delete Group</span>
                         </button>
+                        -->
                     </div>
                     {/if}
                     <!-- /.tab-settings -->
@@ -231,36 +235,6 @@
     </div>
 </div>
 
-<div id="delete-group-modal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="content-header" style="text-align: center">
-                <h2>Delete Group</h2>
-            </div>
-            <div class="box box-primary">
-                <div class="row">
-                    <div class="col-md-12" style="text-align: center">
-                        <h3>Are you sure?</h3>
-                    </div>
-                </div>
-                <div class="box-body notifications-box row">
-
-                    <div class="col-md-6" style="text-align: center">
-                        <button class="btn bg-blue btn-primary">
-                            <span>Yes</span>
-                        </button>
-                    </div>
-                    <div class="col-md-6" style="text-align: center">
-                        <button class="btn bg-blue btn-primary">
-                            <span>No</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div id="change-role-modal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
@@ -360,6 +334,35 @@
                 }
             });
         });
+
+        $('#confirm-changes-btn').click(function (event) {
+            event.preventDefault();
+            var thisButton = $(this);
+            thisButton.addClass('disabled');
+            thisButton.prepend('<span class="bootstrap-dialog-button-icon glyphicon glyphicon-asterisk icon-spin"></span>');
+            $.ajax({
+                url: '{$BASE_URL}groups/{$group.id}',
+                type: 'POST',
+                data: {literal}{ about: $('#about-me-field').val()}{/literal},
+                success: function (a) {
+                    BootstrapDialog.alert({
+                        title: 'Success!',
+                        message: 'Updated successfully!'
+                    });
+                    $('#group-about-content').text($('#about-me-field').val());
+                    thisButton.find('span.bootstrap-dialog-button-icon').remove();
+                    thisButton.removeClass('disabled');
+                },
+                error: function (a, b, c) {
+                    BootstrapDialog.alert({
+                        title: 'Oops!',
+                        message: 'Could not process your request at this time. :(\nError: ' + (c === 'Conflict' ? 'Member is already in group or has application pending.' : c)});
+                    thisButton.find('span.bootstrap-dialog-button-icon').remove();
+                    thisButton.removeClass('disabled');
+                }
+            });
+        });
+
 
     });
 </script>
