@@ -46,3 +46,12 @@
 {$sidebar}
 
 <aside id="content-ajax" class="right-side">
+
+
+<script src="{$BASE_URL}js/pages/reloadInfo.js" type="text/javascript"></script>
+<script>
+    var inProgress = false;
+    $(function () {
+        reloadSchedule();
+    });
+</script>

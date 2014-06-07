@@ -1,18 +1,14 @@
 <header id="navbar-header" class="header">
-    <a href="{$BASE_URL}" class="logo">
-        <!-- Add the class icon to your logo image or logo icon to add the margining -->
+        <a href="{$BASE_URL}" class="logo">
         Socializ3D
     </a>
-    <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar my_navbar" role="navigation">
-        <!-- Sidebar toggle button-->
         <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </a>
-        <!-- search form -->
         <div class="navbar-left hidden-xs">
             <form action="{$BASE_URL}search" method="get" class="navbar-form" id="search-form" role="search">
                 <div class="form-group">
@@ -21,7 +17,6 @@
                 <button type="submit" class="btn btn-default">Submit</button>
             </form>
         </div>
-        <!-- /.search form -->
         {if $IS_LOGGED_IN}
         <div class="navbar-right">
             <ul class="nav navbar-nav">
@@ -44,8 +39,7 @@
                         </li>
                     </ul>
                 </li>
-                <!-- Notifications: style can be found in dropdown.less -->
-                <li class="dropdown notifications-menu">
+                <li id="drop-down-toggler" class="dropdown notifications-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa  fa-flag"></i>
                         {if $userUnreadNots|@count > 0}
@@ -56,7 +50,6 @@
                         <li class="header">You have {$userUnreadNots|@count} new notifications</li>
                         {if $userUnreadNots|@count > 0}
                         <li>
-                            <!-- inner menu: contains the actual data -->
                             <ul class="menu">
                                 {foreach $userUnreadNots as $noti}
                                     <li>
@@ -74,7 +67,6 @@
                         </li>
                     </ul>
                 </li>
-                <!-- User Account: style can be found in dropdown.less -->
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="glyphicon glyphicon-user"></i>
@@ -83,7 +75,6 @@
                             </span>
                     </a>
                     <ul class="dropdown-menu">
-                        <!-- User image -->
                         <li class="user-header bg-light-blue">
                             <img src="{$GRAVATAR_URL}{$userInfo.userHash}?d=identicon" class="img-circle" alt="User Image" />
                             <p>
@@ -91,14 +82,12 @@
                                 <small>Member since Nov. 2012</small>
                             </p>
                         </li>
-                        <!-- Menu Body -->
                         <li class="user-body">
                             <div class="text-center">
                                 <a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$userInfo.userId}#tab_friends">Friends</a> |
                                 <a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$userInfo.userId}#tab_groups">Groups</a>
                             </div>
                         </li>
-                        <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
                                 <a href="{$BASE_URL}{$MEMBERS}/{$userInfo.userId}" class="btn btn-default btn-flat dynamic_load">Profile</a>
@@ -124,4 +113,4 @@
         </div>
         {/if}
     </nav>
-</header> <!-- /.navbar -->
+</header>

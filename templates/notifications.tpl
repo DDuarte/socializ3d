@@ -154,6 +154,6 @@
         });
     }
     $(function () {
-        setInterval(reloadNotifications(),5000);
+        setInterval(reloadNotificationsNow(),3000);
     });
 </script>
