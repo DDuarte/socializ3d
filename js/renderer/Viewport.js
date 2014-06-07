@@ -1,8 +1,9 @@
-var Viewport = function ( editor ) {
+var Viewport = function ( editor, isMobile ) {
 
 	var signals = editor.signals;
 
-	var container = new UI.Panel();
+	this.container = new UI.Panel();
+    var container = this.container;
 
 	var scene = editor.scene;
 	var sceneHelpers = editor.sceneHelpers;
@@ -30,7 +31,7 @@ var Viewport = function ( editor ) {
 	selectionBox.visible = false;
 	sceneHelpers.add( selectionBox );
 
-	var transformControls = new THREE.TransformControls( camera, container.dom );
+	var transformControls = new THREE.TransformControls( camera, container.dom);
 	transformControls.addEventListener( 'change', function () {
 
 		controls.enabled = true;
@@ -85,29 +86,6 @@ var Viewport = function ( editor ) {
     var spinner = new Spinner(opts).spin();
     container.dom.appendChild(spinner.el);
 
-	// events
-
-	/*var getIntersects = function ( event, object ) {
-
-		var rect = container.dom.getBoundingClientRect();
-		x = ( event.clientX - rect.left ) / rect.width;
-		y = ( event.clientY - rect.top ) / rect.height;
-		var vector = new THREE.Vector3( ( x ) * 2 - 1, - ( y ) * 2 + 1, 0.5 );
-
-		projector.unprojectVector( vector, camera );
-
-		ray.set( camera.position, vector.sub( camera.position ).normalize() );
-
-		if ( object instanceof Array ) {
-
-			return ray.intersectObjects( object );
-
-		}
-
-		return ray.intersectObject( object );
-
-	}; */
-
 	var onMouseDownPosition = new THREE.Vector2();
 	var onMouseUpPosition = new THREE.Vector2();
 
@@ -132,33 +110,7 @@ var Viewport = function ( editor ) {
 		onMouseUpPosition.set( x, y );
 
 		if ( onMouseDownPosition.distanceTo( onMouseUpPosition ) == 0 ) {
-
-			/*var intersects = getIntersects( event, objects );
-
-			if ( intersects.length > 0 ) {
-
-				var object = intersects[ 0 ].object;
-
-				if ( object.userData.object !== undefined ) {
-
-					// helper
-
-					editor.select( object.userData.object );
-
-				} else {
-
-					editor.select( object );
-
-				}
-
-			} else {
-
-				editor.select( null );
-
-			} */
-
 			render();
-
 		}
 
 		document.removeEventListener( 'mouseup', onMouseUp );
@@ -169,15 +121,6 @@ var Viewport = function ( editor ) {
     };
 
 	var onDoubleClick = function ( event ) {
-
-		/*var intersects = getIntersects( event, objects );
-
-		if ( intersects.length > 0 && intersects[ 0 ].object === editor.selected ) {
-
-			controls.focus( editor.selected );
-
-		} */
-
 	};
 
 	container.dom.addEventListener( 'mousedown', onMouseDown, true );
@@ -187,7 +130,7 @@ var Viewport = function ( editor ) {
 	// controls need to be added *after* main logic,
 	// otherwise controls.enabled doesn't work.
 
-	var controls = new THREE.EditorControls( camera, container.dom );
+	var controls = new THREE.EditorControls( camera, container.dom , isMobile);
     controls.center = new THREE.Vector3(0, 0, 0);
 	controls.addEventListener( 'change', function () {
 
@@ -199,6 +142,10 @@ var Viewport = function ( editor ) {
     signals.cameraChanged.add(function() {
         light.position = camera.position;
     });
+
+    this.activateControls = function (activate) {
+        controls.activateControls(activate);
+    };
 
 	// signals
 
@@ -288,30 +235,7 @@ var Viewport = function ( editor ) {
 	} );
 
 	signals.objectSelected.add( function ( object ) {
-
-		/*selectionBox.visible = false;
-		transformControls.detach();
-
-		if ( object !== null ) {
-
-			if ( object.geometry !== undefined &&
-				 object instanceof THREE.Sprite === false ) {
-
-				selectionBox.update( object );
-				selectionBox.visible = true;
-
-			}
-
-			if ( object instanceof THREE.PerspectiveCamera === false ) {
-
-				transformControls.attach( object );
-
-			}
-
-		} */
-
 		render();
-
 	} );
 
 	signals.objectAdded.add( function ( object ) {
@@ -618,7 +542,4 @@ var Viewport = function ( editor ) {
 		}
 
 	}
-
-	return container;
-
-}
+};

@@ -4,13 +4,16 @@
         height: 600px;
     }
 
-    .Panel {
-        -moz-user-select: none;
-        -webkit-user-select: none;
-        -ms-user-select: none;
+    #fullscreenIcon.desktop {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+    }
 
-        -o-user-select: none;
-        user-select: none;
+    #fullscreenIcon.mobile {
+        position: absolute;
+        left: 50%;
+        top: 50%;
     }
 
 </style>
@@ -255,6 +258,15 @@ function checkComment() {
 }
 
 $(function () {
+
+    {literal}
+    window.mobilecheck = function() {
+        var check = false;
+        (function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4)))check = true})(navigator.userAgent||navigator.vendor||window.opera);
+        return check; };
+    {/literal}
+
+    var isMobile = window.mobilecheck();
     var data = [
         {
             label: "Up votes",
@@ -274,26 +286,28 @@ $(function () {
         hideHover: 'auto'
     });
 
-    var voted_up = $("#up_vote_button").hasClass("disabled");
-    var voted_down = $("#down_vote_button").hasClass("disabled");
+    var voteButtonElem = $('#up_vote_button');
+    var voted_up = voteButtonElem.hasClass("disabled");
+    var voted_down = voteButtonElem.hasClass("disabled");
 
-
-    $("#interests-field + .bootstrap-tagsinput").focusin(function (event) {
+    var interestsElem = $("#interests-field").find("+ .bootstrap-tagsinput");
+    interestsElem.focusin(function (event) {
         event.preventDefault();
         $("#tags-info").removeClass("hidden");
     });
 
-    $("#interests-field + .bootstrap-tagsinput").focusout(function (event) {
+    interestsElem.focusout(function (event) {
         event.preventDefault();
         $("#tags-info").addClass("hidden");
     });
 
-    $(".item").mouseover(function (event) {
+    var itemElem = $('.item');
+    itemElem.mouseover(function (event) {
         event.preventDefault();
         $(this).find(".removeicon").removeClass("hidden");
     });
 
-    $(".item").mouseout(function (event) {
+    itemElem.mouseout(function (event) {
         event.preventDefault();
         $(this).find(".removeicon").addClass("hidden");
     });
@@ -406,83 +420,38 @@ $(function () {
         donut.setData(data);
     }
 
+    $('#delete-btn').on('click', function(event) {
+        //toggleFullscreen();
+    });
+
     $("#vote_section").removeClass("hidden");
+
+    $(document).bind("fullscreenchange", function() {
+        if ($(document).fullScreen())
+            return;
+
+        if (isMobile)
+            viewport.activateControls(false);
+    });
 
     window.URL = window.URL || window.webkitURL;
     window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
 
     var editor = new Editor();
+    var viewport = new Viewport(editor, isMobile);
+    viewport.container.setId('viewport');
+    viewport.container.dom.className += " col-md-offset-2";
+    viewport.container.dom.className += " col-md-8";
+    var fullscreenIcon;
+    if (isMobile) {
+        fullscreenIcon = $('<button id="fullscreenIcon" class="btn bg-gray mobile"> <i class="fa fa-play"></i> <span> &nbsp Start</span>  </button>').get(0);
+    } else {
+        fullscreenIcon = $('<button id="fullscreenIcon" class="btn bg-gray desktop"> <span>Fullscreen &nbsp</span> <i class="fa fa-arrows-alt"></i> </button>').get(0);
+    }
 
-    var viewport = new Viewport(editor).setId('viewport');
-    viewport.dom.className += " col-md-offset-2";
-    viewport.dom.className += " col-md-8";
-    document.getElementById('rendererContainer').appendChild(viewport.dom);
-
-
-    /*var toolbar = new Toolbar( editor ).setId( 'toolbar' )
-     document.body.appendChild( toolbar.dom );
-
-     var menubar = new Menubar( editor ).setId( 'menubar' );
-     document.body.appendChild( menubar.dom );
-
-     var sidebar = new Sidebar( editor ).setId( 'sidebar' );
-     document.body.appendChild( sidebar.dom ); */
-
-//
+    document.getElementById('rendererContainer').appendChild(viewport.container.dom);
 
     editor.setTheme(editor.config.getKey('theme'));
-
-    /*editor.storage.init( function () {
-
-     editor.storage.get( function ( state ) {
-
-     if ( state !== undefined ) {
-
-     var loader = new THREE.ObjectLoader();
-     var scene = loader.parse( state );
-
-     editor.setScene( scene );
-
-     }
-
-     var selected = editor.config.getKey( 'selected' );
-
-     if ( selected !== undefined ) {
-
-     editor.selectByUuid( selected );
-
-     }
-
-     } );
-
-     //
-
-     var timeout;
-     var exporter = new THREE.ObjectExporter();
-
-     var saveState = function ( scene ) {
-
-     clearTimeout( timeout );
-
-     timeout = setTimeout( function () {
-
-     editor.storage.set( exporter.parse( editor.scene ) );
-
-     }, 1000 );
-
-     };
-
-     var signals = editor.signals;
-
-     signals.objectAdded.add( saveState );
-     signals.objectChanged.add( saveState );
-     signals.objectRemoved.add( saveState );
-     signals.materialChanged.add( saveState );
-     signals.sceneGraphChanged.add( saveState );
-
-     } );*/
-
-//
 
     document.addEventListener('dragover', function (event) {
 
@@ -494,28 +463,9 @@ $(function () {
     document.addEventListener('drop', function (event) {
 
         event.preventDefault();
-        console.log("drop");
-        //viewport.camera.position = THREE.Vector3(10, 10, 10);
         editor.loader.loadFile(event.dataTransfer.files[ 0 ]);
 
     }, false);
-
-    /*document.addEventListener( 'keydown', function ( event ) {
-
-     switch ( event.keyCode ) {
-
-     case 8: // prevent browser back
-     event.preventDefault();
-     break;
-     case 46: // delete
-     var parent = editor.selected.parent;
-     editor.removeObject( editor.selected );
-     editor.select( parent );
-     break;
-
-     }
-
-     }, false );*/
 
     var onWindowResize = function (event) {
 
@@ -538,14 +488,20 @@ $(function () {
             var matches = contentDisposition.match(/filename=(.*)/);
             var fileName = matches[1];
 
-            console.log(this.response, typeof this.response, fileName);
-
             var file = this.response;
             file.name = fileName;
 
+            viewport.container.dom.appendChild(fullscreenIcon);
+            var toggle = true;
+            $('#fullscreenIcon').click(function(event) {
+                viewport.activateControls(true);
+                $('canvas').fullScreen(toggle);
+            });
+
             editor.loader.loadFile(file);
         }
-    }
+    };
+    
     xhr.open('GET', '{$BASE_URL}{$MODELS}/{$model.id}/file');
     xhr.responseType = 'blob';
     xhr.send();
