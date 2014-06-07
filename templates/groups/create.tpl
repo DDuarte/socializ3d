@@ -57,7 +57,7 @@
 
                     <div class="form-group">
                         <label for="name-field">Group name:</label>
-                        <input name="name" required type="text" class="form-control" id="name-field" placeHolder="Enter the group name" />
+                        <input name="name" type="text" class="form-control" id="name-field" placeHolder="Enter the group name" required/>
                     </div>
 
                     <div class="form-group">
@@ -77,14 +77,14 @@
 
                     <div class="form-group">
                         <label for="to-field">Visibility:</label>
-                        <select name="visibility" class="form-control" id="to-field">
+                        <select name="visibility" class="form-control" id="to-field" required>
                             <option>Public</option>
                             <option>Private</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <div id="submit" class="btn btn-primary btn-sm">Submit</div>
+                        <button type="submit" id="submitBtn" class="btn btn-primary btn-sm">Submit</button>
                     </div>
                 </div>
             </form>
@@ -95,3 +95,4 @@
 <script src="{$BASE_URL}js/dropzone.min.js" type="text/javascript"></script>
 <script src="{$BASE_URL}js/pages/upload.js" type="text/javascript"></script>
 <script src="{$BASE_URL}js/bootstrap-tagsinput.min.js" type="text/javascript"></script>
+<script src="{$BASE_URL}js/pages/createGroup.js" type="text/javascript"></script>

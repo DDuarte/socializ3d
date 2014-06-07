@@ -19,13 +19,14 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
 
-    <script src="{$BASE_URL}js/jquery-2.1.0.min.js"></script>
+    <script src="{$BASE_URL}js/jquery-2.1.0.min.js" type="text/javascript"></script>
     <script src="{$BASE_URL}js/plugins/timeago/jquery.timeago.js" type="text/javascript"></script>
     <script src="{$BASE_URL}js/plugins/bootstrap.min.js" type="text/javascript"></script>
 
-    <script src="{$BASE_URL}js/renderer/build/three.min.js"></script>
-    <script src="{$BASE_URL}js/renderer/js/libs/system.min.js"></script>
-    <script src="{$BASE_URL}js/vendor/jquery.fullscreen.js"></script>
+    <script src="{$BASE_URL}js/renderer/build/three.min.js" type="text/javascript"></script>
+    <script src="{$BASE_URL}js/renderer/js/libs/system.min.js" type="text/javascript"></script>
+    <script src="{$BASE_URL}js/vendor/jquery.fullscreen.js" type="text/javascript"></script>
+    <script src="{$BASE_URL}js/vendor/bootstrapValidator.min.js" type="text/javascript"></script>
 
     <script type="text/javascript">
         if (typeof Socializ3d === 'undefined')
