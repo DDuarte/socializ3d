@@ -27,6 +27,7 @@ if(!isset($_SESSION['username'])){ $_SESSION['username'] = null; }
 if(!isset($_SESSION['id'])){ $_SESSION['id'] = null; }
 if(!isset($_SESSION['success_messages'])){ $_SESSION['success_messages'] = null; }
 if(!isset($_SESSION['field_errors'])){ $_SESSION['field_errors'] = null; }
+if(!isset($_SESSION['isAdmin'])){ $_SESSION['isAdmin'] = false; }
 
 $smarty->assign('BASE_URL', $BASE_URL);
 $smarty->assign('GRAVATAR_URL', $GRAVATAR_BASE_URL);
