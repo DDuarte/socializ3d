@@ -1,62 +1,8 @@
-<title>Upload</title>
-
 <section class="content-header">
     <h1 id="myh122">
         Upload a Model
     </h1>
 </section>
-
-<style>
-    .inner-content {
-        width: 95%;
-        margin: 0 auto;
-    }
-
-    .box.box-drop {
-        height: 125px;
-        background: rgba(182,205,229,0.5);
-        border-radius: 10px;
-        border: 3px dashed rgba(0,0,255,0.2);
-        padding: 0;
-        text-align: center;
-        font-size: 2em;
-        font-weight: bold;
-    }
-
-    .box.box-drop h2 {
-        margin-top: 10px;
-        font-size: 0.75em;
-    }
-
-    .btn.btn-drop {
-        display: inline-block;
-        margin-top: 10px;
-        margin-bottom: 6px;
-    }
-
-    .hidden {
-        visibility: hidden;
-    }
-
-    .col-centered {
-        float: none;
-        margin: 0 auto;
-    }
-
-    #drop-files {
-        width: 90%;
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
-
-    #upload-form .form-group textarea {
-        resize: vertical;
-    }
-
-    #upload-form .form-group {
-        margin-bottom: 10px;
-    }
-</style>
 
 <section class="content">
     <div class="row">
@@ -66,16 +12,9 @@
                     <div class="error">{$error}<a class="close" href="#">X</a></div>
                 {/foreach}
             </div>
-            <form action="{$BASE_URL}upload" method="post"  enctype="multipart/form-data">
+            <form action="{$BASE_URL}upload" method="post" enctype="multipart/form-data">
 
                 <div class="box-body">
-                    {*<div class="form-group">
-                        <div id="drop-files" class="box box-drop col-centered">
-                            <h2>Drag &amp; drop your file here or</h2>
-                            <div id="upload-button" class="btn btn-primary btn-lg btn-drop">Choose a file to upload</div>
-                        </div>
-                    </div>*}
-
                     <input type="file" name="file" />
 
                     <hr>
@@ -116,7 +55,7 @@
                     <hr>
 
                     <div class="form-group">
-                        <div id="submit" class="btn btn-primary btn-sm" style="margin-top: 10px">Submit all files</button>
+                        <div id="submit" class="btn btn-primary btn-sm" style="margin-top: 10px">Submit all files</div>
                     </div>
 
                 </div>

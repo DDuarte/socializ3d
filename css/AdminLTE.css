@@ -2826,3 +2826,12 @@ Component: timeline
     overflow: auto;
     margin-bottom: 0px;
 }
+
+.col-centered {
+    float: none;
+    margin: 0 auto;
+}
+
+.hidden {
+    visibility: hidden;
+}

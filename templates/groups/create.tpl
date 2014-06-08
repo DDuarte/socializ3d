@@ -4,50 +4,6 @@
     </h1>
 </section>
 
-<style>
-    .inner-content {
-        width: 95%;
-        margin: 0 auto;
-    }
-    .box.box-drop {
-        height: 125px;
-        background: rgba(182, 205, 229, 0.5);
-        border-radius: 10px;
-        border: 3px dashed rgba(0, 0, 255, 0.2);
-        padding: 0;
-        text-align: center;
-        font-size: 2em;
-        font-weight: bold;
-    }
-    .box.box-drop h2 {
-        margin-top: 10px;
-        font-size: 0.75em;
-    }
-    .btn.btn-drop {
-        display: inline-block;
-        margin-top: 10px;
-        margin-bottom: 6px;
-    }
-    .hidden {
-        visibility: hidden;
-    }
-    .col-centered {
-        float: none;
-        margin: 0 auto;
-    }
-    #drop-files {
-        width: 90%;
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
-    #upload-form .form-group textarea {
-        resize: vertical;
-    }
-    #upload-form .form-group {
-        margin-bottom: 10px;
-    }
-</style>
-
 <section class="content">
     <div class="row">
         <div class="col-md-8 col-centered" id="upload-form">

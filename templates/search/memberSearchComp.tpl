@@ -1,7 +1,7 @@
 <article class="search-result row user">
     <div class="col-xs-12 col-sm-12 col-md-3">
         <a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$member.id}" class="thumbnail">
-            <img src="{$GRAVATAR_URL}{$member.hash}?s=140&d=identicon" alt="{$member.name}" />
+            <img src="{$GRAVATAR_URL}{$member.hash}?s=140&amp;d=identicon" alt="{$member.name}" />
         </a>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-2">

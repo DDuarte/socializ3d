@@ -253,21 +253,21 @@ function getGroupNotifications($id, $dateLimit, $numLimit) {
                 $userName = $r['username'];
                 $userLink = $BASE_URL . "members/$idAuthor";
                 $modelLink = $BASE_URL . "models/$idModel";
-                $r['img'] = 'http://www.gravatar.com/avatar/' . $r['hash'] . '?s=50&d=identicon';
+                $r['img'] = 'http://www.gravatar.com/avatar/' . $r['hash'] . '?s=50&amp;d=identicon';
                 $r['text'] = "<a href=\"$userLink\">$userName</a> published <a href=\"$modelLink\">$modelName</a>";
                 break;
             case 'GroupApplication':
                 $userId = $r['idmember'];
                 $userName = $r['username'];
                 $userLink = $BASE_URL . "members/$userId";
-                $r['img'] = 'http://www.gravatar.com/avatar/' . $r['hash'] . '?s=50&d=identicon';
+                $r['img'] = 'http://www.gravatar.com/avatar/' . $r['hash'] . '?s=50&amp;d=identicon';
                 $r['text'] = "<a href=\"$userLink\">$userName</a> applied to join this group";
                 break;
             case 'GroupApplicationAccepted':
                 $userId = $r['idmember'];
                 $userName = $r['username'];
                 $userLink = $BASE_URL . "members/$userId";
-                $r['img'] = 'http://www.gravatar.com/avatar/' . $r['hash'] . '?s=50&d=identicon';
+                $r['img'] = 'http://www.gravatar.com/avatar/' . $r['hash'] . '?s=50&amp;d=identicon';
                 $r['text'] = "<a href=\"$userLink\">$userName</a>'s application to join this group has been accepted";
                 break;
             case 'GroupInvite':
@@ -277,13 +277,13 @@ function getGroupNotifications($id, $dateLimit, $numLimit) {
                 $userId2 = $r['idmember'];
                 $userName2 = $r['username'];
                 $userLink2 = $BASE_URL . "members/$userId2";
-                $r['img'] = 'http://www.gravatar.com/avatar/' . $r['hash'] . '?s=50&d=identicon';
+                $r['img'] = 'http://www.gravatar.com/avatar/' . $r['hash'] . '?s=50&amp;d=identicon';
                 $r['text'] = "<a href=\"$userLink2\">$userName2</a> was invited by <a href=\"$userLink\">$userName</a> to join this group";
                 break;
             case 'GroupInviteAccepted':
                 $userId = $r['idmember'];
                 $userName = $r['username'];
-                $r['img'] = 'http://www.gravatar.com/avatar/' . $r['hash'] . '?s=50&d=identicon';
+                $r['img'] = 'http://www.gravatar.com/avatar/' . $r['hash'] . '?s=50&amp;d=identicon';
                 $userLink = $BASE_URL . "members/$userId";
                 $r['text'] = "<a href=\"$userLink\">$userName</a> accepted the invitation to join this group";
                 break;
