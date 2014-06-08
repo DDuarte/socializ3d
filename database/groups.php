@@ -180,7 +180,7 @@ function removeGroupUser($groupId, $userId)
 function deleteGroup($groupId)
 {
     global $conn;
-    $stmt = $conn->prepare('UPDATE TGroup SET deleteDate = now() WHERE id = :id');
+    $stmt = $conn->prepare('UPDATE TGroup SET deleteDate = now()::timestamp(0) WHERE id = :id');
     $stmt->execute(array(':id' => $groupId));
 }
 

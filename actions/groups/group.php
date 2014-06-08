@@ -15,7 +15,7 @@ function getGroupPage($group) {
 function updateLastAccess($group, $memberId) {
     global $conn;
 
-    $stmt = $conn->prepare("UPDATE GroupUser SET lastAccess = now() WHERE idGroup = ? AND idMember = ?");
+    $stmt = $conn->prepare("UPDATE GroupUser SET lastAccess = now()::timestamp(0) WHERE idGroup = ? AND idMember = ?");
     $stmt->execute(array($group, $memberId));
 }
 
