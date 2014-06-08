@@ -16,6 +16,12 @@
         top: 50%;
     }
 
+    #screenshotIcon {
+        position: absolute;
+        bottom: 5px;
+        left: 30px;
+    }
+
 </style>
 
 <link href="{$BASE_URL}css/renderer/types.css" rel="stylesheet"/>
@@ -236,6 +242,7 @@
 <script src="{$BASE_URL}js/renderer/js/renderers/RaytracingRenderer.js"></script>
 <script src="{$BASE_URL}js/renderer/js/renderers/SoftwareRenderer.js"></script>
 <script src="{$BASE_URL}js/renderer/js/renderers/SVGRenderer.js"></script>
+<script src="{$BASE_URL}js/renderer/libs/THREEx.screenshot.js"></script>
 
 <!-- WIP -->
 
@@ -464,12 +471,14 @@ $(function () {
     viewport.container.setId('viewport');
     viewport.container.dom.className += " col-md-offset-2";
     viewport.container.dom.className += " col-md-8";
-    var fullscreenIcon;
+    var fullscreenIcon, screenshotIcon;
     if (isMobile) {
         fullscreenIcon = $('<button id="fullscreenIcon" class="btn bg-gray mobile"> <i class="fa fa-play"></i> <span> &nbsp Start</span>  </button>').get(0);
     } else {
         fullscreenIcon = $('<button id="fullscreenIcon" class="btn bg-gray desktop"> <span>Fullscreen &nbsp</span> <i class="fa fa-arrows-alt"></i> </button>').get(0);
     }
+
+    screenshotIcon = $('<button id="screenshotIcon" class="btn bg-gray mobile"> <i class="fa fa-camera"></i> <span> &nbsp Screenshot</span>  </button>').get(0);
 
     document.getElementById('rendererContainer').appendChild(viewport.container.dom);
 
@@ -498,8 +507,77 @@ $(function () {
     window.addEventListener('resize', onWindowResize, false);
 
     onWindowResize();
-
     var link = "{$BASE_URL}{$MODELS}/{$model.id}/file";
+    var screenshotUrl;
+    viewport.container.dom.appendChild(fullscreenIcon);
+    viewport.container.dom.appendChild(screenshotIcon);
+    var toggle = true;
+    $('#fullscreenIcon').click(function(event) {
+        viewport.activateControls(true);
+        $('canvas').fullScreen(toggle);
+    });
+
+    function resizeImage(url, width, height, callback) {
+        var sourceImage = new Image();
+
+        sourceImage.onload = function() {
+            // Create a canvas with the desired dimensions
+            var canvas = document.createElement("canvas");
+            canvas.width = width;
+            canvas.height = height;
+
+            // Scale and draw the source image to the canvas
+            canvas.getContext("2d").drawImage(sourceImage, 0, 0, width, height);
+
+            // Convert the canvas to a data URL in PNG format
+            callback(canvas.toDataURL());
+        };
+
+        sourceImage.src = url;
+    }
+
+    $('#screenshotIcon').click(function(event) {
+        screenshotUrl = THREEx.Screenshot.toDataURL(viewport.renderer, "img/png");
+
+        var $textAndPic = $('<div></div>');
+        resizeImage(screenshotUrl, 300, 200, function(resizedUrl) {
+            $textAndPic.append('<img class="center-block" src="'+ resizedUrl + '" />');
+
+            BootstrapDialog.show({
+                title: 'Do you wish to set this image as the thumbnail?',
+                message: $textAndPic,
+                buttons: [{
+                label: 'Confirm',
+                cssClass: 'btn-primary',
+                autospin: true,
+                action: function(dialogRef){
+                    dialogRef.enableButtons(false);
+                    dialogRef.setClosable(false);
+                    dialogRef.getModalBody().html('Submitting thumbnail..');
+                    $.ajax({
+                        url: "{$BASE_URL}models/{$model.id}/thumbnail",
+                        type: "POST",
+                        data: {
+                            image: resizedUrl
+                        },
+                        success: function(data, textStatus, jqXHR) {
+                            dialogRef.close();
+                        },
+                        error: function(jqXHR, textStatus, errorThrown ) {
+                            console.log("error");
+                            dialogRef.close();
+                        }
+                    });
+                }
+            }, {
+                label: 'Cancel',
+                action: function(dialogRef){
+                    dialogRef.close();
+                }
+            }]
+            });
+        });
+    });
 
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function(){
@@ -512,10 +590,16 @@ $(function () {
             file.name = fileName;
 
             viewport.container.dom.appendChild(fullscreenIcon);
+            viewport.container.dom.appendChild(screenshotIcon);
             var toggle = true;
             $('#fullscreenIcon').click(function(event) {
                 viewport.activateControls(true);
                 $('canvas').fullScreen(toggle);
+            });
+
+            $('#screenshotIcon').click(function(event) {
+                screenshotUrl = THREEx.Screenshot.toDataURL(viewport.renderer, "img/png");
+                console.log(screenshotUrl);
             });
 
             editor.loader.loadFile(file);

@@ -204,13 +204,19 @@ var Viewport = function ( editor, isMobile ) {
 
 		container.dom.removeChild( renderer.domElement );
 
-		renderer = new THREE[ type ]( { antialias: true } );
+		renderer = new THREE[ type ]( {
+            antialias: true,
+            preserveDrawingBuffer   : true   // required to support .toDataURL()
+		} );
+
 		renderer.autoClear = false;
 		renderer.autoUpdateScene = false;
 		renderer.setClearColor( clearColor );
 		renderer.setSize( container.dom.offsetWidth, container.dom.offsetHeight );
 
 		container.dom.appendChild( renderer.domElement );
+
+        THREEx.Screenshot.bindKey(renderer);
 
 		render();
 
@@ -254,6 +260,7 @@ var Viewport = function ( editor, isMobile ) {
 
         spinner.stop();
 		var materialsNeedUpdate = false;
+        //console.log(object);
 
 		object.traverse( function ( child ) {
 
@@ -447,7 +454,7 @@ var Viewport = function ( editor, isMobile ) {
 	renderer.autoClear = false;
 	renderer.autoUpdateScene = false;
 	container.dom.appendChild( renderer.domElement );
-
+    this.renderer = renderer;
 	animate();
 
 	//
