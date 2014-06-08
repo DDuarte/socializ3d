@@ -481,8 +481,6 @@ $(function () {
 
     onWindowResize();
 
-    console.log("Here");
-
     var link = "{$BASE_URL}{$MODELS}/{$model.id}/file";
 
     var xhr = new XMLHttpRequest();
