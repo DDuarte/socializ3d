@@ -34,7 +34,7 @@
                 <ul id="groups-listing" class="treeview-menu">
                     {foreach $userInfo.groups as $group}
                         <li>
-                            <a class="dynamic_load" href="{$BASE_URL}{$GROUPS}/{$group.groupid}" class="pull-left">
+                            <a class="dynamic_load" href="{$BASE_URL}{$GROUPS}/{$group.groupid}">
                                 <i class="fa fa-angle-double-right"></i>{$group.groupname}</a>
                         </li>
                     {/foreach}
