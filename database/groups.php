@@ -19,6 +19,13 @@ function getSimpleGroup($id) {
     return $result;
 }
 
+function getGroupVisibility($id) {
+    global $conn;
+    $stmt = $conn->prepare("SELECT visibility FROM TGroup WHERE id = ?");
+    $stmt->execute(Array($id));
+    return $stmt->fetch()['visibility'];
+}
+
 function getGroup($id) {
     $loggedId = getLoggedId();
 
@@ -31,6 +38,7 @@ function getGroup($id) {
 
     $result['id'] = $id;
     $result['models'] = getGroupModels($id);
+    $result['visibility'] = getGroupVisibility($id);
     $result['members'] = getMembersOfGroup($id);
     $result['isMember'] = isGroupMember($id, $loggedId);
     $result['isGroupAdmin'] = isGroupAdmin($id, $loggedId) || isAdmin($loggedId);
@@ -138,11 +146,11 @@ function answerGroupApplication($appId, $answer)
     $stmt->execute(array($converted_answer, $appId));
 }
 
-function updateGroupInfo($groupId, $aboutInfo, $coverImg, $avatarImg)
+function updateGroupInfo($groupId, $aboutInfo, $coverImg, $avatarImg, $visibility)
 {
     global $conn;
-    $stmt = $conn->prepare('UPDATE TGroup SET about = :about, coverImg = :cover, avatarImg = :avatar WHERE id = :id');
-    $stmt->execute(array(':id' => $groupId, ":about" => $aboutInfo, ":cover" => $coverImg, ":avatar" => $avatarImg));
+    $stmt = $conn->prepare('UPDATE TGroup SET about = :about, coverImg = :cover, avatarImg = :avatar, visibility = :visibility::visibility_group WHERE id = :id');
+    $stmt->execute(array(':id' => $groupId, ":about" => $aboutInfo, ":cover" => $coverImg, ":avatar" => $avatarImg, ":visibility" => $visibility));
 }
 
 function createGroup($creator, $groupName, $aboutInfo, $coverImg, $avatarImg, $visibility)

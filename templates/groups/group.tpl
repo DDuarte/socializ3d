@@ -72,6 +72,12 @@
                             <input type="text" class="form-control" id="avatar-img-url" placeHolder="Avatar img URL here" value="{$group.avatarimg}" />
                             <label for="about-me-field">About:</label>
                             <textarea class="form-control" id="about-me-field" placeHolder="Enter your text here">{$group.about}</textarea>
+                            <label for="visibility">Visibility:</label>
+                            <select name="visibility" class="form-control" id="visibility-field">
+                                <option {if $group.visibility == 'public'}selected{/if}>Public</option>
+                                <option {if $group.visibility == 'private'}selected{/if}>Private</option>
+                            </select>
+                            <span class="help-block">Public: everyone can see your group; Private: invitation only</span>
                         </div>
                         <button id="confirm-changes-btn" class="btn btn-success" >
                             <span>Confirm Changes</span>
@@ -367,7 +373,7 @@
             $.ajax({
                 url: '{$BASE_URL}groups/{$group.id}',
                 type: 'POST',
-                data: {literal}{ about: $('#about-me-field').val(), cover: $('#cover-img-url').val(), avatar: $('#avatar-img-url').val()}{/literal},
+                data: {literal}{ about: $('#about-me-field').val(), cover: $('#cover-img-url').val(), avatar: $('#avatar-img-url').val(), visibility: $('#visibility-field').val() }{/literal},
                 success: function (a) {
                     BootstrapDialog.alert({
                         title: 'Success!',

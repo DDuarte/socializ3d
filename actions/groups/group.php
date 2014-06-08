@@ -75,7 +75,7 @@ class GroupHandler {
             exit;
         }
 
-        if (!isset($_POST['about']) || !isset($_POST['cover']) || !isset($_POST['avatar'])) {
+        if (!isset($_POST['about']) || !isset($_POST['cover']) || !isset($_POST['avatar']) || !isset($_POST['visibility'])) {
             http_response_code(400);
             return;
         }
@@ -99,6 +99,8 @@ class GroupHandler {
         else
             $avatarImg = substr($avatarImg, 0, 255);
 
-        updateGroupInfo($id, $aboutInfo, $coverImg, $avatarImg);
+        $visibility = strtolower($_POST['visibility']);
+
+        updateGroupInfo($id, $aboutInfo, $coverImg, $avatarImg, $visibility);
     }
 }
