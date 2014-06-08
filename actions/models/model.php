@@ -58,10 +58,11 @@ class ModelHandler {
             return;
         }
 
-        if (!isset($_POST['about']) || !isset($_POST['tags'])) {
+        if (!isset($_POST['name']) || !isset($_POST['about']) || !isset($_POST['tags'])) {
             return;
         }
 
+        $name = $_POST['name'];
         $about = $_POST['about'];
         $tags = $_POST['tags'];
         $tagsArray = explode(',', $tags);
@@ -71,8 +72,8 @@ class ModelHandler {
         }
 
         global $conn;
-        $stmt = $conn->prepare('UPDATE Model SET description = :about WHERE id = :id');
-        $stmt->execute(array(':id' => $modelId, ":about" => $about));
+        $stmt = $conn->prepare('UPDATE Model SET name = :name, description = :about WHERE id = :id');
+        $stmt->execute(array(':id' => $modelId, ':name' => $name, ':about' => $about));
 
         $prevTags = getModelTags($modelId);
         $prevTagsNames = array();

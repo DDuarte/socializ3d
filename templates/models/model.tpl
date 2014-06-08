@@ -157,6 +157,11 @@
                         <div class="tab-pane" id="tab_settings">
                             <form id="edit-form" action="{$BASE_URL}models/{$model.id}" method="post">
                                 <div class="form-group">
+                                    <label for="name-field">Name:</label>
+                                    <textarea class="form-control" id="name-field" name="name"
+                                              placeHolder="Enter your text here">{$model.name}</textarea>
+                                </div>
+                                <div class="form-group">
                                     <label for="about-me-field">Description:</label>
                                     <textarea class="form-control" id="about-me-field" name="about"
                                               placeHolder="Enter your text here">{$model.description}</textarea>
