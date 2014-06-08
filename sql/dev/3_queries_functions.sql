@@ -126,9 +126,10 @@ $$ LANGUAGE SQL;
 -- List all the friend id's and name of a user --
 CREATE OR REPLACE FUNCTION get_complete_friends_of_member(memberId BIGINT)
 RETURNS TABLE(memberId BIGINT, memberName VARCHAR, hash VARCHAR, about VARCHAR) AS $$
-    SELECT Member.id, Member.name, get_user_hash(Member.id) as hash, Member.about
+    SELECT Member.id, RegisteredUser.username, get_user_hash(Member.id) as hash, Member.about
     FROM get_friends_of_member($1)
     JOIN Member ON Member.id = friendId
+    JOIN RegisteredUser ON Member.id = RegisteredUser.id
 $$ LANGUAGE SQL;
 
 -- List the top rated models --
