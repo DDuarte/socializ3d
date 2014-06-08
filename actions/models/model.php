@@ -85,4 +85,21 @@ class ModelHandler {
 
         header("Location: " . $_SERVER['HTTP_REFERER']);
     }
+
+    function delete($modelId) {
+        $model = getModel($modelId);
+
+        $loggedId = getLoggedId();
+        $authorId = intval($model['idauthor']);
+
+        if ($loggedId != $authorId && !loggedIsAdmin()) {
+            http_response_code(403);
+            return;
+        }
+
+        global $conn;
+
+        $stmt = $conn->prepare("DELETE FROM model WHERE id = ?");
+        $stmt->execute(Array($modelId));
+    }
 }

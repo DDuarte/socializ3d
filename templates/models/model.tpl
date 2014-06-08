@@ -263,6 +263,24 @@ function checkComment() {
 
 $(function () {
 
+    $('#delete-btn').click(function () {
+        $.ajax({
+            url: '{$BASE_URL}models/{$model.id}',
+            type: 'DELETE',
+            success: function (a) {
+                BootstrapDialog.alert({
+                    title: 'Success',
+                    message: 'Model deleted with success.'});
+                window.location = '{$BASE_URL}';
+            },
+            error: function (a, b, c) {
+                BootstrapDialog.alert({
+                    title: 'Oops!',
+                    message: 'Could not delete this model. :(\nError: ' + c});
+            }
+        });
+    })
+
     {literal}
     window.mobilecheck = function() {
         var check = false;

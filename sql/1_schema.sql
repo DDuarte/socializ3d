@@ -117,7 +117,7 @@ CREATE TABLE IF NOT EXISTS TComment (
 
 ALTER TABLE TComment ADD CONSTRAINT TComment_pk PRIMARY KEY (id);
 ALTER TABLE TComment ADD CONSTRAINT TComment_idMember_fk FOREIGN KEY (idMember) REFERENCES Member (id);
-ALTER TABLE TComment ADD CONSTRAINT TComment_idModel_fk FOREIGN KEY (idModel) REFERENCES Model (id);
+ALTER TABLE TComment ADD CONSTRAINT TComment_idModel_fk FOREIGN KEY (idModel) REFERENCES Model (id)  ON DELETE CASCADE;
 
 CREATE TABLE IF NOT EXISTS Vote (
     idMember bigint NOT NULL,
@@ -127,8 +127,8 @@ CREATE TABLE IF NOT EXISTS Vote (
 );
 
 ALTER TABLE Vote ADD CONSTRAINT Vote_pk PRIMARY KEY (idMember, idModel);
-ALTER TABLE Vote ADD CONSTRAINT Vote_idMember_fk FOREIGN KEY (idMember) REFERENCES Member (id);
-ALTER TABLE Vote ADD CONSTRAINT Vote_idModel_fk FOREIGN KEY (idModel) REFERENCES Model (id);
+ALTER TABLE Vote ADD CONSTRAINT Vote_idMember_fk FOREIGN KEY (idMember) REFERENCES Member (id);7
+ALTER TABLE Vote ADD CONSTRAINT Vote_idModel_fk FOREIGN KEY (idModel) REFERENCES Model (id)  ON DELETE CASCADE;
 
 CREATE TABLE IF NOT EXISTS Tag (
     id bigserial NOT NULL,
@@ -154,7 +154,7 @@ CREATE TABLE IF NOT EXISTS ModelTag (
 
 ALTER TABLE ModelTag ADD CONSTRAINT ModelTag_pk PRIMARY KEY (idTag, idModel);
 ALTER TABLE ModelTag ADD CONSTRAINT ModelTag_idTag_fk FOREIGN KEY (idTag) REFERENCES Tag (id);
-ALTER TABLE ModelTag ADD CONSTRAINT ModelTag_idModel_fk FOREIGN KEY (idModel) REFERENCES Model (id);
+ALTER TABLE ModelTag ADD CONSTRAINT ModelTag_idModel_fk FOREIGN KEY (idModel) REFERENCES Model (id)  ON DELETE CASCADE;
 
 CREATE TABLE IF NOT EXISTS GroupUser (
    idGroup bigint NOT NULL,
@@ -174,7 +174,7 @@ CREATE TABLE IF NOT EXISTS GroupModel (
 
 ALTER TABLE GroupModel ADD CONSTRAINT GroupModel_pk PRIMARY KEY (idGroup, idModel);
 ALTER TABLE GroupModel ADD CONSTRAINT GroupModel_idGroup_fk FOREIGN KEY (idGroup) REFERENCES TGroup (id);
-ALTER TABLE GroupModel ADD CONSTRAINT GroupModel_idModel_fk FOREIGN KEY (idModel) REFERENCES Model (id);
+ALTER TABLE GroupModel ADD CONSTRAINT GroupModel_idModel_fk FOREIGN KEY (idModel) REFERENCES Model (id) ON DELETE CASCADE;
 
 CREATE TABLE IF NOT EXISTS FriendshipInvite (
     id bigserial NOT NULL,
@@ -230,7 +230,7 @@ ALTER TABLE Notification ADD CONSTRAINT Notification_pk PRIMARY KEY (id);
 ALTER TABLE Notification ADD CONSTRAINT Notification_idFriendshipInvite_fk FOREIGN KEY (idFriendshipInvite) REFERENCES FriendshipInvite (id);
 ALTER TABLE Notification ADD CONSTRAINT Notification_idGroupApplication_fk FOREIGN KEY (idGroupApplication) REFERENCES GroupApplication (id);
 ALTER TABLE Notification ADD CONSTRAINT Notification_idGroupInvite_fk FOREIGN KEY (idGroupInvite) REFERENCES GroupInvite (id);
-ALTER TABLE Notification ADD CONSTRAINT Notification_idModel_fk FOREIGN KEY (idModel) REFERENCES Model (id);
+ALTER TABLE Notification ADD CONSTRAINT Notification_idModel_fk FOREIGN KEY (idModel) REFERENCES Model (id)  ON DELETE CASCADE;
 
 ALTER TABLE Notification ADD CONSTRAINT Notification_check CHECK((
     (notificationType IN ('FriendshipInvite', 'FriendshipInviteAccepted') AND idFriendshipInvite IS NOT NULL)::INTEGER + 
@@ -249,7 +249,7 @@ CREATE TABLE IF NOT EXISTS UserNotification (
 
 ALTER TABLE UserNotification ADD CONSTRAINT UserNotification_pk PRIMARY KEY (idMember, idNotification);
 ALTER TABLE UserNotification ADD CONSTRAINT UserNotification_idMember_fk FOREIGN KEY (idMember) REFERENCES Member (id);
-ALTER TABLE UserNotification ADD CONSTRAINT UserNotification_idNotification_fk FOREIGN KEY (idNotification) REFERENCES Notification (id);
+ALTER TABLE UserNotification ADD CONSTRAINT UserNotification_idNotification_fk FOREIGN KEY (idNotification) REFERENCES Notification (id) ON DELETE CASCADE;
 
 CREATE TABLE IF NOT EXISTS GroupNotification (
     idGroup bigint NOT NULL,
@@ -258,4 +258,4 @@ CREATE TABLE IF NOT EXISTS GroupNotification (
 
 ALTER TABLE GroupNotification ADD CONSTRAINT GroupNotification_pk PRIMARY KEY (idGroup, idNotification);
 ALTER TABLE GroupNotification ADD CONSTRAINT GroupNotification_idGroup_fk FOREIGN KEY (idGroup) REFERENCES TGroup (id);
-ALTER TABLE GroupNotification ADD CONSTRAINT GroupNotification_idNotification_fk FOREIGN KEY (idNotification) REFERENCES Notification (id);
+ALTER TABLE GroupNotification ADD CONSTRAINT GroupNotification_idNotification_fk FOREIGN KEY (idNotification) REFERENCES Notification (id) ON DELETE CASCADE;
