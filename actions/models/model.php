@@ -107,8 +107,15 @@ class ModelHandler {
         }
 
         global $conn;
+        global $BASE_DIR;
 
         $stmt = $conn->prepare("DELETE FROM model WHERE id = ?");
         $stmt->execute(Array($modelId));
+
+        $filename = $model['filname'];
+
+        unlink($filename);
+        unlink($BASE_DIR . 'thumbnail/' . $model['id'] . '.png');
+
     }
 }

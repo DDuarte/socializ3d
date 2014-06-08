@@ -366,6 +366,9 @@ FOR EACH ROW WHEN (OLD.upVote <> NEW.upVote) EXECUTE PROCEDURE update_vote_updat
 
 CREATE OR REPLACE FUNCTION delete_vote_update_model_vote() RETURNS TRIGGER AS $$
     BEGIN
+        IF NOT(EXISTS(SELECT 1 FROM model WHERE id = OLD.idModel)) THEN
+          RETURN NULL;
+        END IF;
         IF OLD.upvote = TRUE THEN
             UPDATE ModelVote SET numUpVotes = numUpVotes - 1 WHERE idModel = NEW.idModel;
         ELSE
