@@ -12,27 +12,27 @@
                     <div class="error">{$error}<a class="close" href="#">X</a></div>
                 {/foreach}
             </div>
-            <form action="{$BASE_URL}upload" method="post" enctype="multipart/form-data">
+            <form id="uploadForm" action="{$BASE_URL}upload" method="post" enctype="multipart/form-data">
 
                 <div class="box-body">
-                    <input type="file" name="file" />
+                    <input type="file" name="file" required/>
 
                     <hr>
 
                     <div class="form-group">
                         <label for="name-filed">Model name: </label>
-                        <input type="text" class="form-control" id="name-filed" name="name" placeHolder="Enter model's name" />
+                        <input type="text" class="form-control" id="name-filed" name="name" placeHolder="Enter model's name" required/>
                     </div>
 
                     <div class="form-group">
                         <label for="description-field">Description: </label>
-                        <textarea class="form-control" id="description-field" name="description" placeHolder="Enter model's description" ></textarea>
+                        <textarea class="form-control" id="description-field" name="description" placeHolder="Enter model's description"  required></textarea>
                     </div>
 
                     <div class="form-group">
                         <label for="to-field">To:</label>
                         <select class="form-control" id="to-field" name="to">
-                            <option>Private</option>
+                            <option selected>Private</option>
                             <option>Public</option>
                             <option>Friends</option>
                         </select>
