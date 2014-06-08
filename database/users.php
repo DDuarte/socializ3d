@@ -19,6 +19,20 @@ function hasRequestedFriendship($id1, $id2)
     return $result;
 }
 
+function getMemberPassChangeHash($id)
+{
+    global $conn;
+    $stmt = $conn->prepare("SELECT RegisteredUser.username,
+                                   RegisteredUser.passwordHash
+                            FROM Member JOIN RegisteredUser ON Member.id = RegisteredUser.id
+                            WHERE Member.id = :id");
+    $stmt->execute(array(':id' => $id));
+    $result = $stmt->fetch();
+    if ($result == false) return false;
+
+    return hash('sha256', $result['username'] . $result['passwordhash']);
+}
+
 function getSimpleMember($id, $id2)
 {
     global $conn;
