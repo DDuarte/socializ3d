@@ -33,6 +33,17 @@ function getMemberPassChangeHash($id)
     return hash('sha256', $result['username'] . $result['passwordhash']);
 }
 
+function getMemberFromEmail($email)
+{
+    global $conn;
+    $stmt = $conn->prepare("SELECT RegisteredUser.userName, Member.* FROM RegisteredUser JOIN Member ON RegisteredUser.id = Member.id WHERE RegisteredUser.email = :email");
+    $stmt->execute(array(':email' => $email));
+    $result = $stmt->fetch();
+    if ($result == false) return false;
+
+    return $result;
+}
+
 function getSimpleMember($id, $id2)
 {
     global $conn;
