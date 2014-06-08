@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS Member (
     name varchar(70) NOT NULL,
     about varchar(1024) NOT NULL DEFAULT '',
     birthDate date NOT NULL,
-    registerDate timestamp NOT NULL DEFAULT now(),
+    registerDate timestamp NOT NULL DEFAULT now()::timestamp(0),
     deleteDate timestamp DEFAULT NULL
 );
 
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS TGroup (
     about varchar(1024) NOT NULL DEFAULT '',
     avatarImg varchar(255) DEFAULT NULL,
     coverImg varchar(255) DEFAULT NULL,
-    createDate timestamp NOT NULL DEFAULT now(),
+    createDate timestamp NOT NULL DEFAULT now()::timestamp(0),
     deleteDate timestamp DEFAULT NULL,
     visibility visibility_group NOT NULL
 );
@@ -73,7 +73,7 @@ ALTER TABLE TGroup ADD CONSTRAINT TGroup_deleteDate_check CHECK (deleteDate IS N
 CREATE TABLE IF NOT EXISTS Friendship (
     idMember1 bigint NOT NULL,
     idMember2 bigint NOT NULL,
-    createDate timestamp NOT NULL DEFAULT now()
+    createDate timestamp NOT NULL DEFAULT now()::timestamp(0)
 );
 
 ALTER TABLE Friendship ADD CONSTRAINT Friendship_pk PRIMARY KEY (idMember1, idMember2);
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS Model (
     description varchar(1024) NOT NULL DEFAULT '',
     userFileName varchar(255) NOT NULL,
     fileName varchar(255) NOT NULL,
-    createDate timestamp NOT NULL DEFAULT now(),
+    createDate timestamp NOT NULL DEFAULT now()::timestamp(0),
     visibility visibility_model NOT NULL
 );
 
@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS TComment (
     idMember bigint NOT NULL,
     idModel bigint NOT NULL,
     content varchar(1024) NOT NULL,
-    createDate timestamp NOT NULL DEFAULT now(),
+    createDate timestamp NOT NULL DEFAULT now()::timestamp(0),
     deleted boolean NOT NULL DEFAULT false
 );
 
@@ -122,7 +122,7 @@ ALTER TABLE TComment ADD CONSTRAINT TComment_idModel_fk FOREIGN KEY (idModel) RE
 CREATE TABLE IF NOT EXISTS Vote (
     idMember bigint NOT NULL,
     idModel bigint NOT NULL,
-    createDate timestamp NOT NULL DEFAULT now(),
+    createDate timestamp NOT NULL DEFAULT now()::timestamp(0),
     upVote boolean NOT NULL
 );
 
@@ -160,7 +160,7 @@ CREATE TABLE IF NOT EXISTS GroupUser (
    idGroup bigint NOT NULL,
    idMember bigint NOT NULL,
    isAdmin boolean NOT NULL DEFAULT false,
-   lastAccess timestamp NOT NULL DEFAULT now()
+   lastAccess timestamp NOT NULL DEFAULT now()::timestamp(0)
 );
 
 ALTER TABLE GroupUser ADD CONSTRAINT GroupUser_pk PRIMARY KEY (idGroup, idMember);
@@ -180,7 +180,7 @@ CREATE TABLE IF NOT EXISTS FriendshipInvite (
     id bigserial NOT NULL,
     idReceiver bigint NOT NULL,
     idSender bigint NOT NULL,
-    createDate timestamp NOT NULL DEFAULT now(),
+    createDate timestamp NOT NULL DEFAULT now()::timestamp(0),
     accepted boolean DEFAULT NULL
 );
 
@@ -192,7 +192,7 @@ CREATE TABLE IF NOT EXISTS GroupApplication (
     id bigserial NOT NULL,
     idGroup bigint NOT NULL,
     idMember bigint NOT NULL,
-    createDate timestamp NOT NULL DEFAULT now(),
+    createDate timestamp NOT NULL DEFAULT now()::timestamp(0),
     accepted boolean DEFAULT NULL
 );
 
@@ -205,7 +205,7 @@ CREATE TABLE IF NOT EXISTS GroupInvite (
     idGroup bigint NOT NULL,
     idReceiver bigint NOT NULL,
     idSender bigint NOT NULL,
-    createDate timestamp NOT NULL DEFAULT now(),
+    createDate timestamp NOT NULL DEFAULT now()::timestamp(0),
     accepted boolean DEFAULT NULL
 );
 
@@ -223,7 +223,7 @@ CREATE TABLE IF NOT EXISTS Notification (
     idGroupInvite bigint DEFAULT NULL,
     idModel bigint DEFAULT NULL,
     notificationType notification_type NOT NULL,
-    createDate timestamp NOT NULL DEFAULT now()
+    createDate timestamp NOT NULL DEFAULT now()::timestamp(0)
 );
 
 ALTER TABLE Notification ADD CONSTRAINT Notification_pk PRIMARY KEY (id);
