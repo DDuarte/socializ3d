@@ -1,29 +1,3 @@
-<style>
-
-    #viewport {
-        height: 600px;
-    }
-
-    #fullscreenIcon.desktop {
-        position: absolute;
-        bottom: 5px;
-        right: 5px;
-    }
-
-    #fullscreenIcon.mobile {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-    }
-
-    #screenshotIcon {
-        position: absolute;
-        bottom: 5px;
-        left: 30px;
-    }
-
-</style>
-
 <link href="{$BASE_URL}css/renderer/types.css" rel="stylesheet"/>
 <link id="theme" href="{$BASE_URL}css/renderer/light.css" rel="stylesheet"/>
 
@@ -509,13 +483,6 @@ $(function () {
     onWindowResize();
     var link = "{$BASE_URL}{$MODELS}/{$model.id}/file";
     var screenshotUrl;
-    viewport.container.dom.appendChild(fullscreenIcon);
-    viewport.container.dom.appendChild(screenshotIcon);
-    var toggle = true;
-    $('#fullscreenIcon').click(function(event) {
-        viewport.activateControls(true);
-        $('canvas').fullScreen(toggle);
-    });
 
     function resizeImage(url, width, height, callback) {
         var sourceImage = new Image();
@@ -590,17 +557,19 @@ $(function () {
             file.name = fileName;
 
             viewport.container.dom.appendChild(fullscreenIcon);
-            viewport.container.dom.appendChild(screenshotIcon);
             var toggle = true;
             $('#fullscreenIcon').click(function(event) {
                 viewport.activateControls(true);
                 $('canvas').fullScreen(toggle);
             });
 
+            {if $LOGGED_ID == $model.idauthor || $IS_ADMIN}
+            viewport.container.dom.appendChild(screenshotIcon);
             $('#screenshotIcon').click(function(event) {
                 screenshotUrl = THREEx.Screenshot.toDataURL(viewport.renderer, "img/png");
                 console.log(screenshotUrl);
             });
+            {/if}
 
             editor.loader.loadFile(file);
         }

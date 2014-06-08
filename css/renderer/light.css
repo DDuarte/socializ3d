@@ -1,22 +1,25 @@
-﻿/** {
-	vertical-align: middle;
-}*/
-
-/*body {
-	font-family: Arial, sans-serif;
-	font-size: 14px;
-	margin: 0;
-	overflow: hidden;
-} */
-
-/*hr {
-	border: 0px;
-	border-top: 1px solid #ccc;
+﻿
+#viewport {
+    height: 600px;
 }
 
-button {
-	position: relative;
-} */
+#fullscreenIcon.desktop {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
+
+#fullscreenIcon.mobile {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+}
+
+#screenshotIcon {
+    position: absolute;
+    bottom: 5px;
+    left: 30px;
+}
 
 .Panel {
 	-moz-user-select: none;
@@ -188,5 +191,3 @@ input.Number {
 	#toolbar button {
 		margin-right: 6px;
 	}
-
-
