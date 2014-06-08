@@ -1,6 +1,3 @@
-<link href="{$BASE_URL}css/renderer/types.css" rel="stylesheet"/>
-<link id="theme" href="{$BASE_URL}css/renderer/light.css" rel="stylesheet"/>
-
 <section class="content">
     <div class="row" id="rendererContainer">
     </div>
