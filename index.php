@@ -3,6 +3,7 @@
 include_once('config/init.php');
 
 include_once($BASE_DIR . 'lib/Toro.php');
+include_once($BASE_DIR . 'lib/PHPMailer/class.phpmailer.php');
 include_once($BASE_DIR . 'lib/CompatUtils.php');
 
 include_once($BASE_DIR . 'actions/indexAction.php');
@@ -45,6 +46,7 @@ function getErrorPage($code, $is_xhr) {
         default:
             $title = "Oops! An error occured.";
             $message = "An error occured. ";
+            break;
     }
 
     global $smarty;
