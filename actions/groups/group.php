@@ -70,7 +70,7 @@ class GroupHandler {
 
     function post($id) {
         $loggedUserId = getLoggedId();
-        if (!isGroupAdmin($id, $loggedUserId)) {
+        if (!isGroupAdmin($id, $loggedUserId) && !isAdmin($loggedUserId)) {
             http_response_code(403);
             exit;
         }
