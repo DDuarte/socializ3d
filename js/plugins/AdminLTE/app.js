@@ -227,16 +227,6 @@ $(function () {
     });
     ////\CUSTOM////
 
-    /*
-     * We are gonna initialize all checkbox and radio inputs to
-     * iCheck plugin in.
-     * You can find the documentation at http://fronteed.com/iCheck/
-     */
-    $("input[type='checkbox'], input[type='radio']").iCheck({
-        checkboxClass: 'icheckbox_minimal',
-        radioClass: 'iradio_minimal'
-    });
-
     hash_change();
 
     $('body').on('click', 'a.dynamic_load', load_page);
@@ -411,41 +401,6 @@ function change_layout() {
 
 }(jQuery));
 
-/*
- * TODO LIST CUSTOM PLUGIN
- * -----------------------
- * This plugin depends on iCheck plugin for checkbox and radio inputs
- */
-(function ($) {
-    "use strict";
-
-    $.fn.todolist = function (options) {
-        // Render options
-        var settings = $.extend({
-            //When the user checks the input
-            onCheck: function (ele) {
-            },
-            //When the user unchecks the input
-            onUncheck: function (ele) {
-            }
-        }, options);
-
-        return this.each(function () {
-            $('input', this).on('ifChecked', function (event) {
-                var ele = $(this).parents("li").first();
-                ele.toggleClass("done");
-                settings.onCheck.call(ele);
-            });
-
-            $('input', this).on('ifUnchecked', function (event) {
-                var ele = $(this).parents("li").first();
-                ele.toggleClass("done");
-                settings.onUncheck.call(ele);
-            });
-        });
-    };
-
-}(jQuery));
 
 /* CENTER ELEMENTS */
 (function ($) {
