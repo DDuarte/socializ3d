@@ -293,7 +293,7 @@ $(function () {
     });
 
     var voteButtonElem = $('#up_vote_button');
-    var voteButtonDownElem = $('#up_vote_button');
+    var voteButtonDownElem = $('#down_vote_button');
     var voted_up = voteButtonElem.hasClass("disabled");
     var voted_down = voteButtonDownElem.hasClass("disabled");
 
