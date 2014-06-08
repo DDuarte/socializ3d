@@ -17,7 +17,6 @@ class ModelThumbnailHandler {
 
         $data = $_POST['image'];
         if (!isset($data)) {
-            error_log("No image");
             http_response_code(401);
             return;
         }
@@ -25,7 +24,6 @@ class ModelThumbnailHandler {
         $model = getModel($modelId);
         $idAuthor = $model['idauthor'];
         if (!isset($idAuthor)) {
-            error_log("Not the author");
             http_response_code(402);
             return;
         }
