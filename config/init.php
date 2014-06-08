@@ -3,7 +3,7 @@ session_set_cookie_params(3600, '/~lbaw1313');
 session_start();
 
 $BASE_DIR = '/opt/lbaw/lbaw1313/public_html/final/';
-$BASE_URL = '/~lbaw1313/final/';
+$BASE_URL = 'http://gnomo.fe.up.pt/~lbaw1313/final/';
 $GRAVATAR_BASE_URL = 'http://www.gravatar.com/avatar/';
 
 $MODELS_PER_PAGE = 20;
