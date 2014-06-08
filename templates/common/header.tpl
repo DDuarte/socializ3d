@@ -13,6 +13,7 @@
     <link href="{$BASE_URL}css/bootstrap-tagsinput.css" rel="stylesheet" type="text/css" />
     <link href="{$BASE_URL}css/bootstrap3-dialog/bootstrap-dialog.min.css" rel="stylesheet" type="text/css" />
     <link href="{$BASE_URL}css/bootstrapValidator.min.css" rel="stylesheet" type="text/css" />
+    <link href="{$BASE_URL}css/pages/formValidator.css" rel="stylesheet" type="text/css" />
     <link href="{$BASE_URL}css/morris/morris.css" rel="stylesheet" type="text/css"/>
     <link href="{$BASE_URL}css/jQRangeSlider/iThing.css" rel="stylesheet" type="text/css" />
     <link href="{$BASE_URL}css/search.css" rel="stylesheet" type="text/css"/>
@@ -31,6 +32,7 @@
     <script src="{$BASE_URL}js/renderer/js/libs/system.min.js" type="text/javascript"></script>
     <script src="{$BASE_URL}js/vendor/jquery.fullscreen.js" type="text/javascript"></script>
     <script src="{$BASE_URL}js/vendor/bootstrapValidator.min.js" type="text/javascript"></script>
+
 
     <script type="text/javascript">
         if (typeof Socializ3d === 'undefined')
