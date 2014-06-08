@@ -57,7 +57,7 @@ class MemberHandler {
         global $smarty;
 
         $loggedUserId = getLoggedId();
-        if ($memberId != $loggedUserId) {
+        if ($memberId != $loggedUserId && !loggedIsAdmin()) {
             http_response_code(403);
             return;
         }
@@ -67,7 +67,7 @@ class MemberHandler {
             return;
         }
 
-        $aboutInfo = stripslashes(strip_tags(trim($_POST['about'])));
+        $aboutInfo = htmlspecialchars(stripslashes((trim($_POST['about']))));
         if (strlen($aboutInfo) < 1024)
             $aboutInfo = $_POST['about'];
         else

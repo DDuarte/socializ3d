@@ -13,7 +13,7 @@
                             <a href="#tab_info" data-toggle="tab">Info</a>
                         </li>
                     {/if}
-                    {if $LOGGED_ID == $member.id}
+                    {if $LOGGED_ID == $member.id || $IS_ADMIN}
                         <li class="pull-right">
                             <a href="#tab_settings" data-toggle="tab">
                                 <i class="fa fa-gear"></i>
@@ -44,7 +44,7 @@
                         </div>
                     {/if}
                     <!-- /.tab-pane -->
-                    {if $LOGGED_ID == $member.id}
+                    {if $LOGGED_ID == $member.id || $IS_ADMIN}
                         <div class="tab-pane" id="tab_settings">
                             <div class="form-group">
                                 <label for="about-me-field">About me:</label>
@@ -75,9 +75,11 @@
                                     </div>
                                 </div>
                             </div>
+                            {if !$IS_ADMIN}
                             <p style="text-align: right;">
                                 <a id="open-password-menu" href="#">Change password.</a>
                             </p>
+                            {/if}
                             <button type="submit" class="btn bg-olive btn-block" id="confirm-button">Confirm</button>
                         </div>
                     {/if}
