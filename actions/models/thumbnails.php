@@ -44,12 +44,15 @@ class ModelThumbnailHandler {
 
         if (!file_exists($baseDir)) {
             mkdir($baseDir);
+            chmod($baseDir, 0755);
         }
 
         if (file_put_contents($targetDir, $data, LOCK_EX) === false) {
             http_response_code(500);
             return;
         }
+
+        chmod($targetDir, 0755);
 
         http_response_code(200);
     }
