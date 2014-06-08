@@ -71,7 +71,6 @@
                 </ul>
                 <div class="inner-content" id="slider"></div>
                 <div class="tab-content no-padding">
-                    <div id="slider"></div>
                     <div class="chart tab-pane active" id="revenue-chart"
                          style="position: relative; height: 300px;"></div>
                 </div>
