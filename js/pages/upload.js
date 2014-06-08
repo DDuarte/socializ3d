@@ -19,8 +19,8 @@ $(document).ready(function() {
                         message: 'The name must be more than 2 and less than 30 characters long'
                     },
                     regexp: {
-                        regexp: /^[a-zA-Z0-9_]+$/,
-                        message: 'The name can only consist of alphabetical, number and underscore'
+                        regexp: /^[a-zA-Z0-9_][a-zA-Z0-9_ ]+$/,
+                        message: 'The name can only consist of alphabetical, number, underscore and space'
                     }
                 }
             },
