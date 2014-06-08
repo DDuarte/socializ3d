@@ -66,11 +66,11 @@
                     {if $group.isGroupAdmin}
                     <div class="tab-pane" id="tab_settings">
                         <div class="form-group">
-                            <label for="cover-img">Cover URL:</label>
+                            <label for="cover-img-url">Cover URL:</label>
                             <input type="text" class="form-control" id="cover-img-url" placeHolder="Cover img URL here" value="{$group.coverimg}"/>
-                            <label for="banner-img">Avatar URL:</label>
+                            <label for="avatar-img-url">Avatar URL:</label>
                             <input type="text" class="form-control" id="avatar-img-url" placeHolder="Avatar img URL here" value="{$group.avatarimg}" />
-                            <label for="description-field">About:</label>
+                            <label for="about-me-field">About:</label>
                             <textarea class="form-control" id="about-me-field" placeHolder="Enter your text here">{$group.about}</textarea>
                         </div>
                         <button id="confirm-changes-btn" class="btn btn-success" >
@@ -151,7 +151,7 @@
                                         <td>
                                             <time class="timeago" datetime="{{$member.lastaccess}}">{{$member.lastaccess}}</time>
                                         </td>
-                                        <td id="mem-role-description">
+                                        <td class="mem-role-description">
                                             {if $member.isadmin}
                                             <span class="label label-success">Admin</span>
                                             {else}
@@ -310,7 +310,7 @@
                         data: {literal}{adm: isAdmin ? 'false' : 'true'}{/literal},
                         success: function (a) {
                             var innerSpan = !isAdmin ? '<span class="label label-success">Admin</span>' : '<span class="label label-primary">Member</span>';
-                            thisButton.parent().parent().find('#mem-role-description').replaceWith('<td id="mem-role-description">' + innerSpan + '</td>');
+                            thisButton.parent().parent().find('.mem-role-description').replaceWith('<td class="mem-role-description">' + innerSpan + '</td>');
                             thisButton.attr('onclick','roleSelect(this, '+ memId + ', ' + (isAdmin ? 'false' : 'true') +');');
                             thisRef.close();
                         },

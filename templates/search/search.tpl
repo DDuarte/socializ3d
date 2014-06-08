@@ -1,4 +1,3 @@
-<link href="{$BASE_URL}css/search.css" rel="stylesheet" type="text/css" />
 <section class="content">
     <div class="row">
         <ul class="nav nav-tabs nav-justified tabs-bar">

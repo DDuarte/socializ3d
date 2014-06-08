@@ -47,12 +47,12 @@
                     {if $LOGGED_ID == $member.id}
                         <div class="tab-pane" id="tab_settings">
                             <div class="form-group">
-                                <label for="description-field">About me:</label>
+                                <label for="about-me-field">About me:</label>
                                 <textarea class="form-control" id="about-me-field" placeHolder="Enter your text here"
                                           name="about">{$member.about}</textarea>
                             </div>
                             <div class="form-group">
-                                <label for="tags-field">Interests:</label>
+                                <label for="interests-field">Interests:</label>
                                 <br/>
                                 <input type="text" class="form-control" id="interests-field"
                                        value="{$member.interests}" data-role="tagsinput"
