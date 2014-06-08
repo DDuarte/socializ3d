@@ -166,8 +166,6 @@ var Loader = function ( editor ) {
 
 					var contents = event.target.result;
 
-					console.log( contents );
-
 					var geometry = new THREE.PLYLoader().parse( contents );
 					geometry.sourceType = "ply";
 					geometry.sourceFile = file.name;
@@ -193,6 +191,7 @@ var Loader = function ( editor ) {
 					var contents = event.target.result;
 
 					var geometry = new THREE.STLLoader().parse( contents );
+                    geometry.computeVertexNormals();
 					geometry.sourceType = "stl";
 					geometry.sourceFile = file.name;
 
