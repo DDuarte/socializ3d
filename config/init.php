@@ -25,6 +25,7 @@ if(!isset($_SESSION['error_messages'])){ $_SESSION['error_messages'] = null; }
 if(!isset($_SESSION['form_values'])){ $_SESSION['form_values'] = null; }
 if(!isset($_SESSION['username'])){ $_SESSION['username'] = null; }
 if(!isset($_SESSION['id'])){ $_SESSION['id'] = null; }
+if(!isset($_SESSION['isAdmin'])){ $_SESSION['isAdmin'] = null; }
 if(!isset($_SESSION['success_messages'])){ $_SESSION['success_messages'] = null; }
 if(!isset($_SESSION['field_errors'])){ $_SESSION['field_errors'] = null; }
 if(!isset($_SESSION['isAdmin'])){ $_SESSION['isAdmin'] = false; }
@@ -54,6 +55,13 @@ unset($_SESSION['form_values']);
 function getLoggedId() {
     if (isset($_SESSION['id']))
         return $_SESSION['id'];
+    else
+        return null;
+}
+
+function loggedIsAdmin() {
+    if (isset($_SESSION['isAdmin']))
+        return $_SESSION['isAdmin'];
     else
         return null;
 }
