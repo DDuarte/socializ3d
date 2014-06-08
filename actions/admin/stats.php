@@ -12,6 +12,20 @@ class StatisticsHandler
         return json_encode($result);
     }
 
+    function get_stats_page() {
+        global /** @noinspection PhpUnusedLocalVariableInspection */
+        $smarty;
+        global $conn;
+        $stmt = $conn->prepare("SELECT * FROM get_counts_per_month_year(:startDate, :endDate)");
+        $stmt->execute(array(':startDate' => '2014/01/01', ':endDate' => '2015/01/01'));
+        $result = $stmt->fetchAll();
+
+        if ($result == false) return false;
+
+        $smarty->assign('stats', $result);
+        $smarty->display('admin/stats.tpl');
+    }
+
     function get()
     {
         if (isset($_GET['startDate']) && isset($_GET['endDate'])) {
@@ -19,11 +33,22 @@ class StatisticsHandler
             return;
         }
 
-        global /** @noinspection PhpUnusedLocalVariableInspection */
-        $smarty;
+        $memberId = getLoggedId();
+
+        if ($memberId == null) {
+            http_response_code(403);
+            return;
+        }
+
+        if (!isAdmin($memberId)) {
+            http_response_code(403);
+            return;
+        }
+
+        global $smarty;
         global $BASE_DIR;
         include($BASE_DIR . 'pages/common/header.php');
-        include($BASE_DIR . 'pages/stats.php');
+        $this->get_stats_page();
         include($BASE_DIR . 'pages/common/footer.php');
     }
 
@@ -34,9 +59,6 @@ class StatisticsHandler
             return;
         }
 
-        global /** @noinspection PhpUnusedLocalVariableInspection */
-        $smarty;
-        global $BASE_DIR;
-        include($BASE_DIR . 'pages/stats.php');
+        $this->get_stats_page();
     }
 }

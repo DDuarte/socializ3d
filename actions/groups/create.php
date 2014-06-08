@@ -2,22 +2,33 @@
 
 class GroupCreateHandler
 {
+
     function get()
     {
+        if (getLoggedId() == null) {
+            http_response_code(403);
+            return;
+        }
+
         global /** @noinspection PhpUnusedLocalVariableInspection */
         $smarty;
         global $BASE_DIR;
         include($BASE_DIR . 'pages/common/header.php');
-        include($BASE_DIR . 'pages/groupCreate.php');
+        $smarty->display('groups/create.tpl');
         include($BASE_DIR . 'pages/common/footer.php');
     }
 
     function get_xhr()
     {
+        if (getLoggedId() == null) {
+            http_response_code(403);
+            return;
+        }
+
         global /** @noinspection PhpUnusedLocalVariableInspection */
         $smarty;
         global $BASE_DIR;
-        include($BASE_DIR . 'pages/groupCreate.php');
+        $smarty->display('groups/create.tpl');
     }
 
     function post() {
