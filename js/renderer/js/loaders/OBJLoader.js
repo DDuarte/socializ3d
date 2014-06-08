@@ -152,7 +152,13 @@ THREE.OBJLoader.prototype = {
 		if ( /^o /gm.test( text ) === false ) {
 
 			geometry = new THREE.Geometry();
-			material = new THREE.MeshLambertMaterial();
+
+            if (geometry.mergeVertices)
+                geometry.mergeVertices();
+
+            geometry.computeVertexNormals();
+
+			material = new THREE.MeshPhongMaterial({side: THREE.DoubleSide});
 			mesh = new THREE.Mesh( geometry, material );
 			object.add( mesh );
 
@@ -277,7 +283,12 @@ THREE.OBJLoader.prototype = {
 			} else if ( /^o /.test( line ) ) {
 
 				geometry = new THREE.Geometry();
-				material = new THREE.MeshLambertMaterial();
+                if (geometry.mergeVertices)
+                    geometry.mergeVertices();
+
+                geometry.computeVertexNormals();
+
+                material = new THREE.MeshPhongMaterial({side: THREE.DoubleSide});
 
 				mesh = new THREE.Mesh( geometry, material );
 				mesh.name = line.substring( 2 ).trim();
