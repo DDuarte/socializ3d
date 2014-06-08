@@ -30,7 +30,7 @@ class ModelThumbnailHandler {
             return;
         }
 
-        if ($idAuthor != $memberId) {
+        if ($idAuthor != $memberId && !loggedIsAdmin()) {
             http_response_code(403);
             return;
         }
