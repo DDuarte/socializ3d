@@ -14,6 +14,7 @@ FROM
      'group'::TEXT                                                                          AS type,
      ts_rank_cd(to_tsvector('english', name), plainto_tsquery(lower(:searchTerm))) * 0.7 +
      ts_rank_cd(to_tsvector('english', about), plainto_tsquery(lower(:searchTerm))) * 0.3 AS score,
+     TGroup.name,
      TGroup.avatarimg,
      TGroup.about
    FROM TGroup
