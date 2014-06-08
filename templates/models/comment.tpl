@@ -6,7 +6,7 @@
     <p class="message">
 
         <small class="text-muted pull-right">
-            {if $LOGGED_ID == $comment.idmember}
+            {if $LOGGED_ID == $comment.idmember || $IS_ADMIN}
                 <a href="{$BASE_URL}{$MODELS}/{$comment.idmodel}/comments/{$comment.id}"><i class="removeicon glyphicon glyphicon-trash deletablecomment hidden"></i></a>
             {else}
                 <i class="removeicon glyphicon hidden"></i>

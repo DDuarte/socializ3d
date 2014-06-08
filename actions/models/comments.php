@@ -34,7 +34,7 @@ class CommentsHandler {
             http_response_code(404);
             return;
         }
-        if (getLoggedId() != $comment['idmember']) {
+        if (getLoggedId() != $comment['idmember'] && !loggedIsAdmin()) {
             http_response_code(403);
             return;
         }
