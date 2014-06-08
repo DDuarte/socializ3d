@@ -2,7 +2,7 @@
 <html class="bg-black">
 <head>
     <meta charset="UTF-8">
-    <title>Socializ3d | Registration</title>
+    <title>Socializ3d | Recovery</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <link href="{$BASE_URL}css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="{$BASE_URL}css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
@@ -22,7 +22,7 @@
                 <div class="error">{$error}<a class="close" href="#">X</a></div>
             {/foreach}
         </div>
-        <form class="registerForm" action="{$BASE_URL}/members/{$member.id}/forgotpass.php?usrhash={$memHash}" method="post">
+        <form class="registerForm" action="{$BASE_URL}members/{$member.id}/forgotpass?usrhash={$memHash}" method="post">
             <div class="body bg-gray">
                 <div class="form-group">
                     <label for="password-field">New Password</label>
