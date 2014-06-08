@@ -21,7 +21,7 @@ class ApplicationHandler {
         }
 
         if ($memberId !== $newMemberId) { //accept invite if exists
-            if (!isGroupAdmin($groupId, $memberId)) {
+            if (!isGroupAdmin($groupId, $memberId) && !isAdmin($memberId)) {
                 http_response_code(403); // Must be admin
                 exit;
             }
@@ -107,7 +107,7 @@ class ApplicationHandler {
         }
 
         if ($memberId !== $newMemberId) { //accept invite if exists
-            if (!isGroupAdmin($groupId, $memberId)) {
+            if (!isGroupAdmin($groupId, $memberId) && !isAdmin($memberId)) {
                 http_response_code(403); // Must be admin
                 exit;
             }
