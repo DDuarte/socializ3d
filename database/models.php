@@ -105,6 +105,7 @@ function deleteComment($idModel, $idComment)
 
 function _getModels($func, $memberId, $numModels, $numSkip) {
     global $conn;
+    global $BASE_DIR;
     $stmt = $conn->prepare("SELECT * FROM " . $func . "(?, ?, ?)");
     $stmt->execute(array($numModels, $numSkip, $memberId));
     $modelIds = $stmt->fetchAll();
@@ -114,6 +115,10 @@ function _getModels($func, $memberId, $numModels, $numSkip) {
         $model_stmt = $conn->prepare("SELECT *, (get_thumbnail_information(Model.id)).*, get_user_hash(Model.idAuthor) AS authorHash FROM Model WHERE Model.id = ?");
         $model_stmt->execute(array($modelId['modelid']));
         array_push($models, $model_stmt->fetch());
+    }
+
+    foreach ($models as $key => $model) {
+        $models[$key]['hasThumbnail'] = file_exists($BASE_DIR . "/thumbnails/" . $model['id'] . ".png");
     }
 
     return $models;
@@ -140,3 +145,4 @@ function insertComment($memberId, $modelId, $content) {
     $stmt = $conn->prepare("INSERT INTO TComment(idMember, idModel, content) VALUES (?, ?, ?)");
     $stmt->execute(array($memberId, $modelId, $content));
 }
+

@@ -1,6 +1,6 @@
 <div class="thumbnail center-block" style="max-width:300px">
-    <a class="dynamic_load" href="{$BASE_URL}{$MODELS}/{$model.id}">
-        <img src="http://placehold.it/300x200" alt="...">
+    <a class="dynamic_load" href="{$BASE_URL}{$MODELS}/{$model.id}" >
+        <img src="{if $model.hasThumbnail}{$BASE_URL}thumbnails/{$model.id}.png{else}http://placehold.it/290x193&text=Model{/if}" alt="..." style="width: 290px; height: 193px;">
     </a>
     <div class="caption center-block" style="margin-top:-30px;position:relative;padding-bottom:0">
         <p>
