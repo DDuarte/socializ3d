@@ -15,7 +15,10 @@
             <form id="uploadForm" action="{$BASE_URL}upload" method="post" enctype="multipart/form-data">
 
                 <div class="box-body">
-                    <input type="file" name="file" required/>
+                    <div class="form-group">
+                        <input type="file" name="file" required/>
+                        <span class="help-block">(.stl and .obj supported)</span>
+                    </div>
 
                     <hr>
 
