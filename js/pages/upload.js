@@ -1,5 +1,3 @@
-$('#uploadSubmit').click(function(event) { event.preventDefault(); $('#uploadForm').submit(); });
-
 $(document).ready(function() {
     $('#uploadForm').bootstrapValidator({
         message: 'This value is not valid',

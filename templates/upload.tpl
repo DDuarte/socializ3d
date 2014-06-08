@@ -55,9 +55,8 @@
                     <hr>
 
                     <div class="form-group">
-                        <div id="uploadSubmit" class="btn btn-primary btn-sm" style="margin-top: 10px">Submit all files</div>
+                        <button type="submit" name="submit" class="btn btn-primary" style="margin-top: 10px">Submit</button>
                     </div>
-
                 </div>
             </form>
         </div>
