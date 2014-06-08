@@ -39,11 +39,12 @@ class ModelThumbnailHandler {
         list(, $data)      = explode(',', $data);
         $data = base64_decode($data);
 
-        $baseDir = '/thumbnails/';
+        $baseDir = $BASE_DIR . 'thumbnails/';
         $targetDir = $baseDir . $modelId . '.png';
 
-        if(!is_dir($baseDir))
+        if (!file_exists($baseDir)) {
             mkdir($baseDir);
+        }
 
         if (file_put_contents($targetDir, $data, LOCK_EX) === false) {
             http_response_code(500);
