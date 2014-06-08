@@ -35,8 +35,8 @@
                     <div class="form-group">
                         <label for="to-field">To:</label>
                         <select class="form-control" id="to-field" name="to">
-                            <option selected>Private</option>
-                            <option>Public</option>
+                            <option>Private</option>
+                            <option selected>Public</option>
                             <option>Friends</option>
                         </select>
                     </div>
