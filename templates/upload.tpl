@@ -64,6 +64,5 @@
     </div>
 </section>
 
-<script src="{$BASE_URL}js/dropzone.min.js" type="text/javascript"></script>
 <script src="{$BASE_URL}js/pages/upload.js" type="text/javascript"></script>
 <script src="{$BASE_URL}js/bootstrap-tagsinput.min.js" type="text/javascript"></script>
