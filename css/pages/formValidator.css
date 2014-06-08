@@ -1,0 +1,9 @@
+.form-group {
+    position: relative;
+}
+
+.form-group .form-control-feedback {
+    position: absolute;
+    top: 35px;
+    right: 10px;
+}
