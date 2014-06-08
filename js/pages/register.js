@@ -19,7 +19,7 @@ $(document).ready(function() {
                         message: 'The real name must be more than 6 and less than 70 characters long'
                     },
                     regexp: {
-                        regexp: /^[-\sa-zA-Z]+$/,
+                        regexp: /^[-\sa-zA-Z_áãàéèíìóõòúù]+$/,
                         message: 'The real name can only consist of alphabetical, ' - ' and spaces'
                     }
                 }
@@ -30,6 +30,10 @@ $(document).ready(function() {
                     date: {
                         format: 'YYYY/MM/DD',
                         message: 'The value is not a valid date'
+                    },
+                    regexp: {
+                        regexp: /^[0-9]{4}\/[0-9]{1,2}\/[0-9]{1,2}$/,
+                        message: ' '
                     }
                 }
             },
