@@ -9,6 +9,7 @@
     <link href="{$BASE_URL}css/AdminLTE.css" rel="stylesheet" type="text/css"/>
     <link href="{$BASE_URL}css/bootstrapValidator.min.css" rel="stylesheet" type="text/css" />
     <link href="{$BASE_URL}css/pages/formValidator.css" rel="stylesheet" type="text/css" />
+    <link href="{$BASE_URL}css/bootstrap3-dialog/bootstrap-dialog.min.css" rel="stylesheet" type="text/css" />
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
@@ -42,7 +43,7 @@
             <div class="footer">
                 <button type="submit" class="btn bg-green btn-block">Confirm</button>
 
-                <p><a href="#">I forgot my password</a></p>
+                <p><a href="#" onclick="recoverAccount();">I forgot my password</a></p>
 
                 <a href="{$BASE_URL}register.php" class="text-center">Register a new account</a>
             </div>
@@ -64,5 +65,49 @@
 <script src="{$BASE_URL}js/bootstrap.min.js" type="text/javascript"></script>
 <script src="{$BASE_URL}js/vendor/bootstrapValidator.min.js" type="text/javascript"></script>
 <script src="{$BASE_URL}js/pages/login.js" type="text/javascript"></script>
+<script src="{$BASE_URL}js/plugins/bootstrap3-dialog/bootstrap-dialog.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    function recoverAccount() {
+        BootstrapDialog.show({
+            title: "Recover Account",
+            message: '<div class="form-group"><label for="email-field" style="color: #444;">Email address</label>' +
+                    '<input type="email" id="email-field" name="email" class="form-control" placeholder="Email address" required/>' +
+                    '</div>',
+            buttons: [{
+                label: 'Request recovery',
+                cssClass: 'btn-primary spinning-email-button',
+                action: function(dialogRef){
+                    dialogRef.enableButtons(false);
+                    dialogRef.setClosable(false);
+                    $('.spinning-email-button').prepend('<span class="bootstrap-dialog-button-icon glyphicon glyphicon-asterisk icon-spin"></span>');
+                    $.ajax({
+                        url: '{$BASE_URL}members/0/forgotpass?email=' + $('#email-field').val(),
+                        type: 'PUT',
+                        success: function (a) {
+                            BootstrapDialog.alert({
+                                title: 'Success!',
+                                message: '<label style="color: #444;">Check your email for recovery instructions<label>'
+                            });
+                            dialogRef.close();
+                        },
+                        error: function (a, b, c) {
+                            BootstrapDialog.alert({
+                                title: 'Oops!',
+                                message: '<label style="color: #444;">Could not process your request at this time. :(\nError: ' + (c !== 'Not Found' ? c : 'Email Not Registered') + '</label>'});
+                            dialogRef.enableButtons(true);
+                            dialogRef.setClosable(true);
+                            $('.spinning-email-button').find('span').remove();
+                        }
+                    });
+                }
+            }, {
+                label: 'Close',
+                action: function(dialogRef){
+                    dialogRef.close();
+                }
+            }]
+        });
+    }
+</script>
 </body>
 </html>
