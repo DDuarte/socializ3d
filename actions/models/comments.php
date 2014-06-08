@@ -20,7 +20,7 @@ class CommentsHandler {
         }
 
         if (isset($_POST['content']) && strlen($_POST['content']) > 0)
-            insertComment($memberId, $modelId, htmlspecialchars($_POST['content']));
+            insertComment($memberId, $modelId, htmlspecialchars(stripslashes($_POST['content'])));
 
         header('Location: ' . $_SERVER['HTTP_REFERER'] . '#tab_comments');
     }
@@ -28,7 +28,6 @@ class CommentsHandler {
     function delete($modelId, $commentId) {
         global $BASE_DIR;
         global $smarty;
-
 
         $comment = getComment($commentId);
         if($comment == null) {
