@@ -51,7 +51,7 @@
 <section class="content">
     <div class="row">
         <div class="col-md-8 col-centered" id="upload-form">
-            <form action="#" method="POST">
+            <form id="createGroupForm" action="#" method="POST">
 
                 <div class="box-body">
 
@@ -63,11 +63,13 @@
                     <div class="form-group">
                         <label for="cover-image">Cover image:</label>
                         <input name="cover" type="text" class="form-control" id="cover-image" placeHolder="Cover img URL" />
+                        <span class="help-block">Optional; recommended 1150x200</span>
                     </div>
 
                     <div class="form-group">
                         <label for="avatar-image">Avatar image:</label>
                         <input name="avatar" type="text" class="form-control" id="avatar-image" placeHolder="Avatar img URL" />
+                        <span class="help-block">Optional; recommended 250x250</span>
                     </div>
 
                     <div class="form-group">
@@ -81,6 +83,7 @@
                             <option>Public</option>
                             <option>Private</option>
                         </select>
+                        <span class="help-block">Public: everyone can see your group; Private: invitation only</span>
                     </div>
 
                     <div class="form-group">

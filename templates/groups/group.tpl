@@ -2,7 +2,7 @@
     <div class="row" style="padding-top:10px">
         <div class="col-md-12">
             <div class="thumbnail">
-                <img id="group-cover-img" src="{$group.coverimg}" alt="...">
+                <img id="group-cover-img" src="{$group.coverimg}" alt="Group cover image">
             </div>
         </div>
     </div>
@@ -41,7 +41,7 @@
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_about">
                         <div class="thumbnail">
-                            <img id="group-avatar-img" src="{$group.avatarimg}" alt="...">
+                            <img id="group-avatar-img" src="{$group.avatarimg}" alt="Group avatar image">
                         </div>
                         <p id="group-about-content">{$group.about}</p>
                     </div>
@@ -51,7 +51,7 @@
                             {foreach $group.activity as $activ}
                                 <li class="media">
                                     <a class="pull-left" href="#">
-                                        <img class="media-object" src="{$activ.img}" alt="...">
+                                        <img class="media-object" src="{$activ.img}" alt="Activity image">
                                     </a>
                                     <div class="media-body">
                                         <h4 class="media-heading" {if $group.isMember && $activ.createdate > $visitor.lastaccess}style="font-weight: bolder"{/if}>
