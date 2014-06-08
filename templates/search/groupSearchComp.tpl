@@ -7,7 +7,7 @@
     <div class="col-xs-12 col-sm-12 col-md-2">
         <ul class="meta-search">
             <li>
-                <i class="glyphicon glyphicon-tags"></i>
+                <i class="glyphicon glyphicon-tags"> </i>
                 <span>Group</span>
             </li>
         </ul>

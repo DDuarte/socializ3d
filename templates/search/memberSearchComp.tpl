@@ -11,7 +11,7 @@
                 <span>4:28 pm</span>
             </li>*}
             <li>
-                <i class="glyphicon glyphicon-tags"></i>
+                <i class="glyphicon glyphicon-tags"> </i>
                 <span>Member</span>
             </li>
             {if $IS_LOGGED_IN && $member.id != $LOGGED_ID}

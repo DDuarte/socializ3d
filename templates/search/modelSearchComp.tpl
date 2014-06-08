@@ -11,7 +11,7 @@
                 <time class="timeago" datetime="{$model.createdate}">{$model.createdate}</time>
             </li>
             <li>
-                <i class="glyphicon glyphicon-tags"></i>
+                <i class="glyphicon glyphicon-tags"> </i>
                 <span>Model</span>
             </li>
         </ul>
