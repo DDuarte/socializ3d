@@ -36,6 +36,8 @@
         if (typeof Socializ3d === 'undefined')
             Socializ3d = {};
         Socializ3d.BASE_URL = "{$BASE_URL}";
+        if (Socializ3d.hash === undefined)
+            Socializ3d.hash = {};
     </script>
     <script src="{$BASE_URL}js/plugins/AdminLTE/app.js" type="text/javascript"></script>
 </head>
