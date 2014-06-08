@@ -35,8 +35,8 @@
 
                     <div class="form-group">
                         <label for="to-field">Visibility:</label>
-                        <select name="visibility" class="form-control" id="to-field" required>
-                            <option>Public</option>
+                        <select name="visibility" class="form-control" id="to-field">
+                            <option selected>Public</option>
                             <option>Private</option>
                         </select>
                         <span class="help-block">Public: everyone can see your group; Private: invitation only</span>

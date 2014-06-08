@@ -1,4 +1,3 @@
-<link href="{$BASE_URL}css/search.css" rel="stylesheet" type="text/css"/>
 <!-- Content Header (Page header) -->
 <!-- Main content -->
 <section class="content">

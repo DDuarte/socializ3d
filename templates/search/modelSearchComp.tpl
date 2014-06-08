@@ -1,6 +1,6 @@
 <article class="search-result row model">
     <div class="col-xs-12 col-sm-12 col-md-3">
-        <a class="dynamic_load" href="{$BASE_URL}{$MODELS}/{$model.id}" class="thumbnail">
+        <a class="dynamic_load thumbnail" href="{$BASE_URL}{$MODELS}/{$model.id}">
             <img src="http://placehold.it/250x140" alt="{$model.name}" >
         </a>
     </div>
@@ -18,7 +18,7 @@
     </div>
     <div class="col-xs-12 col-sm-12 col-md-7">
         <h3>
-            <a class="dynamic_load" href="{$BASE_URL}{$MODELS}/{$model.id}" class="thumbnail">{$model.name}</a>
+            <a class="dynamic_load" href="{$BASE_URL}{$MODELS}/{$model.id}">{$model.name}</a>
         </h3>
         <p class="about">{$model.description}</p>
     </div>
