@@ -191,11 +191,15 @@ var Loader = function ( editor ) {
 					var contents = event.target.result;
 
 					var geometry = new THREE.STLLoader().parse( contents );
+
+                    if (geometry.mergeVertices)
+                        geometry.mergeVertices();
+
                     geometry.computeVertexNormals();
 					geometry.sourceType = "stl";
 					geometry.sourceFile = file.name;
 
-					var material = new THREE.MeshPhongMaterial();
+					var material = new THREE.MeshPhongMaterial({side: THREE.DoubleSide});
 
 					var mesh = new THREE.Mesh( geometry, material );
 					mesh.name = filename;
