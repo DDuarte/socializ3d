@@ -58,14 +58,16 @@ class UploadHandler
         $name = stripslashes(strip_tags($_POST['name']));
         $description = stripslashes(strip_tags($_POST['description']));
         $visibility = strtolower($_POST['to']);
-        $tags = $_POST['tags'];
+        $tags = trim($_POST['tags']);
+
 
         if (isset($_POST['groups']))
             $groups = $_POST['groups'];
         else
             $groups = array();
 
-        $tagsArray = explode(',', $tags);
+        $tagsArray = empty($tags) ? Array() : explode(',', $tags);
+        error_log(json_encode($tagsArray));
 
         $archive_dir = $BASE_DIR . $MODELS_FOLDER ."/";
 
@@ -98,6 +100,7 @@ class UploadHandler
         }
 
         $content_type = mime_content_type($_FILES["file"]['tmp_name']);
+        error_log($content_type);
         if (false === $ext = array_search(
                 $content_type,
                 array(
