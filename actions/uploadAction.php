@@ -55,8 +55,10 @@ class UploadHandler
             return;
         }
 
-        $name = strip_tags($_POST['name']);
-        $description = strip_tags($_POST['description']);
+        $name = stripslashes(strip_tags($_POST['name']));
+        error_log($_POST['description']);
+        $description = stripslashes(strip_tags($_POST['description']));
+        error_log($description);
         $visibility = strtolower($_POST['to']);
         $tags = $_POST['tags'];
 
