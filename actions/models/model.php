@@ -48,6 +48,15 @@ class ModelHandler {
     }
 
     function post($modelId) {
+        $model = getModel($modelId);
+
+        $loggedId = getLoggedId();
+        $authorId = intval($model['idauthor']);
+
+        if ($loggedId != $authorId && !loggedIsAdmin()) {
+            http_response_code(403);
+            return;
+        }
 
         if (!isset($_POST['about']) || !isset($_POST['tags'])) {
             return;

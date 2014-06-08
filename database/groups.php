@@ -56,10 +56,6 @@ function getMembersOfGroup($id) {
     $stmt->execute(array(':id' => $id));
     $members = $stmt->fetchAll();
 
-    // foreach ($members as $key => $member) {
-    //     $members[$key]['lastaccess'] = date(DATE_ISO8601, strtotime($member['lastaccess']));
-    // }
-
     return $members;
 }
 
