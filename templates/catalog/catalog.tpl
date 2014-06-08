@@ -31,7 +31,6 @@
                             It seems you have finished browsing through our entire catalog.
                         </p>
                     </div>
-                    <!-- /.box-body -->
                 </div>
             </div>
         {/if}

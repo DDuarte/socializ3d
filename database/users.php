@@ -161,10 +161,10 @@ function getUserSidebarInfo($id) {
     if ($id == null) return null;
 
     global $conn;
-    $stmt = $conn->prepare("SELECT Member.name FROM Member WHERE Member.id = ?");
+    $stmt = $conn->prepare("SELECT username FROM RegisteredUser WHERE id = ?");
     $stmt->execute(array($id));
     $username = $stmt->fetch();
-    $username = $username['name'];
+    $username = $username['username'];
 
     $stmt = $conn->prepare("SELECT * FROM get_complete_friends_of_member(?)");
     $stmt->execute(array($id));

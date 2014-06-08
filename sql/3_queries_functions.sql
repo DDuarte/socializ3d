@@ -86,12 +86,12 @@ $$ LANGUAGE SQL;
 -- Get thumbnail information for a model --
 CREATE OR REPLACE FUNCTION get_thumbnail_information(modelId BIGINT)
 RETURNS TABLE(modelName VARCHAR, authorName VARCHAR, createDate TIMESTAMP, fileName VARCHAR, numUpVotes BIGINT, numDownVotes BIGINT, numComments BIGINT) AS $$
-    SELECT model_info.name, Member.name, model_info.createDate, fileName, numUpVotes, numDownVotes, count(TComment.id)
+    SELECT model_info.name, RegisteredUser.username, model_info.createDate, fileName, numUpVotes, numDownVotes, count(TComment.id)
         FROM model_info
-        JOIN Member ON Member.id = model_info.idAuthor
+        JOIN RegisteredUser ON RegisteredUser.id = model_info.idAuthor
         LEFT JOIN TComment ON TComment.idModel = model_info.id AND TComment.deleted = false
         WHERE model_info.id = $1
-        GROUP BY model_info.name, Member.name, model_info.createDate, fileName, numUpVotes, numDownVotes
+        GROUP BY model_info.name, RegisteredUser.username, model_info.createDate, fileName, numUpVotes, numDownVotes
 $$ LANGUAGE SQL;
 
 -- List all the members of a group --
