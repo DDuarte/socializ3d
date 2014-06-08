@@ -49,14 +49,18 @@ class GroupCreateHandler
             $aboutInfo = substr($_POST['about'], 0, 1024);
 
         $coverImg = trim($_POST['cover']);
-        if (strlen($coverImg) < 255)
+        if (strlen($coverImg) === 0)
+            $coverImg = 'http://placehold.it/1150x200';
+        else if (strlen($coverImg) < 255)
             $coverImg = $_POST['cover'];
         else
             $coverImg = substr($coverImg, 0, 255);
 
 
         $avatarImg = trim($_POST['avatar']);
-        if (strlen($avatarImg) < 255)
+        if (strlen($avatarImg) === 0)
+            $avatarImg = 'http://placehold.it/250x250';
+        else if (strlen($avatarImg) < 255)
             $avatarImg = $_POST['avatar'];
         else
             $avatarImg = substr($avatarImg, 0, 255);
