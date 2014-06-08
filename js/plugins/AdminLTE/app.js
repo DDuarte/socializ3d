@@ -19,7 +19,7 @@ Socializ3d.update_hash = function () {
 };
 
 function hash_change(newHash) {
-    var hash = newHash === undefined ? document.location.hash : newHash;
+    var hash = typeof newHash != "string" ? document.location.hash : newHash;
 
     if (Socializ3d._ignoreHashChange === true) {
         delete Socializ3d._ignoreHashChange;

@@ -9,8 +9,8 @@ if (!$_POST['username'] || !$_POST['realName'] || !$_POST['password'] || !$_POST
     exit;
 }
 
-$realName = strip_tags($_POST['realName']);
-$username = strip_tags($_POST['username']);
+$realName = stripslashes(strip_tags($_POST['realName']));
+$username = stripslashes(strip_tags($_POST['username']));
 $email = strip_tags($_POST['email']);
 $birthDate = strip_tags($_POST['birthDate']);
 $password = $_POST['password'];

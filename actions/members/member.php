@@ -67,7 +67,7 @@ class MemberHandler {
             return;
         }
 
-        $aboutInfo = trim($_POST['about']);
+        $aboutInfo = stripslashes(strip_tags(trim($_POST['about'])));
         if (strlen($aboutInfo) < 1024)
             $aboutInfo = $_POST['about'];
         else
@@ -77,7 +77,7 @@ class MemberHandler {
 
         $interestsArray = explode(',', $_POST['interests']);
         foreach($interestsArray as $key => $value) {
-            $interestsArray[$key] = trim($value);
+            $interestsArray[$key] = stripslashes(strip_tags(trim($value)));
         }
 
         $prevInterests = getMemberInterests($memberId);
