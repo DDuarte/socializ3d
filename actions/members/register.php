@@ -19,10 +19,15 @@ try {
     createUser($username, $password, $email, $realName, $birthDate);
 } catch (PDOException $e) {
 
-    if (strpos($e->getMessage(), 'RegisteredUser_userName_uk') !== false)
+    if (strpos($e->getMessage(), 'registereduser_username_uk') !== false)
     {
-        $_SESSION['error_messages'][] = 'Duplicate username';
+        $_SESSION['error_messages'][] = 'Duplicate Username';
         $_SESSION['field_errors']['username'] = 'Username already exists';
+    }
+    else if (strpos($e->getMessage(), 'registereduser_email_uk') !== false)
+    {
+        $_SESSION['error_messages'][] = 'Email already registered';
+        $_SESSION['field_errors']['username'] = 'Email already in use';
     }
     else
         $_SESSION['error_messages'][] = 'Error creating user ' . $e->getMessage();
