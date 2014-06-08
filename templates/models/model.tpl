@@ -575,7 +575,6 @@ $(function () {
             editor.loader.loadFile(file);
         }
     }
-};
 
 xhr.open('GET', '{$BASE_URL}{$MODELS}/{$model.id}/file');
 xhr.responseType = 'blob';
