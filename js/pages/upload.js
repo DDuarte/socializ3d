@@ -1,4 +1,4 @@
-$('#submit').click(function(event) { event.preventDefault(); $('form').submit(); });
+$('#uploadSubmit').click(function(event) { event.preventDefault(); $('#uploadForm').submit(); });
 
 $(document).ready(function() {
     $('#uploadForm').bootstrapValidator({
