@@ -55,7 +55,7 @@
                     <hr>
 
                     <div class="form-group">
-                        <button type="submit" name="submit" class="btn btn-primary" style="margin-top: 10px">Submit</button>
+                        <button type="submit" class="btn btn-primary" style="margin-top: 10px">Submit</button>
                     </div>
                 </div>
             </form>
