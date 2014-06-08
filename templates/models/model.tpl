@@ -29,7 +29,7 @@
         <div class="box col-sm-12 col-md-12">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs pull-right">
-                    {if $LOGGED_ID == $model.idauthor}
+                    {if $LOGGED_ID == $model.idauthor || $IS_ADMIN}
                         <li class="pull-right">
                             <a href="#tab_settings" data-toggle="tab"> <i class="fa fa-gear"></i> </a>
                         </li>
@@ -77,7 +77,7 @@
                                             <i class="fa fa-download"></i>
                                             <span>Download</span>
                                         </button>
-                                        {if $LOGGED_ID == $model.idauthor}
+                                        {if $LOGGED_ID == $model.idauthor || $IS_ADMIN}
                                             <button id="delete-btn" class="btn bg-red btn-social">
                                                 <i class="fa fa-trash-o"></i>
                                                 <span>Delete</span>
@@ -176,7 +176,7 @@
                             </div>
                         </div>
                     </div>
-                    {if $LOGGED_ID == $model.idauthor}
+                    {if $LOGGED_ID == $model.idauthor || $IS_ADMIN}
                         <div class="tab-pane" id="tab_settings">
                             <form id="edit-form" action="{$BASE_URL}models/{$model.id}" method="post">
                                 <div class="form-group">

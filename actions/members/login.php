@@ -17,7 +17,7 @@ $usr = getIdIfLoginCorrect($username, $password);
 
 if ($usr != false) {
     $_SESSION['id'] = $usr['id'];
-    $_SESSION['isAdmin'] = $usr['isadmin'];
+    $_SESSION['isAdmin'] = $usr['isadmin'] == 1;
     $_SESSION['username'] = $username;
     $_SESSION['success_messages'][] = 'Login successful';
 } else {

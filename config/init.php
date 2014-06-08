@@ -37,6 +37,7 @@ $smarty->assign('FORM_VALUES', $_SESSION['form_values']);
 $smarty->assign('LOGGED_ID', $_SESSION['id']);
 $smarty->assign('USERNAME', $_SESSION['username']);
 $smarty->assign('IS_LOGGED_IN', getLoggedId() != null);
+$smarty->assign('IS_ADMIN', $_SESSION['isAdmin']);
 
 $smarty->assign('MODELS_PER_PAGE', $MODELS_PER_PAGE);
 $smarty->assign('MEMBERS', 'members');
