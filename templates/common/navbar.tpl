@@ -25,7 +25,7 @@
                         <i class="fa fa-search"></i>
                     </a>
                 </li>
-                <li class="dropdown notifications-menu">
+                <li id="notifications-icon" class="dropdown notifications-menu">
                     <a href="#" id="noti-count-st" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa  fa-flag"></i>
                         {if $userUnreadNots|@count > 0}
