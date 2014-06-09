@@ -23,7 +23,10 @@ function getGroupVisibility($id) {
     global $conn;
     $stmt = $conn->prepare("SELECT visibility FROM TGroup WHERE id = ?");
     $stmt->execute(Array($id));
-    return $stmt->fetch()['visibility'];
+    $result = $stmr->fetch();
+    if (!$result)
+        return 'private';
+    return $result['visibility'];
 }
 
 function getGroup($id) {
