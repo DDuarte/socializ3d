@@ -105,12 +105,12 @@
                         <a href="#tab_members" data-toggle="tab">Members</a>
                     </li>
                     {if $group.isGroupAdmin}
-                    <li>
+                    <li id="tab-notifications">
                         <a href="#tab_notifications" data-toggle="tab">Notifications</a>
                     </li>
                     {/if}
                     {if $visitor.groupShares|@count > 0}
-                    <li>
+                    <li id="tab-publications">
                         <a href="#tab_publications" data-toggle="tab">Publications</a>
                     </li>
                     {/if}
@@ -399,26 +399,41 @@
         // Instance the tour
         function startIntro(){
             var intro = introJs();
-            intro.setOptions({
-                steps: [
-                    {
-                        intro: "Welcome to the group page, here you can access the latest publications from your peers."
-                    },
-                    {
-                        element: document.querySelector('#tab-about'),
-                        intro: "Access the general group information."
-                    },
-                    {
-                        element: document.querySelector('#tab-activity'),
-                        intro: "See the latest activities from your group peers."
-                    },
-                    {
-                        element: document.querySelector('#tab-members'),
-                        intro: "Access the group's members information.",
-                        tooltipPosition: 'bottom-left-aligned'
-                    }
-                ]
+            var options = {steps: []};
+
+            options.steps.push({ intro: "Welcome to the group page, here you can access the latest publications from your peers." });
+
+            options.steps.push({
+                element: document.querySelector('#tab-about'),
+                intro: "Access the general group information."
             });
+            options.steps.push({
+                element: document.querySelector('#tab-activity'),
+                intro: "See the latest activities from your group peers."
+            });
+            options.steps.push({
+                element: document.querySelector('#tab-members'),
+                intro: "Access the group's members information.",
+                tooltipPosition: 'bottom-left-aligned'
+            });
+
+            if ($('#tab-publications').length > 0) {
+                options.steps.push({
+                    element: document.querySelector('#tab-publications'),
+                    intro: "Access the latest model publications in the group.",
+                    tooltipPosition: 'bottom-left-aligned'
+                });
+            }
+
+            if ($('#tab-notifications').length > 0) {
+                options.steps.push({
+                    element: document.querySelector('#tab-notifications'),
+                    intro: "Accept member applications.",
+                    tooltipPosition: 'bottom-left-aligned'
+                });
+            }
+
+            intro.setOptions(options);
 
             intro.start();
         };
