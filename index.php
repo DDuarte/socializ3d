@@ -40,6 +40,10 @@ function getErrorPage($code, $is_xhr) {
             $title = "Oops! Page not found.";
             $message = "We could not find the page you were looking for.";
             break;
+        case (410):
+            $title = "Oops! This page no longer exists.";
+            $message = "The page you requested no longer exists.";
+            break;
         case (500):
             $title = "Oops! Something went wrong.";
             $message = "We will work on fixing that right away. ";
@@ -89,6 +93,12 @@ ToroHook::add("500", $handle_500);
 
 $handle_500_xhr = create_function('', 'getErrorPage(500, true);');
 ToroHook::add("500_xhr", $handle_500_xhr);
+
+$handle_410 = create_function('', 'getErrorPage(410, false);');
+ToroHook::add("410", $handle_410);
+
+$handle_410_xhr = create_function('', 'getErrorPage(410, true);');
+ToroHook::add("410_xhr", $handle_410_xhr);
 
 Toro::serve(array(
     '/' => 'IndexHandler',

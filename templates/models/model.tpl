@@ -247,19 +247,23 @@ function checkComment() {
 $(function () {
 
     $('#delete-btn').click(function () {
-        $.ajax({
-            url: '{$BASE_URL}models/{$model.id}',
-            type: 'DELETE',
-            success: function (a) {
-                BootstrapDialog.alert({
-                    title: 'Success',
-                    message: 'Model deleted with success.'});
-                window.location = '{$BASE_URL}';
-            },
-            error: function (a, b, c) {
-                BootstrapDialog.alert({
-                    title: 'Oops!',
-                    message: 'Could not delete this model. :(\nError: ' + c});
+        BootstrapDialog.confirm('Do you really want to delete this model?', function (result) {
+            if (result) {
+                $.ajax({
+                    url: '{$BASE_URL}models/{$model.id}',
+                    type: 'DELETE',
+                    success: function (a) {
+                        BootstrapDialog.alert({
+                            title: 'Success',
+                            message: 'Model deleted with success.'});
+                        window.location = '{$BASE_URL}';
+                    },
+                    error: function (a, b, c) {
+                        BootstrapDialog.alert({
+                            title: 'Oops!',
+                            message: 'Could not delete this model. :(\nError: ' + c});
+                    }
+                });
             }
         });
     })
@@ -428,10 +432,6 @@ $(function () {
         data[1].value += num ? num : 1;
         donut.setData(data);
     }
-
-    $('#delete-btn').on('click', function (event) {
-        //toggleFullscreen();
-    });
 
     $("#vote_section").removeClass("hidden");
 

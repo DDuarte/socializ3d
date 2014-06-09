@@ -78,6 +78,7 @@ function getMember($id, $id2)
                                    Member.about,
                                    Member.birthDate,
                                    RegisteredUser.username,
+                                   Member.deleteDate,
                                    get_user_hash(:id) AS hash
                             FROM Member JOIN RegisteredUser ON Member.id = RegisteredUser.id
                             WHERE Member.id = :id");

@@ -33,6 +33,9 @@ class MemberHandler {
         if ($member == false) {
             http_response_code(404);
             return;
+        } else if ($member['deletedate'] !== null) {
+            http_response_code(410);
+            return;
         }
         getMemberPage($member);
     }
@@ -44,6 +47,9 @@ class MemberHandler {
         $member = getMember($memberId, getLoggedId());
         if ($member == false) {
             http_response_code(404);
+            return;
+        } else if ($member['deletedate'] !== null) {
+            http_response_code(410);
             return;
         }
 
@@ -86,5 +92,23 @@ class MemberHandler {
 
         $toInsert = array_diff($interestsArray, $prevInterests);
         insertUserInterests($memberId, $toInsert);
+    }
+
+    function delete($memberId) {
+        global $BASE_DIR;
+        global $conn;
+
+        $loggedUserId = getLoggedId();
+        if ($memberId != $loggedUserId && !loggedIsAdmin()) {
+            http_response_code(403);
+            return;
+        }
+
+        $stmt = $conn->prepare("UPDATE member SET deleteDate = NOW() WHERE id = ?");
+        $stmt->execute(array($memberId));
+
+        if ($memberId == $loggedUserId) {
+            session_destroy();
+        }
     }
 }

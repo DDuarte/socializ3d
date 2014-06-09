@@ -76,9 +76,9 @@
                                 </div>
                             </div>
                             {if !$IS_ADMIN}
-                            <p style="text-align: right;">
-                                <a id="open-password-menu" href="#">Change password.</a>
-                            </p>
+                                <p style="text-align: right;">
+                                    <a id="open-password-menu" href="#">Change password.</a>
+                                </p>
                             {/if}
                             <button type="submit" class="btn bg-olive btn-block" id="confirm-button">Confirm</button>
                         </div>
@@ -104,26 +104,34 @@
                     <li class="pull-left header">
                         {$member.username}'s Profile
                     </li>
-                    {if $IS_LOGGED_IN && $LOGGED_ID != $member.id}
-                    <li class="pull-left">
-                        {if $diffGroups|@count > 0}
-                        <button id="add-to-group-btn" class="btn bg-blue btn-primary">
-                            <i class="fa fa-plus-square-o"></i>
-                            <span>Invite to group</span>
-                        </button>
+                    {if $IS_LOGGED_IN}
+                        {if $LOGGED_ID != $member.id}
+                            <li class="pull-left">
+                            {if $diffGroups|@count > 0}
+                                <button id="add-to-group-btn" class="btn bg-blue btn-primary">
+                                    <i class="fa fa-plus-square-o"></i>
+                                    <span>Invite to group</span>
+                                </button>
+                            {/if}
+                            {if $member.myFriend}
+                                <button id="unfriend-btn" class="btn bg-blue btn-primary">
+                                    <i class="fa fa-times"></i>
+                                    <span>Unfriend</span>
+                                </button>
+                            {elseif !$member.sentRequest}
+                                <button class="btn btn-primary" id="friend-add-button">
+                                    <i class="fa fa-user"></i>
+                                    <span>Add friend<span>
+                                </button>
+                            {/if}
                         {/if}
-                        {if $member.myFriend}
-                        <button id="unfriend-btn" class="btn bg-blue btn-primary">
-                            <i class="fa fa-times"></i>
-                            <span>Unfriend</span>
-                        </button>
-                        {elseif !$member.sentRequest}
-                        <button class="btn btn-primary" id="friend-add-button">
-                            <i class="fa fa-user"></i>
-                            <span>Add friend<span>
-                        </button>
+                        {if $LOGGED_ID == $member.id || $IS_ADMIN}
+                            <button id="delete-btn" class="btn bg-red btn-primary">
+                                <i class="fa fa-trash-o"></i>
+                                <span>Delete</span>
+                            </button>
                         {/if}
-                    </li>
+                        </li>
                     {/if}
                 </ul>
                 <div class="tab-content">
@@ -161,69 +169,94 @@
 <script src="{$BASE_URL}js/bootstrap-tagsinput.min.js" type="text/javascript"></script>
 <script src="{$BASE_URL}js/plugins/bootstrap3-dialog/bootstrap-dialog.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-    function inviteToGroup(btn){
-        var thisButton = $(btn);
-        var groupId = thisButton.attr('name');
-        thisButton.addClass('disabled');
-        thisButton.prepend('<span class="bootstrap-dialog-button-icon glyphicon glyphicon-asterisk icon-spin"></span>');
+function inviteToGroup(btn) {
+    var thisButton = $(btn);
+    var groupId = thisButton.attr('name');
+    thisButton.addClass('disabled');
+    thisButton.prepend('<span class="bootstrap-dialog-button-icon glyphicon glyphicon-asterisk icon-spin"></span>');
 
-        $.ajax({
-            url: '{$BASE_URL}groups/' + groupId + '/invite/{$member.id}',
-            type: 'POST',
-            success: function (a) {
-                BootstrapDialog.alert({
-                    title: 'Success!',
-                    message: 'Invited this member to join your group!'
+    $.ajax({
+        url: '{$BASE_URL}groups/' + groupId + '/invite/{$member.id}',
+        type: 'POST',
+        success: function (a) {
+            BootstrapDialog.alert({
+                title: 'Success!',
+                message: 'Invited this member to join your group!'
+            });
+            thisButton.parent().remove();
+        },
+        error: function (a, b, c) {
+            BootstrapDialog.alert({
+                title: 'Oops!',
+                message: 'Could not process your request at this time. :(\nError: ' + (c === 'Conflict' ? 'Member is already in group or has invitation pending.' : c)});
+            thisButton.find('span').remove();
+            thisButton.removeClass('disabled');
+        }
+    });
+}
+var groupSettings = '<div class="form-group">' +
+        '{foreach $diffGroups as $group}<p style="min-height:45px; border-bottom:1px solid gray;" ><span>{$group.groupname}</span>' +
+        '<button class="btn btn-primary" onclick="inviteToGroup(this);" style="float: right;" name="{$group.groupid}" >Invite</button></p>' +
+        '{/foreach}</div>';
+
+var accountSettings =
+        '<div class="form-group" ><p><input type="password" class="form-control" id="old-pass" placeholder="Old password"/></p></div>' +
+        '<div class="form-group" ><p><input type="password" id="new-pass" class="form-control" placeholder="New password"/></p>' +
+        '<p><input type="password" class="form-control" id="confirm-new" placeholder="Confirm"/></p></div>';
+$(function () {
+    $('#delete-btn').click(function () {
+        BootstrapDialog.confirm('Do you really want to delete this member?', function (result) {
+            if (result) {
+                $.ajax({
+                    url: '{$BASE_URL}members/{$member.id}',
+                    type: 'DELETE',
+                    success: function (a) {
+                        BootstrapDialog.alert({
+                            title: 'Success',
+                            message: 'Member deleted with success.'});
+                        window.location = '{$BASE_URL}';
+                    },
+                    error: function (a, b, c) {
+                        BootstrapDialog.alert({
+                            title: 'Oops!',
+                            message: 'Could not delete this member. :(\nError: ' + c});
+                    }
                 });
-                thisButton.parent().remove();
-            },
-            error: function (a, b, c) {
-                BootstrapDialog.alert({
-                    title: 'Oops!',
-                    message: 'Could not process your request at this time. :(\nError: ' + (c === 'Conflict' ? 'Member is already in group or has invitation pending.' : c)});
-                thisButton.find('span').remove();
-                thisButton.removeClass('disabled');
             }
         });
-    }
-    var groupSettings = '<div class="form-group">' +
-            '{foreach $diffGroups as $group}<p style="min-height:45px; border-bottom:1px solid gray;" ><span>{$group.groupname}</span>' +
-            '<button class="btn btn-primary" onclick="inviteToGroup(this);" style="float: right;" name="{$group.groupid}" >Invite</button></p>' +
-            '{/foreach}</div>';
+    })
 
-    var accountSettings =
-            '<div class="form-group" ><p><input type="password" class="form-control" id="old-pass" placeholder="Old password"/></p></div>' +
-            '<div class="form-group" ><p><input type="password" id="new-pass" class="form-control" placeholder="New password"/></p>' +
-            '<p><input type="password" class="form-control" id="confirm-new" placeholder="Confirm"/></p></div>';
-    $(function () {
-        $('#add-to-group-btn').click(function (event) {
-            event.preventDefault();
-            BootstrapDialog.show({
-                type: BootstrapDialog.TYPE_PRIMARY,
-                size: BootstrapDialog.SIZE_NORMAL,
-                title: 'Groups',
-                message: groupSettings,
-                buttons: [{
+    $('#add-to-group-btn').click(function (event) {
+        event.preventDefault();
+        BootstrapDialog.show({
+            type: BootstrapDialog.TYPE_PRIMARY,
+            size: BootstrapDialog.SIZE_NORMAL,
+            title: 'Groups',
+            message: groupSettings,
+            buttons: [
+                {
                     label: 'Done',
                     cssClass: 'btn-error',
-                    action: function(dialogRef){
+                    action: function (dialogRef) {
                         dialogRef.close();
                     }
-                }]
-            });
+                }
+            ]
         });
+    });
 
-        $('#open-password-menu').click(function (event) {
-           event.preventDefault();
-            BootstrapDialog.show({
-                type: BootstrapDialog.TYPE_PRIMARY,
-                size: BootstrapDialog.SIZE_NORMAL,
-                title: 'Account Settings',
-                message: accountSettings,
-                buttons: [{
+    $('#open-password-menu').click(function (event) {
+        event.preventDefault();
+        BootstrapDialog.show({
+            type: BootstrapDialog.TYPE_PRIMARY,
+            size: BootstrapDialog.SIZE_NORMAL,
+            title: 'Account Settings',
+            message: accountSettings,
+            buttons: [
+                {
                     label: 'Confirm',
                     cssClass: 'btn-success',
-                    action: function(dialogRef){
+                    action: function (dialogRef) {
                         if ($('#new-pass').val() != $('#confirm-new').val()) {
                             BootstrapDialog.alert({
                                 type: BootstrapDialog.TYPE_DANGER,
@@ -264,114 +297,119 @@
                             }
                         });
                     }
-                }, {
+                },
+                {
                     label: 'Cancel',
                     cssClass: 'btn-error',
-                    action: function(dialogRef){
+                    action: function (dialogRef) {
                         dialogRef.close();
                     }
-                }]
-            });
-        });
-
-        $("#interests-field + .bootstrap-tagsinput").mouseover(function (event) {
-            event.preventDefault();
-            $("#tags-info").removeClass("hidden");
-        });
-
-        $("#interests-field + .bootstrap-tagsinput").mouseout(function (event) {
-            event.preventDefault();
-            $("#tags-info").addClass("hidden");
-        });
-
-
-
-        $('#unfriend-btn').click(function (event) {
-            event.preventDefault();
-            $('#unfriend-btn').addClass('hidden');
-            $.ajax({
-                url: '{$BASE_URL}members/friend/{$member.id}',
-                type: 'DELETE',
-                success: function (a) {
-                    var diagInstance = new BootstrapDialog({
-                        title: 'Success!',
-                        message: 'Removed this user from your friend list.',
-                        buttons: [{
-                            label: 'Close',
-                            action: function(dialogItself){
-                                dialogItself.close();
-                                window.location.reload(true);
-                            }
-                        }]
-                    });
-                    diagInstance.setClosable(false);
-                    diagInstance.open();
-                },
-                error: function (a, b, c) {
-                    BootstrapDialog.alert({
-                        title: 'Oops!',
-                        message: 'Could not process your request at this time. :(\nError: ' + c});
-                    $('#unfriend-btn').removeClass('hidden');
                 }
-            });
-        });
-
-        $('#friend-add-button').click(function (event) {
-            event.preventDefault();
-            $('#friend-add-button').addClass('hidden');
-            $.ajax({
-                url: '{$BASE_URL}members/friend/{$member.id}',
-                type: 'POST',
-                success: function (a) {
-                    var diagInstance = new BootstrapDialog({
-                        title: 'Success!',
-                        message: 'Sent this member a friend request!',
-                        buttons: [{
-                            label: 'Close',
-                            action: function(dialogItself){
-                                dialogItself.close();
-                                window.location.reload(true);
-                            }
-                        }]
-                    });
-                    diagInstance.setClosable(false);
-                    diagInstance.open();
-                },
-                error: function (a, b, c) {
-                    BootstrapDialog.alert({
-                        title: 'Oops!',
-                        message: 'Could not process your request at this time. :(\nError: ' + c});
-                    $('#friend-add-button').removeClass('hidden');
-                }
-            });
-        });
-
-        $('#confirm-button').click(function (event) {
-            event.preventDefault();
-            $('#confirm-button').addClass('hidden');
-            $('#processing_submit_section').removeClass('hidden');
-            $.ajax({
-                url: '{$BASE_URL}members/{$member.id}',
-                type: 'POST',
-                data: {literal}{ about: $('#about-me-field').val(), interests: $('#interests-field').val()}{/literal},
-                success: function (a) {
-                    $('#member-about-content').text($('#about-me-field').val());
-                    $('#member-interests-content').text($('#interests-field').val().replace(/, */g, ', '));
-                    BootstrapDialog.alert({
-                        title: 'Success!',
-                        message: 'Updated your information successfully'});
-                    $('#processing_submit_section').addClass('hidden');
-                    $('#confirm-button').removeClass('hidden');
-                    document.location.href='#tab_about';
-                },
-                error: function (a, b, c) {
-                    BootstrapDialog.alert({
-                        title: 'Oops!',
-                        message: 'Could not process your request at this time. :(\nError: ' + c});
-                    $('#processing_submit_section').addClass('hidden');
-                    $('#confirm-button').removeClass('hidden');
-                }
-            });
+            ]
         });
     });
+
+    $("#interests-field + .bootstrap-tagsinput").mouseover(function (event) {
+        event.preventDefault();
+        $("#tags-info").removeClass("hidden");
+    });
+
+    $("#interests-field + .bootstrap-tagsinput").mouseout(function (event) {
+        event.preventDefault();
+        $("#tags-info").addClass("hidden");
+    });
+
+
+    $('#unfriend-btn').click(function (event) {
+        event.preventDefault();
+        $('#unfriend-btn').addClass('hidden');
+        $.ajax({
+            url: '{$BASE_URL}members/friend/{$member.id}',
+            type: 'DELETE',
+            success: function (a) {
+                var diagInstance = new BootstrapDialog({
+                    title: 'Success!',
+                    message: 'Removed this user from your friend list.',
+                    buttons: [
+                        {
+                            label: 'Close',
+                            action: function (dialogItself) {
+                                dialogItself.close();
+                                window.location.reload(true);
+                            }
+                        }
+                    ]
+                });
+                diagInstance.setClosable(false);
+                diagInstance.open();
+            },
+            error: function (a, b, c) {
+                BootstrapDialog.alert({
+                    title: 'Oops!',
+                    message: 'Could not process your request at this time. :(\nError: ' + c});
+                $('#unfriend-btn').removeClass('hidden');
+            }
+        });
+    });
+
+    $('#friend-add-button').click(function (event) {
+        event.preventDefault();
+        $('#friend-add-button').addClass('hidden');
+        $.ajax({
+            url: '{$BASE_URL}members/friend/{$member.id}',
+            type: 'POST',
+            success: function (a) {
+                var diagInstance = new BootstrapDialog({
+                    title: 'Success!',
+                    message: 'Sent this member a friend request!',
+                    buttons: [
+                        {
+                            label: 'Close',
+                            action: function (dialogItself) {
+                                dialogItself.close();
+                                window.location.reload(true);
+                            }
+                        }
+                    ]
+                });
+                diagInstance.setClosable(false);
+                diagInstance.open();
+            },
+            error: function (a, b, c) {
+                BootstrapDialog.alert({
+                    title: 'Oops!',
+                    message: 'Could not process your request at this time. :(\nError: ' + c});
+                $('#friend-add-button').removeClass('hidden');
+            }
+        });
+    });
+
+    $('#confirm-button').click(function (event) {
+        event.preventDefault();
+        $('#confirm-button').addClass('hidden');
+        $('#processing_submit_section').removeClass('hidden');
+        $.ajax({
+            url: '{$BASE_URL}members/{$member.id}',
+            type: 'POST',
+            data: {literal}{ about: $('#about-me-field').val(), interests: $('#interests-field').val()}{/literal},
+            success: function (a) {
+                $('#member-about-content').text($('#about-me-field').val());
+                $('#member-interests-content').text($('#interests-field').val().replace(/, */g, ', '));
+                BootstrapDialog.alert({
+                    title: 'Success!',
+                    message: 'Updated your information successfully'});
+                $('#processing_submit_section').addClass('hidden');
+                $('#confirm-button').removeClass('hidden');
+                document.location.href = '#tab_about';
+            },
+            error: function (a, b, c) {
+                BootstrapDialog.alert({
+                    title: 'Oops!',
+                    message: 'Could not process your request at this time. :(\nError: ' + c});
+                $('#processing_submit_section').addClass('hidden');
+                $('#confirm-button').removeClass('hidden');
+            }
+        });
+    });
+});
 </script>
