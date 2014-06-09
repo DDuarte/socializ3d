@@ -105,9 +105,14 @@
                         <a href="#tab_members" data-toggle="tab">Members</a>
                     </li>
                     {if $group.isGroupAdmin}
-                        <li>
-                            <a href="#tab_notifications" data-toggle="tab">Notifications</a>
-                        </li>
+                    <li>
+                        <a href="#tab_notifications" data-toggle="tab">Notifications</a>
+                    </li>
+                    {/if}
+                    {if $visitor.groupShares|@count > 0}
+                    <li>
+                        <a href="#tab_publications" data-toggle="tab">Publications</a>
+                    </li>
                     {/if}
                     <li class="pull-left header">
                         <i class="fa fa-group"></i>{$group.name}</li>
@@ -116,7 +121,7 @@
                     <div class="tab-pane active" id="tab_gallery">
                         <div class="row">
                             {foreach $group.models as $model}
-                                <div class="col-md-4">
+                                <div id="model_{$model.id}" class="col-md-4">
                                     {include file="models/thumbnail.tpl" model=$model }
                                 </div>
                             {/foreach}
@@ -206,6 +211,27 @@
                         </div>
                     </div>
                     {/if}
+                    {if $visitor.groupShares|@count > 0}
+                    <div class="tab-pane" id="tab_publications">
+                        <div class="box box-primary">
+                            <div class="box-body notifications-box">
+                                <ul class="todo-list notifications-list">
+                                    {foreach $visitor.groupShares as $myShare}
+                                    <li class="notification-item notification-group-item">
+                                        <span class="handle">
+                                            <i class="fa fa-comments-o"></i>
+                                        </span>
+                                                <span class="text"><a href="{$BASE_URL}members/{$myShare.idauthor}" class="notification-group-name">{$myShare.authorname}</a> shared <a href="{$BASE_URL}models/{$myShare.id}" class="notification-group-name">{$myShare.name}</a> with the group.</span>
+                                        <span class="pull-right">
+                                            <button name="{$myShare.id}" onclick="removePublication(this);" class="btn btn-danger btn-xs">Remove</button>
+                                        </span>
+                                    </li>
+                                    {/foreach}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    {/if}
                     <!-- /.tab-pane -->
                 </div>
                 <!-- /.tab-content -->
@@ -228,6 +254,35 @@
             });
         }
     });
+
+    function removePublication(btn) {
+        var thisButton = $(btn);
+        var pubid = thisButton.attr('name');
+        thisButton.addClass('disabled');
+        thisButton.prepend('<span class="bootstrap-dialog-button-icon glyphicon glyphicon-asterisk icon-spin"></span>');
+
+        $.ajax({
+            url: '{$BASE_URL}groups/{$group.id}/removepub/'+pubid,
+            type: 'DELETE',
+            success: function (a) {
+                BootstrapDialog.alert({
+                    title: 'Success!',
+                    message: 'Publication removed.'
+                });
+                thisButton.parent().parent().remove();
+                var modelElem = $('#model_' + pubid);
+                if (modelElem)
+                    modelElem.remove();
+            },
+            error: function (a, b, c) {
+                BootstrapDialog.alert({
+                    title: 'Oops!',
+                    message: 'Could not process your request at this time. :(\nError: ' + (c === 'Conflict' ? 'Member is already in group or has application pending.' : c)});
+                thisButton.find('span').remove();
+                thisButton.removeClass('disabled');
+            }
+        });
+    }
 
     function replyToApplication(btn, answer) {
         var thisButton = $(btn);
