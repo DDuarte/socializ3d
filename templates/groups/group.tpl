@@ -23,7 +23,7 @@
                             <span>Apply to Group</span>
                         </button>
                     </li>
-                    {else}
+                    {elseif $IS_LOGGED_IN}
                     <li class="pull-left">
                         <button id="leave-group-btn" class="btn btn-danger pull-right" onclick="excludeMember(this, {$visitor.id});">
                             <span>Leave</span>
