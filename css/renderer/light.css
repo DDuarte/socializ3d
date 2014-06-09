@@ -191,3 +191,8 @@ input.Number {
 	#toolbar button {
 		margin-right: 6px;
 	}
+
+.vertical-text {
+    transform: rotate(90deg);
+    transform-origin: right top 0;
+}

@@ -1,14 +1,14 @@
 <ul id="catalog-nav-bar" class="nav nav-tabs nav-justified pull-left">
-    <li {if $active == "whatsHot"}class="active"{/if}>
+    <li id="whatsHot" {if $active == "whatsHot"}class="active"{/if}>
         <a class="dynamic_load" href="{$BASE_URL}hot/{$skip}">What's Hot</a>
     </li>
-    <li {if $active == "topRated"}class="active"{/if}>
+    <li id="topRated" {if $active == "topRated"}class="active"{/if}>
         <a class="dynamic_load" href="{$BASE_URL}top/{$skip}">Top Rated</a>
     </li>
-    <li {if $active == "new"}class="active"{/if}>
+    <li id="new" {if $active == "new"}class="active"{/if}>
         <a class="dynamic_load" href="{$BASE_URL}new/{$skip}">New</a>
     </li>
-    <li {if $active == "random"}class="active"{/if}>
+    <li id="random" {if $active == "random"}class="active"{/if}>
         <a class="dynamic_load" href="{$BASE_URL}rand/{$skip}">Random</a>
     </li>
 </ul>
@@ -73,3 +73,5 @@
         {/if}
     </ul>
 </section>
+
+<script src="{$BASE_URL}js/pages/catalog.js" type="text/javascript"></script>

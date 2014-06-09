@@ -19,6 +19,7 @@
     <link href="{$BASE_URL}css/search.css" rel="stylesheet" type="text/css"/>
     <link href="{$BASE_URL}css/renderer/types.css" rel="stylesheet"/>
     <link id="theme" href="{$BASE_URL}css/renderer/light.css" rel="stylesheet"/>
+    <link href="{$BASE_URL}css/introjs.min.css" rel="stylesheet">
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -35,6 +36,7 @@
     <script src="{$BASE_URL}js/renderer/js/libs/system.min.js" type="text/javascript"></script>
     <script src="{$BASE_URL}js/vendor/jquery.fullscreen.js" type="text/javascript"></script>
     <script src="{$BASE_URL}js/vendor/bootstrapValidator.min.js" type="text/javascript"></script>
+    <script src="{$BASE_URL}js/vendor/intro.min.js"></script>
 
 
     <script type="text/javascript">
