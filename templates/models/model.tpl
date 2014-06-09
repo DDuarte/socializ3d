@@ -71,7 +71,7 @@
                                     </div>
                                     <div class="box-body">
                                         {foreach $model.tagsArray as $tag}
-                                            <span class="btn bg-white btn-flat margin text-black">{$tag.name}</span>
+                                            <a href="{$BASE_URL}search?q={$tag.name}" class="btn bg-white btn-flat margin text-black">{$tag.name}</a>
                                         {/foreach}
                                     </div>
                                 </div>
