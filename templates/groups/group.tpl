@@ -16,7 +16,7 @@
                     <li id="tab-activity">
                         <a href="#tab_activity" data-toggle="tab">Recent Activity</a>
                     </li>
-                    {if !$group.isMember}
+                    {if !$group.isMember && $IS_LOGGED_IN}
                     <li class="pull-left">
                         <button id="apply-to-group-btn" class="btn bg-blue btn-primary">
                             <i class="fa fa-plus-square-o"></i>
