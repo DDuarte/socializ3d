@@ -31,7 +31,7 @@ FROM
      get_user_hash(member.id) AS hash,
      (member.id IN (SELECT * FROM get_friends_of_member(:userId))) AS isFriend,
      (EXISTS (SELECT 1 FROM FriendshipInvite WHERE idSender = :userId AND idReceiver = member.id AND accepted IS NULL)) AS sentRequest
-   FROM Member JOIN registeredUser USING (id)) AS mem
+   FROM Member JOIN registeredUser USING (id) WHERE Member.deleteDate IS NULL) AS mem
   NATURAL FULL JOIN
   (SELECT
      Model.id,
