@@ -5,7 +5,11 @@ include_once($BASE_DIR . 'database/groups.php');
 function getGroupPage($group) {
     global $smarty;
     $memberId = getLoggedId();
-    $member = array('id' => $memberId);
+    $member = array();
+    if ($memberId)
+        $member['id'] = $memberId;
+    else
+        $member['id'] = -1;
     $member['lastaccess'] = getMemberLastAccess($group['id'], $memberId);
     $group['models'] = array_reverse($group['models']);
     $member['groupShares'] = array();
