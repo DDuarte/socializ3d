@@ -1,7 +1,7 @@
 <article class="search-result row model">
     <div class="col-xs-12 col-sm-12 col-md-3">
         <a class="dynamic_load thumbnail" href="{$BASE_URL}{$MODELS}/{$model.id}">
-            <img src="{$BASE_URL}thumbnails/{$model.id}.png" alt="..." onError="this.src='http://placehold.it/290x193&amp;text=Model';" style="width: 290px; height: 193px;">
+            <img src="{$BASE_URL}thumbnails/{$model.id}.png" alt="..." onError="this.src='http://placehold.it/290x193&amp;text=Model';" style="width: 250px; height: 197px;">
         </a>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-2">

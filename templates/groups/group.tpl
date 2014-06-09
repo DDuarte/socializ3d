@@ -41,7 +41,7 @@
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_about">
                         <div class="thumbnail">
-                            <img id="group-avatar-img" src="{$group.avatarimg}" alt="Group avatar image">
+                            <img id="group-avatar-img" src="{$group.avatarimg}" style="width:250px; height:250px;" alt="Group avatar image">
                         </div>
                         <p id="group-about-content">{$group.about}</p>
                     </div>
