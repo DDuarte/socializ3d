@@ -2,7 +2,7 @@
     <div class="row" style="padding-top:10px">
         <div class="col-md-12">
             <div class="thumbnail">
-                <img id="group-cover-img" src="{$group.coverimg}" alt="Group cover image">
+                <img id="group-cover-img" src="{$group.coverimg}" style="height:200px; width:1150px;" alt="Group cover image">
             </div>
         </div>
     </div>
