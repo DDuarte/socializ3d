@@ -82,6 +82,20 @@ function isGroupVisibleToMember($groupId, $memberId) {
     }
 }
 
+function getGroupPub($groupId, $pubId) {
+    global $conn;
+    $stmt = $conn->prepare("SELECT Model.* FROM GroupModel JOIN Model ON Model.id = GroupModel.idModel WHERE GroupModel.idModel = :id1 AND GroupModel.idGroup = :id2");
+    $stmt->execute(array(":id1" => $pubId, ":id2" => $groupId));
+    $result = $stmt->fetch();
+    return $result;
+}
+
+function removeGroupPublication($groupId, $pubId) {
+    global $conn;
+    $stmt = $conn->prepare("DELETE FROM GroupModel WHERE GroupModel.idModel = :id1 AND GroupModel.idGroup = :id2");
+    $stmt->execute(array(":id1" => $pubId, ":id2" => $groupId));
+}
+
 function isGroupAdmin($idGroup, $idMember) {
     global $conn;
     $stmt = $conn->prepare("SELECT 1 FROM GroupUser WHERE idGroup = ? AND idMember = ? AND isadmin = TRUE");

@@ -7,6 +7,16 @@ function getGroupPage($group) {
     $memberId = getLoggedId();
     $member = array('id' => $memberId);
     $member['lastaccess'] = getMemberLastAccess($group['id'], $memberId);
+    $group['models'] = array_reverse($group['models']);
+    $member['groupShares'] = array();
+    if ($group['isGroupAdmin'])
+        $member['groupShares'] = $group['models'];
+    else {
+        foreach ($group['models'] as $mod) {
+            if ($mod['idauthor'] === $memberId)
+                $member['groupShares'][] = $mod;
+        }
+    }
     $smarty->assign('group', $group);
     $smarty->assign('visitor', $member);
     $smarty->display('groups/group.tpl');
