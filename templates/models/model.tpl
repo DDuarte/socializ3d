@@ -14,7 +14,7 @@
                     <li class="active">
                         <a href="#tab_info" data-toggle="tab">Information</a>
                     </li>
-                    <li>
+                    <li id="tab-comments">
                         <a href="#tab_comments" data-toggle="tab">Comments
                             <span class="badge">{$model.numComments}</span>
                         </a>
@@ -265,7 +265,7 @@ $(function () {
                     intro: "Enter fullscreen mode"
                 },
                 {
-                    element: document.querySelector('#tab_comments'),
+                    element: document.querySelector('#tab-comments'),
                     intro: "Comment and vote the model."
                 }
             ]

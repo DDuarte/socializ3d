@@ -21,3 +21,9 @@
     </div><!-- /.error-page -->
 
 </section><!-- /.content -->
+
+<script type="text/javascript">
+    $.ready(function() {
+        $('#helpBtn').off().hide();
+    });
+</script>
