@@ -27,7 +27,8 @@ $(function() {
         if ($('#notifications-icon').length > 0) {
             options.steps.push({
                 element: document.querySelector('#notifications-icon'),
-                intro: "View the latest notifications from your friends and groups."
+                intro: "View the latest notifications from your friends and groups.",
+                tooltipPosition: 'left'
             });
         }
         intro.setOptions(options);
