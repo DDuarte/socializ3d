@@ -41,6 +41,8 @@ class GroupHandler {
 
         $memberId = getLoggedId();
 
+        if (!$memberId)
+            $memberId = -1;
         if (!isGroupVisibleToMember($groupId, $memberId)) {
             http_response_code(404);
             return;
