@@ -249,27 +249,31 @@ $(function () {
     // Instance the tour
     function startIntro() {
         var intro = introJs();
-        intro.setOptions({
-            steps: [
-                {
-                    intro: "Welcome to the model page."
-                },
-                {if $LOGGED_ID == $model.idauthor || $IS_ADMIN}
-                {
-                    element: document.querySelector('#screenshotIcon'),
-                    intro: "Update the model's thumbnail"
-                },
-                {/if}
-                {
-                  element: document.querySelector('#fullscreenIcon'),
-                    intro: "Enter fullscreen mode"
-                },
-                {
-                    element: document.querySelector('#tab-comments'),
-                    intro: "Comment and vote the model."
-                }
-            ]
+        var options = {
+            steps: []
+        };
+        options.steps.push({ intro: "Welcome to the model page." });
+
+        if ($('#screenshotIcon').length > 0) {
+            options.steps.push({
+                element: document.querySelector('#screenshotIcon'),
+                intro: "Update the model's thumbnail"
+            });
+        }
+
+        if ($('#fullscreenIcon').length > 0) {
+            options.steps.push({
+                element: document.querySelector('#fullscreenIcon'),
+                intro: "Enter fullscreen mode"
+            });
+        }
+
+        options.steps.push({
+            element: document.querySelector('#tab-comments'),
+            intro: "Comment and vote the model."
         });
+
+        intro.setOptions(options);
 
         intro.start();
     }
@@ -298,7 +302,7 @@ $(function () {
                 });
             }
         });
-    })
+    });
 
     {literal}
     window.mobilecheck = function () {
