@@ -36,10 +36,11 @@ FROM
   (SELECT
      Model.id,
      'model'  ::TEXT                                                                                  AS type,
-     ts_rank_cd(to_tsvector('english', name), plainto_tsquery(lower(:searchTerm))) * 0.7 +
+     ts_rank_cd(to_tsvector('english', name), plainto_tsquery(lower(:searchTerm))) * 0.5 +
+     (SELECT SUM(ts_rank_cd(to_tsvector('english', model_tags.name), plainto_tsquery(lower(:searchTerm))) / numTags)  FROM model_tags WHERE idModel = Model.id) * 0.2 +
      ts_rank_cd(to_tsvector('english', description), plainto_tsquery(lower(:searchTerm))) * 0.3 AS score,
      model.name, model.description, model.createdate
-   FROM get_all_visibile_models(:userId) JOIN Model ON get_all_visibile_models.id = Model.id
+   FROM get_all_visibile_models(:userId) JOIN Model USING(id) JOIN (SELECT idModel as id, COUNT(*) as numTags FROM model_tags GROUP BY id) AS Num_tags USING(id)
   ) AS mo
 
 WHERE score <> 0
