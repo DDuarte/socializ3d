@@ -411,11 +411,6 @@
                 element: document.querySelector('#tab-activity'),
                 intro: "See the latest activities from your group peers."
             });
-            options.steps.push({
-                element: document.querySelector('#tab-members'),
-                intro: "Access the group's members information.",
-                tooltipPosition: 'bottom-left-aligned'
-            });
 
             if ($('#tab-publications').length > 0) {
                 options.steps.push({
@@ -432,6 +427,13 @@
                     tooltipPosition: 'bottom-left-aligned'
                 });
             }
+
+            options.steps.push({
+                element: document.querySelector('#tab-members'),
+                intro: "Access the group's members information.",
+                tooltipPosition: 'bottom-left-aligned'
+            });
+
 
             intro.setOptions(options);
 
