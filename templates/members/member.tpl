@@ -125,8 +125,8 @@
                                 </button>
                             {/if}
                         {/if}
-                        {if $LOGGED_ID == $member.id || $IS_ADMIN}
-                            <button id="delete-btn" class="btn bg-red btn-primary">
+                        {if $IS_ADMIN}
+                            <button id="delete-btn" class="btn bg-red btn-danger">
                                 <i class="fa fa-trash-o"></i>
                                 <span>Delete</span>
                             </button>
