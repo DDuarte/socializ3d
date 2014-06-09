@@ -25,22 +25,23 @@ FROM
      'member' ::TEXT                                                                            AS type,
      ts_rank_cd(to_tsvector('english', name), plainto_tsquery(lower(:searchTerm))) * 0.35 +
      ts_rank_cd(to_tsvector('english', username), plainto_tsquery(lower(:searchTerm))) * 0.35 +
-     ts_rank_cd(to_tsvector('english', about), plainto_tsquery(lower(:searchTerm))) * 0.3 AS score,
+     (SELECT SUM(ts_rank_cd(to_tsvector('english', user_tags.name), plainto_tsquery(lower(:searchTerm))) / coalesce(numTags, 0))  FROM user_tags WHERE idMember = Member.id) * 0.1 +
+     ts_rank_cd(to_tsvector('english', about), plainto_tsquery(lower(:searchTerm))) * 0.2 AS score,
      member.name,
      member.about,
      get_user_hash(member.id) AS hash,
      (member.id IN (SELECT * FROM get_friends_of_member(:userId))) AS isFriend,
      (EXISTS (SELECT 1 FROM FriendshipInvite WHERE idSender = :userId AND idReceiver = member.id AND accepted IS NULL)) AS sentRequest
-   FROM Member JOIN registeredUser USING (id) WHERE Member.deleteDate IS NULL) AS mem
+   FROM Member JOIN registeredUser USING (id) LEFT JOIN (SELECT idMember as id, COUNT(*) as numTags FROM user_tags GROUP BY id) AS Num_tags USING(id) WHERE Member.deleteDate IS NULL) AS mem
   NATURAL FULL JOIN
   (SELECT
      Model.id,
      'model'  ::TEXT                                                                                  AS type,
      ts_rank_cd(to_tsvector('english', name), plainto_tsquery(lower(:searchTerm))) * 0.5 +
-     (SELECT SUM(ts_rank_cd(to_tsvector('english', model_tags.name), plainto_tsquery(lower(:searchTerm))) / numTags)  FROM model_tags WHERE idModel = Model.id) * 0.2 +
+     (SELECT SUM(ts_rank_cd(to_tsvector('english', model_tags.name), plainto_tsquery(lower(:searchTerm))) / coalesce(numTags, 0))  FROM model_tags WHERE idModel = Model.id) * 0.2 +
      ts_rank_cd(to_tsvector('english', description), plainto_tsquery(lower(:searchTerm))) * 0.3 AS score,
      model.name, model.description, model.createdate
-   FROM get_all_visibile_models(:userId) JOIN Model USING(id) JOIN (SELECT idModel as id, COUNT(*) as numTags FROM model_tags GROUP BY id) AS Num_tags USING(id)
+   FROM get_all_visibile_models(:userId) JOIN Model USING(id) LEFT JOIN (SELECT idModel as id, COUNT(*) as numTags FROM model_tags GROUP BY id) AS Num_tags USING(id)
   ) AS mo
 
 WHERE score <> 0
