@@ -28,7 +28,7 @@ $(function() {
             options.steps.push({
                 element: document.querySelector('#notifications-icon'),
                 intro: "View the latest notifications from your friends and groups.",
-                'data-position': 'left'
+                position: 'left'
             });
         }
         intro.setOptions(options);
