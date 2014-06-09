@@ -20,6 +20,7 @@ include_once($BASE_DIR . 'actions/uploadAction.php');
 include_once($BASE_DIR . 'actions/groups/group.php');
 include_once($BASE_DIR . 'actions/groups/invite.php');
 include_once($BASE_DIR . 'actions/groups/application.php');
+include_once($BASE_DIR . 'actions/groups/removepub.php');
 include_once($BASE_DIR . 'actions/groups/create.php');
 include_once($BASE_DIR . 'actions/groups/members.php');
 include_once($BASE_DIR . 'actions/admin/stats.php');
@@ -120,6 +121,7 @@ Toro::serve(array(
     '/groups/:number' => 'GroupHandler',
     '/groups/:number/invite/:number' => 'InvitationHandler',
     '/groups/:number/application/:number' => 'ApplicationHandler',
+    '/groups/:number/removepub/:number' => 'PublicationHandler',
     '/groups/:number/members/:number' => 'GroupMemberHandler',
     '/groups/create' => 'GroupCreateHandler',
     '/admin/stats' => 'StatisticsHandler',
