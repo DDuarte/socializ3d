@@ -1,7 +1,7 @@
 <article class="search-result row group">
     <div class="col-xs-12 col-sm-12 col-md-3">
         <a class="dynamic_load thumbnail" href="{$BASE_URL}{$GROUPS}/{$group.id}" title="{$group.name}">
-            <img style="height:100%;width:100%;" src="{$group.avatarimg}" alt="Group avatar image"/>
+            <img style="height:143px;width:143px;" src="{$group.avatarimg}" alt="Group avatar image"/>
         </a>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-2">
