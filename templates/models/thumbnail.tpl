@@ -1,6 +1,6 @@
 <div class="thumbnail center-block" style="max-width:300px">
     <a class="dynamic_load" href="{$BASE_URL}{$MODELS}/{$model.id}" >
-        <img src="{$BASE_URL}thumbnails/{$model.id}.png" alt="..." onError="this.src='http://placehold.it/290x193&text=Model';" style="width: 290px; height: 193px;">
+        <img src="{$BASE_URL}thumbnails/{$model.id}.png" alt="..." onError="this.src='http://placehold.it/290x193&amp;text=Model';" style="width: 290px; height: 193px;">
     </a>
     <div class="caption center-block" style="margin-top:-30px;position:relative;padding-bottom:0">
         <p>
@@ -14,7 +14,7 @@
             <div class="pull-left image">
                 <img src="{$GRAVATAR_URL}{$model.authorhash}?d=identicon" class="img-square" alt="User Image" />
             </div>
-            <div class="pull-left info">
+            <div class="pull-left info" style="padding-right: 0; padding-left: 10px;">
                 <p><a class="dynamic_load" href="{$BASE_URL}{$MEMBERS}/{$model.idauthor}">{$model.authorname}</a></p>
                 <p>
                     <time class="timeago" datetime="{$model.createdate}">{$model.createdate}</time>

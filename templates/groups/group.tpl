@@ -72,7 +72,7 @@
                             <input type="text" class="form-control" id="avatar-img-url" placeHolder="Avatar img URL here" value="{$group.avatarimg}" />
                             <label for="about-me-field">About:</label>
                             <textarea class="form-control" id="about-me-field" placeHolder="Enter your text here">{$group.about}</textarea>
-                            <label for="visibility">Visibility:</label>
+                            <label for="visibility-field">Visibility:</label>
                             <select name="visibility" class="form-control" id="visibility-field">
                                 <option {if $group.visibility == 'public'}selected{/if}>Public</option>
                                 <option {if $group.visibility == 'private'}selected{/if}>Private</option>
