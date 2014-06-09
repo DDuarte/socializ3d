@@ -66,4 +66,7 @@
     $(function () {
         reloadSchedule();
     });
+
+    $('#helpBtn').hide();
+    $('#helpBtn').off();
 </script>

@@ -1,4 +1,8 @@
 $(document).ready(function() {
+
+    $('#helpBtn').hide();
+    $('#helpBtn').off();
+
     $('#createGroupForm').bootstrapValidator({
         message: 'This value is not valid',
         feedbackIcons: {

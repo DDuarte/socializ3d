@@ -5,11 +5,11 @@
         <div class="col-md-4">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active">
+                    <li class="active" id="tab-about">
                         <a href="#tab_about" data-toggle="tab">About me</a>
                     </li>
                     {if $IS_LOGGED_IN}
-                        <li>
+                        <li id="tab-info">
                             <a href="#tab_info" data-toggle="tab">Info</a>
                         </li>
                     {/if}
@@ -92,13 +92,13 @@
         <div class="col-md-8">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs pull-right">
-                    <li class="active">
+                    <li class="active" id="tab-gallery">
                         <a href="#tab_gallery" data-toggle="tab">Gallery</a>
                     </li>
-                    <li>
+                    <li id="tab-friends">
                         <a href="#tab_friends" data-toggle="tab">Friends</a>
                     </li>
-                    <li>
+                    <li id="tab-groups">
                         <a href="#tab_groups" data-toggle="tab">Groups</a>
                     </li>
                     <li class="pull-left header">
@@ -226,6 +226,40 @@ $(function () {
         });
     })
 
+
+        // Instance the tour
+        function startIntro(){
+            var intro = introJs();
+            intro.setOptions({
+                steps: [
+                    {
+                        intro: "Welcome the member page."
+                    },
+                    {
+                        element: document.querySelector('#tab-about'),
+                        intro: "See the 'about me' section and member avatar."
+                    },
+                    {
+                        element: document.querySelector('#tab-info'),
+                        intro: "See the member's basic information."
+                    },
+                    {
+                        element: document.querySelector('#tab-groups'),
+                        intro: "See the member's groups."
+                    },
+                    {
+                        element: document.querySelector('#tab-friends'),
+                        intro: "See the member's friends."
+                    }
+                ]
+            });
+
+            intro.start();
+        };
+
+        $('#helpBtn').off().show().click(function(event) {
+            startIntro();
+        });
     $('#add-to-group-btn').click(function (event) {
         event.preventDefault();
         BootstrapDialog.show({

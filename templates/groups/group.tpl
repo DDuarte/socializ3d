@@ -10,10 +10,10 @@
         <div class="col-md-4">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active">
+                    <li class="active" id="tab-about">
                         <a href="#tab_about" data-toggle="tab">About</a>
                     </li>
-                    <li>
+                    <li id="tab-activity">
                         <a href="#tab_activity" data-toggle="tab">Recent Activity</a>
                     </li>
                     {if !$group.isMember}
@@ -98,10 +98,10 @@
         <div class="col-md-8">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs pull-right">
-                    <li class="active">
+                    <li class="active" id="tab-gallery">
                         <a href="#tab_gallery" data-toggle="tab">Gallery</a>
                     </li>
-                    <li>
+                    <li id="tab-members">
                         <a href="#tab_members" data-toggle="tab">Members</a>
                     </li>
                     {if $group.isGroupAdmin}
@@ -117,7 +117,7 @@
                     <li class="pull-left header">
                         <i class="fa fa-group"></i>{$group.name}</li>
                 </ul>
-                <div class="tab-content">
+                <div class="tab-content" id="right-tab-content">
                     <div class="tab-pane active" id="tab_gallery">
                         <div class="row">
                             {foreach $group.models as $model}
@@ -395,6 +395,38 @@
     }
 
     $(function () {
+
+        // Instance the tour
+        function startIntro(){
+            var intro = introJs();
+            intro.setOptions({
+                steps: [
+                    {
+                        intro: "Welcome to the group page, here you can access the latest publications from your peers."
+                    },
+                    {
+                        element: document.querySelector('#tab-about'),
+                        intro: "Access the general group information."
+                    },
+                    {
+                        element: document.querySelector('#tab-activity'),
+                        intro: "See the latest activities from your group peers."
+                    },
+                    {
+                        element: document.querySelector('#tab-members'),
+                        intro: "Access the group's members information.",
+                        tooltipPosition: 'bottom-left-aligned'
+                    }
+                ]
+            });
+
+            intro.start();
+        };
+
+        $('#helpBtn').off().show().click(function(event) {
+            startIntro();
+        });
+
         $('#apply-to-group-btn').click(function (event) {
             event.preventDefault();
             var thisButton = $(this);
