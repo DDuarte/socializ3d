@@ -399,7 +399,7 @@
         // Instance the tour
         function startIntro(){
             var intro = introJs();
-            var options = {steps: []};
+            var options = { steps: [] };
 
             options.steps.push({ intro: "Welcome to the group page, here you can access the latest publications from your peers." });
 
