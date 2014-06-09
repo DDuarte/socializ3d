@@ -246,6 +246,38 @@ function checkComment() {
 
 $(function () {
 
+    // Instance the tour
+    function startIntro() {
+        var intro = introJs();
+        intro.setOptions({
+            steps: [
+                {
+                    intro: "Welcome to the model page."
+                },
+                {if $LOGGED_ID == $model.idauthor || $IS_ADMIN}
+                {
+                    element: document.querySelector('#screenshotIcon'),
+                    intro: "Update the model's thumbnail"
+                },
+                {/if}
+                {
+                  element: document.querySelector('#fullscreenIcon'),
+                    intro: "Enter fullscreen mode"
+                },
+                {
+                    element: document.querySelector('#tab_comments'),
+                    intro: "Comment and vote the model."
+                }
+            ]
+        });
+
+        intro.start();
+    }
+
+    $('#helpBtn').show().off().click(function(event) {
+        startIntro();
+    });
+
     $('#delete-btn').click(function () {
         BootstrapDialog.confirm('Do you really want to delete this model?', function (result) {
             if (result) {

@@ -33,6 +33,9 @@
 <script src="{$BASE_URL}js/plugins/jQRangeSlider/jQDateRangeSlider-min.js" type="text/javascript"></script>
 <script type="text/javascript">
     $(function() {
+
+        $('#helpBtn').off().hide();
+
         var area = new Morris.Area({
             element: 'revenue-chart',
             resize: true,

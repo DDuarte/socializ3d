@@ -1,4 +1,7 @@
 $(document).ready(function() {
+
+    $('#helpBtn').off().hide();
+
     $('#uploadForm').bootstrapValidator({
         message: 'This value is not valid',
         feedbackIcons: {

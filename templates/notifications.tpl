@@ -158,6 +158,7 @@
         });
     }
     $(function () {
+        $('#helpBtn').off().hide();
         setInterval(reloadNotificationsNow(),3000);
     });
 </script>

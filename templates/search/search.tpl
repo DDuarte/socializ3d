@@ -65,6 +65,6 @@
 </script>
 <script>
     $(document).ready(function() {
-
+        $('#helpBtn').off().hide();
     });
 </script>
