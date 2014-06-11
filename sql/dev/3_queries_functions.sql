@@ -438,7 +438,7 @@ $$ LANGUAGE PLPGSQL;
 CREATE OR REPLACE FUNCTION get_group_profile(memberId BIGINT, groupId BIGINT) RETURNS TABLE(name VARCHAR(70), about VARCHAR(255), avatarImg VARCHAR(255), coverImg VARCHAR(255)) AS $$
 BEGIN
     IF ('public' NOT IN (SELECT TGroup.visibility FROM TGroup WHERE TGroup.id = $2) AND
-        $1 NOT IN (SELECT GroupUser.idMember FROM GroupUser WHERE GroupUser.idGroup = $2)) THEN
+        $1 NOT IN (SELECT GroupUser.idMember FROM GroupUser WHERE GroupUser.idGroup = $2) AND $1 NOT IN (SELECT RegisteredUser.id FROM RegisteredUser WHERE RegisteredUser.id = $1 AND RegisteredUser.isAdmin = TRUE)) THEN
         RAISE EXCEPTION 'User % does not have permission to access group % profile.', $1, $2;
     ELSE
         RETURN QUERY SELECT TGroup.name, TGroup.about, TGroup.avatarImg, TGroup.coverImg FROM TGroup WHERE TGroup.id = $2 AND TGroup.deleteDate IS NULL;

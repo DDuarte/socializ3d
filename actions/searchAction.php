@@ -18,7 +18,8 @@ FROM
      TGroup.avatarimg,
      TGroup.about
    FROM TGroup
-   WHERE visibility = 'public') AS gro
+   WHERE visibility = 'public' OR EXISTS(SELECT 1 FROM registeredUser WHERE registeredUser.id = :userId AND registeredUser.isAdmin = TRUE) OR (TGRoup.id IN (SELECT get_groups_of_member.groupid FROM get_groups_of_member(:userId)))
+   ) AS gro
   NATURAL FULL JOIN
   (SELECT
      id,

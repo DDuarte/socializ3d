@@ -43,7 +43,7 @@ class GroupHandler {
 
         if (!$memberId)
             $memberId = -1;
-        if (!isGroupVisibleToMember($groupId, $memberId)) {
+        if (!isGroupVisibleToMember($groupId, $memberId) && !loggedIsAdmin()) {
             http_response_code(404);
             return;
         }
@@ -68,7 +68,7 @@ class GroupHandler {
 
         $memberId = getLoggedId();
 
-        if (!isGroupVisibleToMember($groupId, $memberId)) {
+        if (!isGroupVisibleToMember($groupId, $memberId) && !loggedIsAdmin()) {
             http_response_code(404);
             exit;
         }
