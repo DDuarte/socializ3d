@@ -46,6 +46,7 @@
         if (Socializ3d.hash === undefined)
             Socializ3d.hash = {};
     </script>
+    <script src="{$BASE_URL}js/renderer/libs/spin.js"></script>
     <script src="{$BASE_URL}js/plugins/AdminLTE/app.js" type="text/javascript"></script>
 </head>
 
@@ -67,6 +68,5 @@
         reloadSchedule();
     });
 
-    $('#helpBtn').hide();
-    $('#helpBtn').off();
+    $('#helpBtn').hide().off();
 </script>

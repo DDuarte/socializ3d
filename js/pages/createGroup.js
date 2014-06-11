@@ -1,7 +1,6 @@
 $(document).ready(function() {
 
-    $('#helpBtn').hide();
-    $('#helpBtn').off();
+    $('#helpBtn').hide().off();
 
     $('#createGroupForm').bootstrapValidator({
         message: 'This value is not valid',

@@ -201,7 +201,6 @@
 <script src="{$BASE_URL}js/bootstrap-tagsinput.min.js" type="text/javascript"></script>
 <script src="{$BASE_URL}js/plugins/bootstrap3-dialog/bootstrap-dialog.min.js" type="text/javascript"></script>
 
-<script src="{$BASE_URL}js/renderer/libs/spin.js"></script>
 <script src="{$BASE_URL}js/renderer/js/controls/EditorControls.js"></script>
 <script src="{$BASE_URL}js/renderer/js/controls/TransformControls.js"></script>
 <script src="{$BASE_URL}js/renderer/js/loaders/BabylonLoader.js"></script>

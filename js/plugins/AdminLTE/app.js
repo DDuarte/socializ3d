@@ -5,6 +5,25 @@
  *      This file should be included in all pages
  !**/
 
+var spinnerOpts = {
+    lines: 11, // The number of lines to draw
+    length: 7, // The length of each line
+    width: 19, // The line thickness
+    radius: 37, // The radius of the inner circle
+    corners: 1, // Corner roundness (0..1)
+    rotate: 0, // The rotation offset
+    direction: 1, // 1: clockwise, -1: counterclockwise
+    color: '#000', // #rgb or #rrggbb or array of colors
+    speed: 1.2, // Rounds per second
+    trail: 69, // Afterglow percentage
+    shadow: true, // Whether to render a shadow
+    hwaccel: false, // Whether to use hardware acceleration
+    className: 'spinner', // The CSS class to assign to the spinner
+    zIndex: 2e9, // The z-index (defaults to 2000000000)
+    top: '50%', // Top position relative to parent
+    left: '50%' // Left position relative to parent
+};
+
 if (typeof Socializ3d === 'undefined')
     Socializ3d = {};
 
@@ -66,6 +85,9 @@ function load_ajax(page) {
     var hash = index == -1 ? "" : pageURL.substr(index + 1);
     hash_change(hash);
 
+    var target = document.getElementById('content-ajax');
+    var spinner = new Spinner(spinnerOpts).spin(target);
+
     $.ajax({
         url: pageURL,
         type: 'GET',
@@ -80,6 +102,7 @@ function load_ajax(page) {
         complete: function (jqXHR, textStatus) {
             window.history.pushState({html: jqXHR.responseText}, "", pageURL);
             $("time.timeago").timeago();
+            spinner.stop();
         }
     });
 }
