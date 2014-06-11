@@ -24,6 +24,20 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-search"></i>
                     </a>
+                    <ul class="dropdown-menu">
+                        <li class="header">
+                            <form action="{$BASE_URL}search" method="get" class="navbar-form" role="search" >
+                                <div class="input-group">
+                                    <input type="text" name="q" class="form-control" id="search-input2" placeholder="Search...">
+                                        <span class="input-group-btn">
+                                            <button type="submit" id="search-btn" class="btn btn-flat">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </span>
+                                </div>
+                            </form>
+                        </li>
+                    </ul>
                 </li>
                 <li id="notifications-icon" class="dropdown notifications-menu">
                     <a href="#" id="noti-count-st" class="dropdown-toggle" data-toggle="dropdown">
@@ -92,6 +106,25 @@
         {else}
         <div class="navbar-right">
             <ul class="nav navbar-nav">
+                <li class="dropdown  notifications-menu visible-xs">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-search"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="header">
+                            <form action="{$BASE_URL}search" method="get" class="navbar-form" role="search" >
+                                <div class="input-group">
+                                    <input type="text" name="q" class="form-control" id="search-input2" placeholder="Search...">
+                                        <span class="input-group-btn">
+                                            <button type="submit" id="search-btn" class="btn btn-flat">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </span>
+                                </div>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
                 <li>
                     <a class="bt btn-flat" href="{$BASE_URL}register.php" role="button">Register</a>
                 </li>
